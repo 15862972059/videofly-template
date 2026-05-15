@@ -20,7 +20,10 @@
     "script:add-credits": "dotenv -e .env.local -- tsx scripts/add-credits.ts",
     "script:check-credits": "dotenv -e .env.local -- tsx scripts/check-user-credits.ts",
     "script:reset-credits": "dotenv -e .env.local -- tsx scripts/reset-user-credits.ts",
-    "script:test-proxy": "node scripts/test-proxy.mjs"
+    "script:test-proxy": "node scripts/test-proxy.mjs",
+    "script:seed-classic-images": "dotenv -e .env -- tsx scripts/seed-classic-images.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@creem_io/better-auth": "^0.0.12",

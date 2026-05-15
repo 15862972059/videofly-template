@@ -24,6 +24,11 @@ export const env = createEnv({
     ADMIN_EMAIL: z.string().optional(),
     // Debug
     IS_DEBUG: z.string().optional(),
+    // MiniMax AI Image
+    MINIMAX_API_KEY: z.string().optional(),
+    MINIMAX_API_URL: z.string().optional(),
+    // Upload
+    MAX_UPLOAD_MB: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().min(1),
@@ -43,5 +48,8 @@ export const env = createEnv({
     RESEND_FROM: process.env.RESEND_FROM,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     IS_DEBUG: process.env.IS_DEBUG,
+    MINIMAX_API_KEY: process.env.MINIMAX_API_KEY,
+    MINIMAX_API_URL: process.env.MINIMAX_API_URL,
+    MAX_UPLOAD_MB: process.env.MAX_UPLOAD_MB,
   },
 });

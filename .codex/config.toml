@@ -1,0 +1,13 @@
+[mcp_servers.chrome-devtools]
+args = ["chrome-devtools-mcp@latest"]
+command = "npx"
+
+[mcp_servers.context7]
+args = [
+    "-y",
+    "@upstash/context7-mcp@latest",
+]
+command = "npx"
+
+[mcp_servers.evolink]
+url = "https://mcp.evolink.ai/sse"

@@ -1,0 +1,117 @@
+"use client";
+
+import { useState } from "react";
+import { countrySubcategories } from "@/data/classic-images";
+
+interface GalleryFiltersProps {
+  categories: string[];
+  activeCategory?: string;
+  activeSubcategory?: string;
+  activeQuery?: string;
+  onCategoryChange: (category: string | undefined) => void;
+  onSubcategoryChange: (subcategory: string | undefined) => void;
+  onQueryChange: (query: string) => void;
+}
+
+export function GalleryFilters({
+  categories,
+  activeCategory,
+  activeSubcategory,
+  activeQuery = "",
+  onCategoryChange,
+  onSubcategoryChange,
+  onQueryChange,
+}: GalleryFiltersProps) {
+  const [query, setQuery] = useState(activeQuery);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    onQueryChange(query);
+  };
+
+  const handleCategoryClick = (category: string | undefined) => {
+    onCategoryChange(category);
+    onSubcategoryChange(undefined);
+  };
+
+  const subcategories = activeCategory
+    ? countrySubcategories[activeCategory] || []
+    : [];
+
+  return (
+    <div className="space-y-4">
+      {/* Search */}
+      <form onSubmit={handleSearch} className="flex gap-2">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search artworks..."
+          className="flex-1 px-4 py-2 rounded-lg border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        />
+        <button
+          type="submit"
+          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
+        >
+          Search
+        </button>
+      </form>
+
+      {/* Country tabs */}
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => handleCategoryClick(undefined)}
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            !activeCategory
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted hover:bg-muted/80"
+          }`}
+        >
+          All
+        </button>
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => handleCategoryClick(category)}
+            className={`px-4 py-2 rounded-full text-sm font-medium capitalize transition-colors ${
+              activeCategory === category
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted hover:bg-muted/80"
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      {/* Subcategory tabs */}
+      {subcategories.length > 0 && (
+        <div className="flex flex-wrap gap-2 pl-4 border-l-2 border-primary/30">
+          <button
+            onClick={() => onSubcategoryChange(undefined)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+              !activeSubcategory
+                ? "bg-secondary text-secondary-foreground"
+                : "bg-muted/50 hover:bg-muted"
+            }`}
+          >
+            All {activeCategory}
+          </button>
+          {subcategories.map((sub) => (
+            <button
+              key={sub}
+              onClick={() => onSubcategoryChange(sub)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium capitalize transition-colors ${
+                activeSubcategory === sub
+                  ? "bg-secondary text-secondary-foreground"
+                  : "bg-muted/50 hover:bg-muted"
+              }`}
+            >
+              {sub}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

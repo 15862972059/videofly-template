@@ -237,6 +237,16 @@ export const CREDIT_PACKAGES: CreditPackageConfig[] = [
 // ============================================
 
 /**
+ * 图片生成积分配置
+ */
+export const IMAGE_MODEL_PRICING = {
+  /** 每次图片生成消耗积分 */
+  creditCost: 1,
+  /** MiniMax 模型 */
+  model: "image-01",
+} as const;
+
+/**
  * 视频生成模型积分配置
  *
  * 💡 定价说明（基于 Evolink 1:1 成本，向上取整）:

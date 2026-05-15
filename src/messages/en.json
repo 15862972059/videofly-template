@@ -1,7 +1,7 @@
 {
   "Metadata": {
-    "title": "VideoFly - AI Video Generation Platform",
-    "description": "Create stunning AI-generated videos in minutes with Sora 2, Veo 3.1, and more"
+    "title": "AI Art - AI Photo Generation Platform",
+    "description": "Create stunning AI-generated photos and remix your images with MiniMax"
   },
   "Common": {
     "login": "Login",
@@ -15,22 +15,26 @@
     "edit": "Edit",
     "loading": "Loading...",
     "error": "Something went wrong",
-    "success": "Success"
+    "success": "Success",
+    "buyCredits": "Buy Credits",
+    "loadMore": "Load More"
   },
   "Header": {
     "models": "Models",
     "tools": "Tools",
     "pricing": "Pricing",
     "docs": "Docs",
-    "myCreations": "My Creations",
+    "studio": "Studio",
+    "gallery": "Gallery",
+    "generations": "My Generations",
     "credits": "Credits",
     "settings": "Settings"
   },
   "Hero": {
-    "badge": "Powered by Sora 2, Veo 3.1 & more",
-    "title": "Transform Your Ideas Into Stunning Videos",
+    "badge": "Powered by MiniMax AI",
+    "title": "Transform Your Photos Into Stunning AI Art",
     "subtitle": "with AI",
-    "description": "Create professional AI-generated videos in minutes. From text to video, image to video, or enhance existing footage.",
+    "description": "Create professional AI-generated images in seconds. Browse gallery templates, remix your photos into beautiful scenes, or generate images from text.",
     "startCreating": "Start Creating Free",
     "viewExamples": "View Examples",
     "features": {
@@ -39,7 +43,7 @@
       "ai": "AI-Powered"
     },
     "stats": {
-      "videos": "videos created",
+      "videos": "images created",
       "users": "happy users",
       "rating": "user rating"
     },
@@ -263,13 +267,13 @@
       }
     },
     "features": {
-      "hd_videos": "HD video generation",
-      "fast_generation": "Fast generation speed",
-      "no_watermark": "No watermark",
+      "hd_videos": "HD image generation",
+      "fast_generation": "Fast remix workflow",
+      "no_watermark": "No watermark exports",
       "commercial_use": "Commercial use license",
       "priority_support": "Priority support",
-      "api_access": "API access",
-      "custom_models": "Custom AI models"
+      "api_access": "Gallery and history access",
+      "custom_models": "Custom AI art styles"
     }
   },
   "VideoGenerator": {

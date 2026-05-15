@@ -32,6 +32,7 @@ export const creditTransTypeEnum = pgEnum("CreditTransType", [
   "ORDER_PAY",
   "SUBSCRIPTION",
   "VIDEO_CONSUME",
+  "IMAGE_CONSUME",
   "REFUND",
   "EXPIRED",
   "SYSTEM_ADJUST",
@@ -48,6 +49,18 @@ export const videoStatusEnum = pgEnum("VideoStatus", [
   "GENERATING",
   "UPLOADING",
   "COMPLETED",
+  "FAILED",
+]);
+
+export const imageGenerationTypeEnum = pgEnum("ImageGenerationType", [
+  "TEXT",
+  "REMIX",
+]);
+
+export const imageGenerationStatusEnum = pgEnum("ImageGenerationStatus", [
+  "QUEUED",
+  "RUNNING",
+  "SUCCEEDED",
   "FAILED",
 ]);
 
@@ -330,12 +343,86 @@ export const videos = pgTable(
   })
 );
 
+export const classicImages = pgTable(
+  "classic_images",
+  {
+    id: text("id").primaryKey(),
+    slug: text("slug").notNull().unique(),
+    title: text("title").notNull(),
+    description: text("description"),
+    category: text("category").notNull(),
+    subcategory: text("subcategory"),
+    promptTemplate: text("prompt_template").notNull(),
+    heroImageUrl: text("hero_image_url").notNull(),
+    thumbnailUrl: text("thumbnail_url").notNull(),
+    isActive: boolean("is_active").default(true).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    slugIdx: uniqueIndex("classic_images_slug_idx").on(table.slug),
+    categoryIdx: index("classic_images_category_idx").on(table.category),
+    subcategoryIdx: index("classic_images_subcategory_idx").on(table.subcategory),
+    activeIdx: index("classic_images_is_active_idx").on(table.isActive),
+  })
+);
+
+export const imageGenerationJobs = pgTable(
+  "image_generation_jobs",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull(),
+    type: imageGenerationTypeEnum("type").notNull(),
+    status: imageGenerationStatusEnum("status").default("QUEUED").notNull(),
+    classicImageId: text("classic_image_id"),
+    prompt: text("prompt"),
+    sourceImageKey: text("source_image_key"),
+    resultImageKey: text("result_image_key"),
+    resultImageUrl: text("result_image_url"),
+    creditsUsed: integer("credits_used").default(0).notNull(),
+    errorMessage: text("error_message"),
+    parameters: jsonb("parameters"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    completedAt: timestamp("completed_at"),
+  },
+  (table) => ({
+    userIdx: index("image_generation_jobs_user_id_idx").on(table.userId),
+    statusIdx: index("image_generation_jobs_status_idx").on(table.status),
+    typeIdx: index("image_generation_jobs_type_idx").on(table.type),
+    classicImageIdx: index("image_generation_jobs_classic_image_id_idx").on(table.classicImageId),
+    createdAtIdx: index("image_generation_jobs_created_at_idx").on(table.createdAt),
+  })
+);
+
+export const rateLimitEvents = pgTable(
+  "rate_limit_events",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id").notNull(),
+    scope: text("scope").notNull(),
+    windowStart: timestamp("window_start").notNull(),
+    count: integer("count").default(0).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    userScopeWindowIdx: uniqueIndex("rate_limit_events_user_scope_window_idx").on(
+      table.userId,
+      table.scope,
+      table.windowStart
+    ),
+  })
+);
+
 export type Customer = typeof customers.$inferSelect;
 export type BetterAuthUser = typeof users.$inferSelect;
 export type CreditPackage = typeof creditPackages.$inferSelect;
 export type CreditHold = typeof creditHolds.$inferSelect;
 export type CreditTransaction = typeof creditTransactions.$inferSelect;
 export type Video = typeof videos.$inferSelect;
+export type ClassicImage = typeof classicImages.$inferSelect;
+export type ImageGenerationJob = typeof imageGenerationJobs.$inferSelect;
 
 export const SubscriptionPlan = {
   FREE: "FREE",
@@ -350,6 +437,7 @@ export const CreditTransType = {
   ORDER_PAY: "ORDER_PAY",
   SUBSCRIPTION: "SUBSCRIPTION",
   VIDEO_CONSUME: "VIDEO_CONSUME",
+  IMAGE_CONSUME: "IMAGE_CONSUME",
   REFUND: "REFUND",
   EXPIRED: "EXPIRED",
   SYSTEM_ADJUST: "SYSTEM_ADJUST",

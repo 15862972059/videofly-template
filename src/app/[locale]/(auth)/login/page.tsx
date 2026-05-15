@@ -26,7 +26,7 @@ export default async function LoginPage({
   const { locale } = await params;
   const t = await getTranslations("Login");
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+    <div className="flex h-screen w-full flex-col items-center justify-center">
       <Link
         href={`/${locale}`}
         className={cn(

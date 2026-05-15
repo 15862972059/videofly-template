@@ -21,44 +21,30 @@ export interface NavGroup {
 // 左侧导航菜单 (工具页和管理页使用)
 export const sidebarNavigation: NavGroup[] = [
   {
-    id: "video",
-    title: "VIDEO",
+    id: "image",
+    title: "IMAGE",
     items: [
       {
-        id: "txt2vid",
-        title: "Text to Video",
-        href: "/text-to-video",
-        icon: "Type",
+        id: "studio",
+        title: "Studio",
+        href: "/studio",
+        icon: "Sparkles",
       },
       {
-        id: "img2vid",
-        title: "Image to Video",
-        href: "/image-to-video",
-        icon: "ImagePlay",
-      },
-      {
-        id: "ref2vid",
-        title: "Reference Video",
-        href: "/reference-to-video",
-        icon: "Video",
+        id: "gallery",
+        title: "Gallery",
+        href: "/gallery",
+        icon: "Images",
       },
     ],
   },
-  // 未来 IMAGE 分组扩展示例
-  // {
-  //   id: "image",
-  //   title: "IMAGE",
-  //   items: [
-  //     { id: "txt2img", title: "Text to Image", href: "/text-to-image", icon: "Image" },
-  //   ],
-  // },
   {
     id: "user",
     items: [
       {
-        id: "creations",
-        title: "My Creations",
-        href: "/my-creations",
+        id: "generations",
+        title: "My Generations",
+        href: "/generations",
         icon: "FolderOpen",
         requiresAuth: true,
       },
@@ -85,37 +71,22 @@ export const sidebarNavigation: NavGroup[] = [
 ];
 
 // 落地页顶部导航 - Models 下拉菜单
-export const headerModels = [
-  { id: "sora", title: "Sora 2", subtitle: "by OpenAI", href: "/sora-2" },
-  { id: "veo", title: "Veo 3.1", subtitle: "by Google", href: "/veo-3-1" },
-  {
-    id: "seedance",
-    title: "Seedance 1.5",
-    subtitle: "by ByteDance",
-    href: "/seedance-1-5",
-  },
-  { id: "wan", title: "Wan 2.6", subtitle: "by Alibaba", href: "/wan-2-6" },
-];
+// Hidden: image generation uses a single MiniMax model, no model selection dropdown
+export const headerModels: typeof headerTools = [];
 
 // 落地页顶部导航 - Tools 下拉菜单
 export const headerTools = [
   {
-    id: "txt2vid",
-    title: "Text to Video",
-    href: "/text-to-video",
-    icon: "Type",
+    id: "studio",
+    title: "Studio",
+    href: "/studio",
+    icon: "Sparkles",
   },
   {
-    id: "img2vid",
-    title: "Image to Video",
-    href: "/image-to-video",
-    icon: "ImagePlay",
-  },
-  {
-    id: "ref2vid",
-    title: "Reference to Video",
-    href: "/reference-to-video",
-    icon: "Video",
+    id: "gallery",
+    title: "Gallery",
+    href: "/gallery",
+    icon: "Images",
   },
 ];
 
@@ -129,7 +100,7 @@ export const headerDocs = {
 
 // 用户菜单项 (HeaderSimple 组件使用)
 export const userMenuItems = [
-  { id: "creations", title: "My Creations", href: "/my-creations", icon: "FolderOpen" },
+  { id: "generations", title: "My Generations", href: "/generations", icon: "FolderOpen" },
   { id: "credits", title: "Credits", href: "/credits", icon: "Gem" },
   { id: "settings", title: "Account", href: "/settings", icon: "User" },
 ];

@@ -19,8 +19,13 @@ const config = {
       { protocol: "https", hostname: "www.twillot.com" },
       { protocol: "https", hostname: "cdnv2.ruguoapp.com" },
       { protocol: "https", hostname: "www.setupyourpay.com" },
+      { protocol: "https", hostname: "cdnv2.ruguoapp.com" },
     ],
+    // Allow generated user images from storage domain (uses plain <img> for dynamic hosts)
+    unoptimized: false,
   },
+  /** Vercel serverless function max duration for image generation routes */
+  serverExternalPackages: ["postgres"],
   /** We already do linting and typechecking as separate tasks in CI */
   typescript: { ignoreBuildErrors: true },
   output: "standalone",

@@ -24,7 +24,7 @@ export default async function RegisterPage({
   const t = await getTranslations("Login");
 
   return (
-    <div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <div className="flex h-screen w-full flex-col items-center justify-center">
       <Link
         href={`/${locale}/login`}
         className={cn(
@@ -34,21 +34,19 @@ export default async function RegisterPage({
       >
         {t("back")}
       </Link>
-      <div className="hidden h-full bg-muted lg:block" />
-      <div className="lg:p-8">
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              {t("create_account")}
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              {t("create_account_desc")}
-            </p>
-          </div>
-          <Suspense fallback={<div className="h-10" />}>
-            <UserAuthForm lang={locale} disabled={true} />
-          </Suspense>
-          <p className="px-8 text-center text-sm text-muted-foreground">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <div className="flex flex-col space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("create_account")}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {t("create_account_desc")}
+          </p>
+        </div>
+        <Suspense fallback={<div className="h-10" />}>
+          <UserAuthForm lang={locale} disabled={true} />
+        </Suspense>
+        <p className="px-8 text-center text-sm text-muted-foreground">
             {t("agree_prefix")}{" "}
             <Link
               href={`/${locale}/terms`}
@@ -65,7 +63,6 @@ export default async function RegisterPage({
             </Link>
             .
           </p>
-        </div>
       </div>
     </div>
   );

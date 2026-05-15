@@ -10,6 +10,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().min(1),
+    NEXT_PUBLIC_SHOW_VIDEO_FEATURES: z.string().optional(),
     NEXT_PUBLIC_STRIPE_PRO_PRODUCT_ID: z.string().optional(),
     NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PRICE_ID: z.string().optional(),
     NEXT_PUBLIC_STRIPE_PRO_YEARLY_PRICE_ID: z.string().optional(),
@@ -24,6 +25,7 @@ export const env = createEnv({
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_SHOW_VIDEO_FEATURES: process.env.NEXT_PUBLIC_SHOW_VIDEO_FEATURES,
     NEXT_PUBLIC_STRIPE_PRO_PRODUCT_ID:
       process.env.NEXT_PUBLIC_STRIPE_PRO_PRODUCT_ID,
     NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PRICE_ID:

@@ -1,7 +1,7 @@
 {
   "Metadata": {
-    "title": "VideoFly - AI 视频生成平台",
-    "description": "使用 Sora 2、Veo 3.1 等模型在几分钟内创建惊人的 AI 视频"
+    "title": "AI Art - AI 图片生成平台",
+    "description": "使用 MiniMax 创建惊人的 AI 生成的图片和重新混合您的照片"
   },
   "Common": {
     "login": "登录",
@@ -15,35 +15,39 @@
     "edit": "编辑",
     "loading": "加载中...",
     "error": "出错了",
-    "success": "成功"
+    "success": "成功",
+    "buyCredits": "购买积分",
+    "loadMore": "加载更多"
   },
   "Header": {
     "models": "模型",
     "tools": "工具",
     "pricing": "定价",
     "docs": "文档",
-    "myCreations": "我的作品",
+    "studio": "工作室",
+    "gallery": "画廊",
+    "generations": "我的生成",
     "credits": "积分",
     "settings": "设置"
   },
   "Hero": {
-    "badge": "支持 Sora 2、Veo 3.1 等模型",
-    "title": "将您的想法转化为精彩视频",
-    "subtitle": "使用 AI",
-    "description": "在几分钟内创建专业的 AI 生成视频。支持文本转视频、图片转视频，或增强现有素材。",
+    "badge": "由 MiniMax AI 驱动",
+    "title": "将您的照片转化为惊艳的 AI 艺术作品",
+    "subtitle": "用 AI",
+    "description": "在几秒钟内创建专业的 AI 生成图片。浏览画廊模板，将照片重混到美丽场景中，或用文本生成图片。",
     "startCreating": "免费开始创作",
-    "viewExamples": "查看示例",
+    "viewExamples": "浏览画廊",
     "features": {
-      "fast": "闪电般快速",
+      "fast": "瞬间生成",
       "easy": "简单易用",
       "ai": "AI 驱动"
     },
     "stats": {
-      "videos": "个视频已创建",
-      "users": "位满意用户",
+      "videos": "张图片已生成",
+      "users": "活跃用户",
       "rating": "用户评分"
     },
-    "creditsHint": "{credits} 个免费积分开始 • 无需信用卡"
+    "creditsHint": "{credits} 个免费积分开始使用 • 无需信用卡"
   },
   "Notifications": {
     "generationWillNotify": "生成时间较长，我们会在生成完成后通知你。",

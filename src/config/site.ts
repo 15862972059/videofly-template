@@ -23,8 +23,8 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "VideoFly",
-  description: "AI Video Generation Platform - Create stunning videos with Sora 2, Veo 3.1, and more",
+  name: "AI2ART",
+  description: "AI photo remix and art generation platform powered by MiniMax",
   url: process.env.NEXT_PUBLIC_APP_URL || "https://videofly.app",
   ogImage: "/og.png",
   links: {},
@@ -34,7 +34,7 @@ export const siteConfig: SiteConfig = {
     defaultProvider: "google",
   },
   routes: {
-    defaultLoginRedirect: "/text-to-video",
+    defaultLoginRedirect: "/studio",
   },
 };
 

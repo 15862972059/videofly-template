@@ -1,0 +1,1 @@
+ALTER TYPE "public"."CreditTransType" ADD VALUE 'IMAGE_CONSUME' BEFORE 'REFUND';

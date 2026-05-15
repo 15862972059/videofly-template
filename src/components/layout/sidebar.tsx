@@ -7,10 +7,11 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ImagePlay, Type, Video, FolderOpen, Gem, User, Sparkles } from "lucide-react";
+import { ImagePlay, Type, Video, FolderOpen, Gem, User, Sparkles, Images } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/components/ui";
 import { sidebarNavigation } from "@/config/navigation";
+import { useCredits } from "@/stores/credits-store";
 import {
   Sheet,
   SheetContent,
@@ -28,6 +29,8 @@ const iconMap = {
   FolderOpen,
   Gem,
   User,
+  Sparkles,
+  Images,
 };
 
 interface SidebarProps {
@@ -41,6 +44,7 @@ export function Sidebar({ lang = "en", mobileOpen, onMobileClose }: SidebarProps
   const pathWithoutLang = pathname.replace(new RegExp(`^/${lang}`), "");
   const t = useTranslations("Sidebar");
   const { openModal } = useUpgradeModal();
+  const { balance } = useCredits();
 
   // 判断是否为免费用户（可根据实际业务调整）
   const isFreeUser = useMemo(() => true, []);
@@ -73,6 +77,11 @@ export function Sidebar({ lang = "en", mobileOpen, onMobileClose }: SidebarProps
       >
         {Icon && <Icon className="h-4 w-4 shrink-0" />}
         <span className="truncate">{item.title}</span>
+        {item.id === "credits" && balance && (
+          <span className="ml-auto shrink-0 text-xs font-semibold text-amber-500">
+            {balance.availableCredits}
+          </span>
+        )}
       </Link>
     );
   };
@@ -161,6 +170,11 @@ export function Sidebar({ lang = "en", mobileOpen, onMobileClose }: SidebarProps
                         return Icon && <Icon className="h-4 w-4 shrink-0" />;
                       })()}
                       <span className="truncate">{item.title}</span>
+                      {item.id === "credits" && balance && (
+                        <span className="ml-auto shrink-0 text-xs font-semibold text-amber-500">
+                          {balance.availableCredits}
+                        </span>
+                      )}
                     </Link>
                   </SheetClose>
                 );

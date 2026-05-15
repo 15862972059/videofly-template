@@ -11,6 +11,7 @@ const transTypeMapping: Record<CreditTransType, string> = {
   ORDER_PAY: "order_pay",
   SUBSCRIPTION: "subscription",
   VIDEO_CONSUME: "video_generate",
+  IMAGE_CONSUME: "image_generate",
   REFUND: "video_refund",
   EXPIRED: "expired",
   SYSTEM_ADJUST: "admin_adjust",
