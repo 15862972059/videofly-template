@@ -1,8 +1,9 @@
-import { generateImage, remixImage } from "@/ai/images/minimax";
+import { generateImage, remixImage } from "@/ai/images";
+import type { ImageModel } from "@/ai/images/types";
 import { creditService } from "@/services/credit";
 import { getStorage } from "@/lib/storage";
 import { getClassicImageById, getClassicImageBySlug } from "./gallery";
-import { buildRemixPrompt, buildTextPrompt,inferRemixAspectRatio } from "./prompts";
+import { buildRemixPrompt, buildTextPrompt, inferRemixAspectRatio } from "./prompts";
 import { assertPromptAllowed } from "./safety";
 import { buildImageObjectKey, validateSourceImageUrl } from "./storage";
 import {
@@ -17,6 +18,7 @@ export async function generateTextImage(input: {
   userId: string;
   prompt: string;
   aspectRatio?: string;
+  model?: ImageModel;
 }): Promise<{
   jobId: string;
   objectKey: string;
@@ -35,7 +37,7 @@ export async function generateTextImage(input: {
     type: "TEXT",
     prompt: finalPrompt,
     creditsUsed: IMAGE_GENERATION_CREDIT_COST,
-    parameters: { aspectRatio: input.aspectRatio },
+    parameters: { aspectRatio: input.aspectRatio, model: input.model },
   });
 
   if (!job) {
@@ -52,15 +54,14 @@ export async function generateTextImage(input: {
     await updateImageGenerationJobStatus(job.id, "RUNNING");
 
     const result = await generateImage({
-      model: "image-01",
       prompt: finalPrompt,
-      aspectRatio: input.aspectRatio || "1:1",
-      imageCount: 1,
+      aspectRatio: (input.aspectRatio || "1:1") as "1:1" | "16:9" | "9:16" | "3:4",
+      model: input.model || "minimax",
     });
 
     const imageUrl = result.imageUrls?.[0] ?? result.base64ImageList?.[0];
     if (!imageUrl) {
-      throw new Error("MiniMax returned no image");
+      throw new Error("Image generation returned no image");
     }
 
     const key = buildImageObjectKey({
@@ -111,6 +112,7 @@ export async function generateRemixImage(input: {
   sourceImageKey: string;
   prompt?: string;
   aspectRatio?: string;
+  model?: ImageModel;
 }): Promise<{
   jobId: string;
   objectKey: string;
@@ -158,7 +160,7 @@ export async function generateRemixImage(input: {
     prompt: finalPrompt,
     sourceImageKey: input.sourceImageKey,
     creditsUsed: IMAGE_GENERATION_CREDIT_COST,
-    parameters: { aspectRatio: finalAspectRatio },
+    parameters: { aspectRatio: finalAspectRatio, model: input.model },
   });
 
   if (!job) {
@@ -174,15 +176,17 @@ export async function generateRemixImage(input: {
 
     await updateImageGenerationJobStatus(job.id, "RUNNING");
 
+    // Note: Remix currently only supports MiniMax
     const result = await remixImage({
       prompt: finalPrompt,
       sourceImageUrl,
       aspectRatio: finalAspectRatio,
+      model: input.model,
     });
 
     const imageUrl = result.imageUrls?.[0] ?? result.base64ImageList?.[0];
     if (!imageUrl) {
-      throw new Error("MiniMax returned no image");
+      throw new Error("Image generation returned no image");
     }
 
     const key = buildImageObjectKey({

@@ -795,7 +795,6 @@ export const countrySubcategories: Record<string, string[]> = {
   India: ["Agra", "Rajasthan"],
   Indonesia: ["Java"],
   Ireland: ["Clare"],
-  Italy: ["Venice"],
   Jordan: ["Petra"],
   Mexico: ["Yucatan"],
   Morocco: ["Marrakech"],

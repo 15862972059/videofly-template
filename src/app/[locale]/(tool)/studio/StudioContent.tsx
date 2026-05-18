@@ -43,16 +43,6 @@ export default function StudioContent() {
 
   return (
     <div className="mx-auto flex h-full w-full max-w-[1520px] flex-col">
-      <div className="mb-8">
-        <div className="inline-flex rounded-full border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-700 dark:text-amber-400">
-          AI Photo Studio
-        </div>
-        <h1 className="mt-4 text-4xl font-bold tracking-tight text-slate-950 dark:text-white">Create</h1>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-          Transform your photos into stunning AI-generated artwork
-        </p>
-      </div>
-
       <div className="mb-8 inline-flex w-fit gap-1 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 p-1.5 shadow-sm">
         {tabs.map((tab) => (
           <button

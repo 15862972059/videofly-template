@@ -20,6 +20,7 @@ export async function POST(request: Request) {
       sourceImageKey: parsed.data.sourceImageKey,
       prompt: parsed.data.prompt,
       aspectRatio: parsed.data.aspectRatio,
+      model: parsed.data.model,
     });
 
     return apiSuccess(result);

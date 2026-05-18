@@ -3,15 +3,42 @@
 import { useState } from "react";
 import { Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { IMAGE_MODELS, type ImageModel } from "@/ai/images/types";
+import { getSupportedAspectRatios } from "@/ai/images/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface TextToImageProps {
   onGenerate: (data: { jobId: string; objectKey: string; publicUrl: string }) => void;
   generating: boolean;
 }
 
+const modelOptions = Object.entries(IMAGE_MODELS).map(([key, value]) => ({
+  value: key as ImageModel,
+  label: value.name,
+  description: value.description,
+  provider: value.provider,
+}));
+
+const aspectRatioOptions = [
+  { value: "1:1", label: "1:1" },
+  { value: "3:4", label: "3:4" },
+  { value: "9:16", label: "9:16" },
+  { value: "16:9", label: "16:9" },
+] as const;
+
 export function TextToImage({ onGenerate, generating }: TextToImageProps) {
   const [prompt, setPrompt] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [model, setModel] = useState<ImageModel>("minimax");
+  const [aspectRatio, setAspectRatio] = useState<"1:1" | "3:4" | "9:16" | "16:9">("16:9");
+
+  const supportedRatios = getSupportedAspectRatios(model);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
@@ -21,7 +48,11 @@ export function TextToImage({ onGenerate, generating }: TextToImageProps) {
       const res = await fetch("/api/v1/image/generate/text", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: prompt.trim() }),
+        body: JSON.stringify({
+          prompt: prompt.trim(),
+          model,
+          aspectRatio,
+        }),
       });
 
       const data = await res.json();
@@ -52,6 +83,59 @@ export function TextToImage({ onGenerate, generating }: TextToImageProps) {
             placeholder="A beautiful sunset over the Eiffel Tower, golden hour lighting, cinematic composition..."
             className="min-h-[120px] resize-none w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
           />
+
+          {/* Model Selection - Always visible on left */}
+          <div className="flex gap-3">
+            <div className="w-48">
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-400">Model</label>
+              <Select
+                value={model}
+                onValueChange={(value: ImageModel) => {
+                  setModel(value);
+                  if (!getSupportedAspectRatios(value).includes(aspectRatio)) {
+                    setAspectRatio(getSupportedAspectRatios(value)[0]);
+                  }
+                }}
+              >
+                <SelectTrigger className="mt-1.5">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {modelOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <div>
+                        <div className="font-medium">{option.label}</div>
+                        <div className="text-xs text-muted-foreground">{option.provider}</div>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-32">
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-400">Aspect Ratio</label>
+              <Select
+                value={aspectRatio}
+                onValueChange={(value: "1:1" | "3:4" | "9:16" | "16:9") => setAspectRatio(value)}
+              >
+                <SelectTrigger className="mt-1.5">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {aspectRatioOptions.map((option) => {
+                    const supported = supportedRatios.includes(option.value as "1:1" | "16:9" | "9:16" | "3:4");
+                    if (!supported) return null;
+                    return (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
           <Button
             onClick={handleGenerate}
