@@ -47,9 +47,10 @@ const DialogContent = React.forwardRef<
       ref={ref}
       className={cn(
         "fixed bottom-0 z-50 grid w-full gap-4 rounded-b-lg border bg-background p-6 shadow-lg animate-in md:bottom-auto",
-        "data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 md:max-w-lg md:rounded-lg md:zoom-in-90 data-[state=open]:md:slide-in-from-bottom-0",
+        "data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 md:rounded-lg md:zoom-in-90 data-[state=open]:md:slide-in-from-bottom-0",
         className,
       )}
+      style={{ maxWidth: "90vw", maxHeight: "90vh" }}
       {...props}
     >
       {children}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,7 @@ interface ClassicImageDetailDialogProps {
   open: boolean;
   onClose: () => void;
   onUseScene: (image: ClassicImageData | ClassicImage) => void;
+  loading?: boolean;
 }
 
 function getHeroUrl(image: ClassicImageData | ClassicImage): string {
@@ -58,6 +60,7 @@ export function ClassicImageDetailDialog({
   open,
   onClose,
   onUseScene,
+  loading = false,
 }: ClassicImageDetailDialogProps) {
   if (!image) return null;
 
@@ -68,13 +71,16 @@ export function ClassicImageDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent
+        style={{ maxWidth: "70vw" }}
+        className="overflow-hidden p-4"
+      >
         <DialogHeader>
           <DialogTitle className="text-2xl capitalize">{title}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted">
+          <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden bg-muted">
             <img
               src={heroUrl}
               alt={title}
@@ -92,10 +98,21 @@ export function ClassicImageDetailDialog({
           </div>
 
           <div className="flex gap-2">
-            <Button onClick={() => onUseScene(image)} className="flex-1">
-              Use This Scene
+            <Button
+              onClick={() => onUseScene(image)}
+              disabled={loading}
+              className="flex-1"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                "Use This Scene"
+              )}
             </Button>
-            <Button variant="outline" onClick={onClose}>
+            <Button variant="outline" onClick={onClose} disabled={loading}>
               Close
             </Button>
           </div>

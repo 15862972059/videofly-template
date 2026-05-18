@@ -2,8 +2,8 @@
 
 ## Summary
 - **Success:** 40
-- **Failed:** 0
-- **Output directory:** /root/feishu-oc_80d7f434b95af98ef888749eab995169/ai2art/public/images/generated
+- **Failed:** 1
+- **Output directory:** D:\dev\cc\ai2art\public\images\generated
 
 ## Entry IDs
 - `gallery-sweden-stockholm` — ✓ success
@@ -46,4 +46,4 @@
 - `gallery-luxembourg-bertrange` — ✓ success
 - `gallery-andorra-caldea` — ✓ success
 - `gallery-liechtenstein-vaduz` — ✓ success
-- `gallery-san-marino-guaita` — ✓ success (fixed: added manually after initial run)
+- `gallery-san-marino-guaita` — ✗ failed

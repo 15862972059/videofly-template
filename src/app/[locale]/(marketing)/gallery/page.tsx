@@ -63,6 +63,7 @@ export default function GalleryPage() {
   const [activeQuery, setActiveQuery] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState<ClassicImageData | ClassicImage | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [sceneLoading, setSceneLoading] = useState(false);
 
   useEffect(() => {
     void fetchGallery(true);
@@ -133,8 +134,9 @@ export default function GalleryPage() {
   };
 
   const handleUseScene = (image: ClassicImageData | ClassicImage) => {
-    setDetailOpen(false);
     const slug = (image as ClassicImage).slug ?? (image as ClassicImageData).slug;
+    setSceneLoading(true);
+    setDetailOpen(false);
     router.push(`/studio?scene=${slug}`);
   };
 
@@ -198,8 +200,12 @@ export default function GalleryPage() {
       <ClassicImageDetailDialog
         image={selectedImage}
         open={detailOpen}
-        onClose={() => setDetailOpen(false)}
+        onClose={() => {
+          setDetailOpen(false);
+          setSceneLoading(false);
+        }}
         onUseScene={handleUseScene}
+        loading={sceneLoading}
       />
     </div>
   );
