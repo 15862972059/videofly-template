@@ -438,7 +438,7 @@ export function mergeDefaults(userDefaults?: GeneratorDefaults): GeneratorDefaul
  * Get texts for a locale
  */
 export function getTexts(locale?: string, customTexts?: GeneratorTexts): GeneratorTexts {
-  const baseTexts = locale === "zh" ? DEFAULT_TEXTS_ZH : DEFAULT_TEXTS_EN;
+  const baseTexts = DEFAULT_TEXTS_EN;
 
   if (!customTexts) return baseTexts;
 

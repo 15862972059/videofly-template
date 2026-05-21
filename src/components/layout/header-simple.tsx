@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLocalePathname, useLocaleRouter } from "@/i18n/navigation";
-import { Gem, Globe, Menu, Sun, Moon, Monitor } from "lucide-react";
+import { Gem, Menu, Sun, Moon, Monitor } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
@@ -20,7 +20,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { userMenuItems } from "@/config/navigation";
-import { i18n, localeMap } from "@/config/i18n-config";
 
 interface HeaderSimpleProps {
   user?: Pick<User, "name" | "image" | "email"> | null;
@@ -39,14 +38,8 @@ export function HeaderSimple({
   const signInModal = useSigninModal();
   const { setTheme } = useTheme();
   const router = useLocaleRouter();
-  const pathname = useLocalePathname();
-  const tCommon = useTranslations("Common");
   const tHeader = useTranslations("Header");
   const currentLocale = lang || "en";
-
-  const switchLocale = (nextLocale: string) => {
-    router.push(pathname, { locale: nextLocale });
-  };
 
   const menuLabelMap: Record<string, string> = {
     creations: tHeader("myCreations"),
@@ -73,38 +66,6 @@ export function HeaderSimple({
 
         {/* Right: Credits + User Menu */}
         <div className="flex items-center gap-4">
-          {/* Language Switcher */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 gap-1 px-2 text-muted-foreground hover:text-foreground"
-              >
-                <Globe className="h-4 w-4" />
-                <span className="text-xs font-semibold">
-                  {currentLocale.toUpperCase()}
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-[140px]">
-              <div className="px-2 py-1 text-xs text-muted-foreground">
-                {tCommon("language")}
-              </div>
-              {i18n.locales.map((locale) => (
-                <DropdownMenuItem
-                  key={locale}
-                  onSelect={() => switchLocale(locale)}
-                  className={cn(
-                    "cursor-pointer",
-                    locale === currentLocale && "bg-muted"
-                  )}
-                >
-                  <span>{localeMap[locale]}</span>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
 
           {/* Theme Toggle */}
           <DropdownMenu>
@@ -177,13 +138,13 @@ export function HeaderSimple({
                     router.refresh();
                   }}
                 >
-                  {tCommon("logout")}
+                  Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <Button variant="default" size="sm" onClick={() => signInModal.onOpen()}>
-              {tCommon("login")}
+              Login
             </Button>
           )}
         </div>

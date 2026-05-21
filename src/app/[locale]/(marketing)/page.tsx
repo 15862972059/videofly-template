@@ -1,5 +1,7 @@
 import { HeroSection } from "@/components/landing/hero-section";
 import { PhotoRemixSection } from "@/components/landing/photo-remix-section";
+import { ModelIntroSection } from "@/components/landing/model-intro-section";
+import { ShowcaseSection } from "@/components/landing/showcase-section";
 import { FeaturesSection } from "@/components/landing/features-section";
 import { HowItWorks } from "@/components/landing/how-it-works-section";
 import { PricingSection } from "@/components/landing/pricing-section";
@@ -72,6 +74,8 @@ export default async function HomePage({ params }: HomePageProps) {
     <>
       <HeroSection />
       <PhotoRemixSection />
+      <ModelIntroSection />
+      <ShowcaseSection />
       <FeaturesSection />
       <HowItWorks />
       <PricingSection />

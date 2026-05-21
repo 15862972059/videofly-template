@@ -1,12 +1,58 @@
 "use client";
 
+import { useState } from "react";
 import { ArrowRight, ImagePlus, Lightbulb, MapPin, Sparkles, Upload } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { cn } from "@/components/ui";
 import { LocaleLink } from "@/i18n/navigation";
+
+const remixCases = [
+  {
+    id: "fuji",
+    tabName: "Mt. Fuji",
+    sceneLabel: "Destination Photo",
+    sceneTitle: "Japan Fuji Scene",
+    sceneImage: "/images/homepage/gallery-japan-fuji-c.png",
+    portraitLabel: "Upload Portrait",
+    portraitTitle: "User Portrait",
+    portraitImage: "/images/homepage/gallery-japan-fuji-p.jpeg",
+    resultLabel: "Generated Result",
+    resultTitle: "Remixed in Fuji",
+    resultImage: "/images/homepage/gallery-japan-fuji-mix.png",
+    promptSeed: "Cinematic portrait with blooming cherry blossoms, Mt. Fuji backdrop, soft natural daylight, premium travel photography style."
+  },
+  {
+    id: "barcelona",
+    tabName: "Barcelona",
+    sceneLabel: "Destination Photo",
+    sceneTitle: "Barcelona Street",
+    sceneImage: "/images/homepage/spain-barcelona-c.png",
+    portraitLabel: "Upload Portrait",
+    portraitTitle: "User Portrait",
+    portraitImage: "/images/homepage/spain-barcelona-p.jpeg",
+    resultLabel: "Generated Result",
+    resultTitle: "Remixed in Barcelona",
+    resultImage: "/images/homepage/spain-barcelona-mix.png",
+    promptSeed: "Editorial travel shot in Barcelona, beautiful architectural elements, warm golden hour sunbeams, cinematic depth of field."
+  },
+  {
+    id: "neon",
+    tabName: "Cyberpunk Street",
+    sceneLabel: "Destination Photo",
+    sceneTitle: "Neon Cyberpunk Alley",
+    sceneImage: "/images/homepage/j-c.png",
+    portraitLabel: "Upload Portrait",
+    portraitTitle: "User Portrait",
+    portraitImage: "/images/homepage/j-p.png",
+    resultLabel: "Generated Result",
+    resultTitle: "Remixed in Cyberpunk",
+    resultImage: "/images/homepage/j-mix.png",
+    promptSeed: "Cyberpunk editorial fashion portrait, neon-lit rainy street style, glowing reflections, ultra-realistic night photography."
+  }
+];
 
 const destinations = [
   { title: "Eiffel Tower", place: "Paris", image: "/images/gallery-france-paris-a.jpeg", tag: "Popular" },
@@ -58,6 +104,9 @@ function StepCard({
 }
 
 export function PhotoRemixSection() {
+  const [activeCaseIndex, setActiveCaseIndex] = useState(0);
+  const currentCase = remixCases[activeCaseIndex];
+
   return (
     <section id="photo-remix" className="relative overflow-hidden bg-slate-50 py-24 dark:bg-slate-950 md:py-32">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_20%,rgba(16,185,129,0.16),transparent_32%)]" />
@@ -89,6 +138,27 @@ export function PhotoRemixSection() {
           </BlurFade>
         </div>
 
+        {/* Tab Selector */}
+        <BlurFade inView>
+          <div className="mb-8 flex justify-center gap-2 flex-wrap">
+            {remixCases.map((item, index) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setActiveCaseIndex(index)}
+                className={cn(
+                  "rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 border cursor-pointer",
+                  activeCaseIndex === index
+                    ? "bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20"
+                    : "bg-white/80 text-slate-600 border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 dark:bg-slate-900/60 dark:text-slate-300 dark:border-white/10 dark:hover:bg-emerald-500/10"
+                )}
+              >
+                {item.tabName}
+              </button>
+            ))}
+          </div>
+        </BlurFade>
+
         <div className="grid gap-6">
           <BlurFade inView>
             <MagicCard
@@ -99,19 +169,37 @@ export function PhotoRemixSection() {
               gradientOpacity={0.15}
               gradientSize={320}
             >
-              <div className="grid gap-4 p-2 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-center">
-                <PreviewCard label="Destination Photo" title="Santorini scene" image="/images/homepage/photo-remix-scene.png" />
-                <ArrowRight className="mx-auto hidden h-5 w-5 text-emerald-600 md:block" />
-                <PreviewCard label="Upload Portrait" title="User image" image="/images/homepage/photo-remix-portrait.png" />
-                <ArrowRight className="mx-auto hidden h-5 w-5 text-emerald-600 md:block" />
-                <PreviewCard label="Generated Result" title="AI remix result" image="/images/homepage/photo-remix-result.png" emphasis />
-              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeCaseIndex}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.25 }}
+                  className="grid gap-4 p-2 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-center"
+                >
+                  <PreviewCard label={currentCase.sceneLabel} title={currentCase.sceneTitle} image={currentCase.sceneImage} />
+                  <ArrowRight className="mx-auto hidden h-5 w-5 text-emerald-600 md:block animate-pulse" />
+                  <PreviewCard label={currentCase.portraitLabel} title={currentCase.portraitTitle} image={currentCase.portraitImage} />
+                  <ArrowRight className="mx-auto hidden h-5 w-5 text-emerald-600 md:block animate-pulse" />
+                  <PreviewCard label={currentCase.resultLabel} title={currentCase.resultTitle} image={currentCase.resultImage} emphasis />
+                </motion.div>
+              </AnimatePresence>
               <div className="mt-4 grid gap-4 md:grid-cols-[0.85fr_1.15fr]">
                 <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/70 p-5 dark:bg-emerald-500/10">
                   <div className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-300">Prompt seed</div>
-                  <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
-                    Cinematic travel portrait at a stylish location, soft body and natural distance, warm sunset light, clean composition, realistic photography.
-                  </p>
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={activeCaseIndex}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-sm leading-6 text-slate-600 dark:text-slate-300"
+                    >
+                      {currentCase.promptSeed}
+                    </motion.p>
+                  </AnimatePresence>
                 </div>
                 <div className="rounded-2xl border border-emerald-900/10 bg-white/80 p-5 dark:bg-white/5">
                   <div className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-300">

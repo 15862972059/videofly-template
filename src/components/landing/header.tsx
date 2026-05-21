@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Gem, Globe, Menu, Moon, Monitor, Sun } from "lucide-react";
+import { Gem, Menu, Moon, Monitor, Sun } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
@@ -41,7 +41,6 @@ export function LandingHeader({ user }: { user?: User | null }) {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
-  const [isPending, startTransition] = useTransition();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -49,15 +48,6 @@ export function LandingHeader({ user }: { user?: User | null }) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const switchLocale = (newLocale: string) => {
-    startTransition(() => {
-      let newPath = pathname.replace(/^\/(zh|en)/, "");
-      if (newPath === "") newPath = "/";
-      router.push(newLocale === "zh" ? (newPath === "/" ? "/zh" : `/zh${newPath}`) : newPath);
-      router.refresh();
-    });
-  };
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -94,26 +84,6 @@ export function LandingHeader({ user }: { user?: User | null }) {
           </div>
 
           <div className="flex items-center gap-3">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  disabled={isPending}
-                  className="flex h-9 items-center gap-1 rounded-full px-3 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                >
-                  <Globe className="h-4 w-4" />
-                  {locale.toUpperCase()}
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => switchLocale("en")} className="cursor-pointer">
-                  English
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => switchLocale("zh")} className="cursor-pointer">
-                  Chinese
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
