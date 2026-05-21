@@ -1,9 +1,7 @@
 import type { ImageGenerationRequest, ImageGenerationResult } from "../types";
 
-// Replicate API base
 const REPLICATE_API_BASE = "https://api.replicate.com/v1";
 
-// Map our aspect ratio to Replicate format
 function mapAspectRatio(ratio: string | undefined): string {
   switch (ratio) {
     case "16:9":
@@ -26,7 +24,6 @@ export async function generateWithFluxSchnell(
     throw new Error("REPLICATE_API_TOKEN is not configured");
   }
 
-  // Get the latest version of flux-schnell
   const modelRes = await fetch(
     `${REPLICATE_API_BASE}/models/black-forest-labs/flux-schnell`,
     { headers: { Authorization: `Bearer ${apiToken}` } }
@@ -42,7 +39,6 @@ export async function generateWithFluxSchnell(
     throw new Error("Could not find flux-schnell version");
   }
 
-  // Create prediction
   const predRes = await fetch(`${REPLICATE_API_BASE}/predictions`, {
     method: "POST",
     headers: {
@@ -67,7 +63,6 @@ export async function generateWithFluxSchnell(
 
   let prediction = await predRes.json();
 
-  // Poll for result
   if (prediction.urls?.get) {
     for (let i = 0; i < 120; i++) {
       await new Promise((r) => setTimeout(r, 1000));
@@ -93,7 +88,6 @@ export async function generateWithFluxSchnell(
     throw new Error("No output from model");
   }
 
-  // Output can be an array of URLs
   const urls = Array.isArray(output) ? output : [output];
   return { imageUrls: urls.filter((u): u is string => typeof u === "string") };
 }
@@ -106,7 +100,6 @@ export async function generateWithGptImage2(
     throw new Error("REPLICATE_API_TOKEN is not configured");
   }
 
-  // First get model info
   const modelRes = await fetch(
     `${REPLICATE_API_BASE}/models/goodex/gpt-image-2`,
     { headers: { Authorization: `Bearer ${apiToken}` } }
@@ -122,7 +115,6 @@ export async function generateWithGptImage2(
     throw new Error("Could not find gpt-image-2 version");
   }
 
-  // Create prediction
   const predRes = await fetch(`${REPLICATE_API_BASE}/predictions`, {
     method: "POST",
     headers: {
@@ -145,7 +137,6 @@ export async function generateWithGptImage2(
 
   let prediction = await predRes.json();
 
-  // Poll for result
   if (prediction.urls?.get) {
     for (let i = 0; i < 120; i++) {
       await new Promise((r) => setTimeout(r, 1000));
@@ -183,7 +174,6 @@ export async function generateWithNanoBanana2(
     throw new Error("REPLICATE_API_TOKEN is not configured");
   }
 
-  // First get model info
   const modelRes = await fetch(
     `${REPLICATE_API_BASE}/models/google/nano-banana-2`,
     { headers: { Authorization: `Bearer ${apiToken}` } }
@@ -199,7 +189,6 @@ export async function generateWithNanoBanana2(
     throw new Error("Could not find nano-banana-2 version");
   }
 
-  // Create prediction
   const predRes = await fetch(`${REPLICATE_API_BASE}/predictions`, {
     method: "POST",
     headers: {
@@ -211,7 +200,7 @@ export async function generateWithNanoBanana2(
       version,
       input: {
         prompt: request.prompt,
-        aspect_ratio: "1:1", // Only 1:1 supported
+        aspect_ratio: "1:1",
       },
     }),
   });

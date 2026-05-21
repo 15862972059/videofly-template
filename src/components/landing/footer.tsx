@@ -23,7 +23,7 @@ const footerSections = [
     title: "Support",
     links: [
       { title: "FAQ", href: "/#faq" },
-      { title: "Contact", href: "mailto:support@ai2art.app" },
+      { title: "Contact", href: "mailto:support@ar2art.net" },
     ],
   },
 ];

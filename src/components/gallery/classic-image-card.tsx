@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { ClassicImageData } from "@/types/ai-photo";
 import type { ClassicImage } from "@/db";
 
@@ -28,12 +27,10 @@ export function ClassicImageCard({ image, onSelect, priority = false }: ClassicI
       onClick={() => onSelect(image)}
       className="group relative overflow-hidden rounded-xl bg-muted aspect-[3/4] text-left hover:ring-2 hover:ring-primary transition-all"
     >
-      <Image
+      <img
         src={thumbnailUrl}
         alt={title}
-        fill
-        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-        priority={priority}
+        loading={priority ? "eager" : "lazy"}
         className="absolute inset-0 h-full w-full object-cover transition-transform group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

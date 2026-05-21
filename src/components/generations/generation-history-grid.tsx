@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { GenerationJobData } from "@/types/ai-photo";
 
 interface GenerationHistoryGridProps {
@@ -25,7 +24,7 @@ function GenerationCard({
   job: GenerationJobData;
   onSelect?: (j: GenerationJobData) => void;
 }) {
-  const hasImage = !!job.result_image_key;
+  const imageUrl = job.result_image_url;
   const isLoading = job.status === "queued" || job.status === "running";
 
   return (
@@ -34,13 +33,13 @@ function GenerationCard({
       className="group relative overflow-hidden rounded-xl bg-muted aspect-square text-left hover:ring-2 hover:ring-primary transition-all"
       disabled={isLoading}
     >
-      {hasImage ? (
-        <Image
-          src={job.result_image_key!}
+      {imageUrl ? (
+        <img
+          src={imageUrl}
           alt={`Generation ${job.id}`}
-          fill
-          className="object-cover"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover"
         />
       ) : (
         <div className="w-full h-full flex items-center justify-center">

@@ -1,5 +1,22 @@
-import { and, eq, ilike, inArray, like, or, sql } from "drizzle-orm";
-import { db, classicImages } from "@/db";
+import { and, eq, ilike, or, sql } from "drizzle-orm";
+import { db, classicImages, type ClassicImage } from "@/db";
+import type { ClassicImageData } from "@/types/ai-photo";
+
+function toClassicImageData(row: ClassicImage): ClassicImageData {
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    description: row.description,
+    category: row.category,
+    subcategory: row.subcategory,
+    prompt_template: row.promptTemplate,
+    hero_image_url: row.heroImageUrl,
+    thumbnail_url: row.thumbnailUrl,
+    is_active: row.isActive,
+    created_at: row.createdAt instanceof Date ? row.createdAt.toISOString() : row.createdAt,
+  };
+}
 
 export interface GalleryFilters {
   category?: string;
@@ -10,7 +27,7 @@ export interface GalleryFilters {
   offset?: number;
 }
 
-export async function listClassicImages(filters: GalleryFilters = {}) {
+export async function listClassicImages(filters: GalleryFilters = {}): Promise<ClassicImageData[]> {
   const conditions = [];
 
   if (filters.category) {
@@ -33,38 +50,34 @@ export async function listClassicImages(filters: GalleryFilters = {}) {
     conditions.push(eq(classicImages.isActive, true));
   }
 
-  const query = db
+  const q = db
     .select()
     .from(classicImages)
     .where(and(...conditions))
-    .orderBy(classicImages.createdAt);
+    .orderBy(classicImages.createdAt)
+    .limit(filters.limit ?? 100)
+    .offset(filters.offset ?? 0);
 
-  if (filters.limit !== undefined) {
-    query.limit(filters.limit);
-    if (filters.offset !== undefined) {
-      query.offset(filters.offset);
-    }
-  }
-
-  return query;
+  const rows = await q;
+  return rows.map(toClassicImageData);
 }
 
-export async function getClassicImageById(id: string) {
+export async function getClassicImageById(id: string): Promise<ClassicImageData | null> {
   const results = await db
     .select()
     .from(classicImages)
     .where(eq(classicImages.id, id))
     .limit(1);
-  return results[0] ?? null;
+  return results[0] ? toClassicImageData(results[0]) : null;
 }
 
-export async function getClassicImageBySlug(slug: string) {
+export async function getClassicImageBySlug(slug: string): Promise<ClassicImageData | null> {
   const results = await db
     .select()
     .from(classicImages)
     .where(eq(classicImages.slug, slug))
     .limit(1);
-  return results[0] ?? null;
+  return results[0] ? toClassicImageData(results[0]) : null;
 }
 
 export async function countClassicImages(filters: GalleryFilters = {}) {
@@ -104,6 +117,15 @@ export async function getGalleryCategories() {
     .where(eq(classicImages.isActive, true))
     .orderBy(classicImages.category);
   return results.map((r) => r.category);
+}
+
+export async function getSubcategoriesByCategory(category: string) {
+  const results = await db
+    .selectDistinct({ subcategory: classicImages.subcategory })
+    .from(classicImages)
+    .where(and(eq(classicImages.isActive, true), eq(classicImages.category, category)))
+    .orderBy(classicImages.subcategory);
+  return results.map((r) => r.subcategory).filter((s): s is string => s !== null);
 }
 
 export async function updateClassicImage(

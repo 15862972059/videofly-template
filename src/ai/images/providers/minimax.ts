@@ -1,6 +1,14 @@
 import type { ImageGenerationRequest, ImageGenerationResult } from "../types";
 
 const DEFAULT_API_BASE = "https://api.minimaxi.com/v1";
+const API_TIMEOUT_MS = 120_000;
+
+class MiniMaxApiError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "MiniMaxApiError";
+  }
+}
 
 function getApiBase(): string {
   const configured = process.env.MINIMAX_API_URL?.trim();
@@ -48,7 +56,7 @@ async function parseResponse(response: Response): Promise<ImageGenerationResult>
       "status_code" in baseResp &&
       baseResp.status_code !== 0
     ) {
-      throw new Error(
+      throw new MiniMaxApiError(
         `MiniMax API error: ${baseResp.status_code} ${baseResp.status_msg || "Unknown"}`
       );
     }
@@ -57,15 +65,51 @@ async function parseResponse(response: Response): Promise<ImageGenerationResult>
   return normalizeResponse(payload);
 }
 
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs: number = API_TIMEOUT_MS
+): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...init,
+      signal: controller.signal,
+    });
+    return response;
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      throw new MiniMaxApiError(
+        `MiniMax API request timed out after ${Math.round(timeoutMs / 1000)}s. The image generation may take longer than expected, please try again.`
+      );
+    }
+    if (err instanceof TypeError) {
+      const cause = (err as TypeError & { cause?: Error & { code?: string; message?: string } }).cause;
+      const detail = cause?.message ? `: ${cause.message}` : "";
+      const code = cause?.code ? ` (${cause.code})` : "";
+      console.error("[MiniMax] fetch failed:", { message: err.message, causeMessage: cause?.message, causeCode: cause?.code });
+      throw new MiniMaxApiError(
+        `Failed to connect to MiniMax API${code}${detail}. Please check your network or API configuration.`
+      );
+    }
+    console.error("[MiniMax] unexpected error:", err);
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export async function generateWithMiniMax(
   request: ImageGenerationRequest
 ): Promise<ImageGenerationResult> {
   const apiKey = process.env.MINIMAX_API_KEY;
   if (!apiKey) {
-    throw new Error("MINIMAX_API_KEY is not configured");
+    throw new MiniMaxApiError("MINIMAX_API_KEY is not configured");
   }
 
-  const response = await fetch(`${getApiBase()}/image_generation`, {
+  const response = await fetchWithTimeout(`${getApiBase()}/image_generation`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -83,7 +127,7 @@ export async function generateWithMiniMax(
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`MiniMax API error: ${response.status} ${error}`);
+    throw new MiniMaxApiError(`MiniMax API error: ${response.status} ${error}`);
   }
 
   return parseResponse(response);
@@ -96,10 +140,10 @@ export async function remixWithMiniMax(request: {
 }): Promise<ImageGenerationResult> {
   const apiKey = process.env.MINIMAX_API_KEY;
   if (!apiKey) {
-    throw new Error("MINIMAX_API_KEY is not configured");
+    throw new MiniMaxApiError("MINIMAX_API_KEY is not configured");
   }
 
-  const response = await fetch(`${getApiBase()}/image_generation`, {
+  const response = await fetchWithTimeout(`${getApiBase()}/image_generation`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -122,7 +166,7 @@ export async function remixWithMiniMax(request: {
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`MiniMax API error: ${response.status} ${error}`);
+    throw new MiniMaxApiError(`MiniMax API error: ${response.status} ${error}`);
   }
 
   return parseResponse(response);

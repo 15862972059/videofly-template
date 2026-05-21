@@ -1,11 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useLocale } from "next-intl";
-import type { ClassicImageData } from "@/types/ai-photo";
-import { classicImages as allImages } from "@/data/classic-images";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { ExternalLink, ImageIcon, MapPin, RefreshCcw, Search, X } from "lucide-react";
+import type { ClassicImageData } from "@/types/ai-photo";
 
 interface RemixScenePanelProps {
   selectedScene: ClassicImageData | null;
@@ -13,26 +10,94 @@ interface RemixScenePanelProps {
   onClear: () => void;
 }
 
+function ImageWithFallback({ src, alt, className, loading = "lazy" }: { src: string; alt: string; className?: string; loading?: "lazy" | "eager" }) {
+  const [error, setError] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  if (error || !src) {
+    return (
+      <div className={`${className} flex items-center justify-center bg-slate-100 dark:bg-slate-800`}>
+        <ImageIcon className="h-6 w-6 text-slate-300 dark:text-slate-600" />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {!loaded && (
+        <div className={`${className} animate-pulse bg-slate-100 dark:bg-slate-800`} />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+        className={`${className} transition-opacity duration-200 ${loaded ? "opacity-100" : "opacity-0 absolute"}`}
+        onLoad={() => setLoaded(true)}
+        onError={() => setError(true)}
+      />
+    </>
+  );
+}
+
 export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScenePanelProps) {
-  const locale = useLocale();
   const [showPicker, setShowPicker] = useState(false);
   const [category, setCategory] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [images, setImages] = useState<ClassicImageData[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const fetchedCategoriesRef = useRef<string[] | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const categories = [...new Set(allImages.map((img) => img.category))].sort();
-  const filtered = allImages.filter((img) => {
-    if (category && img.category !== category) return false;
-    if (search) {
-      const q = search.toLowerCase();
-      if (!img.title.toLowerCase().includes(q) && !(img.description ?? "").toLowerCase().includes(q)) return false;
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [search]);
+
+  const fetchImages = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (category) params.set("category", category);
+      if (debouncedSearch) params.set("q", debouncedSearch);
+      params.set("limit", "30");
+
+      const res = await fetch(`/api/v1/gallery?${params.toString()}`);
+      const data = await res.json();
+      if (data.success) {
+        setImages(data.data.images);
+        if (fetchedCategoriesRef.current) {
+          setCategories(fetchedCategoriesRef.current);
+        } else {
+          setCategories(data.data.categories);
+          fetchedCategoriesRef.current = data.data.categories;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch images:", err);
+    } finally {
+      setLoading(false);
     }
-    return true;
-  });
+  }, [category, debouncedSearch]);
+
+  useEffect(() => {
+    if (showPicker) {
+      fetchImages();
+    }
+  }, [showPicker, category, debouncedSearch, fetchImages]);
 
   const handleSelect = (scene: ClassicImageData) => {
     onSelect(scene);
     setShowPicker(false);
     setSearch("");
+    setDebouncedSearch("");
     setCategory(null);
   };
 
@@ -50,7 +115,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
         {selectedScene && (
           <button
             type="button"
-            onClick={() => { setShowPicker(true); setSearch(""); setCategory(null); }}
+            onClick={() => { setShowPicker(true); setSearch(""); setDebouncedSearch(""); setCategory(null); }}
             className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 transition hover:border-slate-300 hover:text-slate-900 dark:hover:text-white"
           >
             <RefreshCcw className="h-3.5 w-3.5" />
@@ -59,13 +124,14 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
         )}
       </div>
 
-      <div className="overflow-hidden rounded-[1.5rem] border border-slate-200 dark:border-slate-700 bg-[linear-gradient(180deg,_#f8fafc_0%,_#ffffff_100%)] dark:bg-[linear-gradient(180deg,_#1e293b_0%,_#0f172a_100%)]">
+      <div className="relative overflow-hidden rounded-[1.5rem] border border-slate-200 dark:border-slate-700 bg-[linear-gradient(180deg,_#f8fafc_0%,_#ffffff_100%)] dark:bg-[linear-gradient(180deg,_#1e293b_0%,_#0f172a_100%)]">
         {selectedScene ? (
           <div className="relative">
-            <img
+            <ImageWithFallback
               src={selectedScene.hero_image_url}
               alt={selectedScene.title}
-              className="h-[320px] w-full object-cover"
+              className="h-[320px] w-full object-contain"
+              loading="eager"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent p-5">
               <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-medium text-white backdrop-blur">
@@ -89,7 +155,6 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
           </div>
         ) : showPicker ? (
           <div className="p-4">
-            {/* Search & Category filters */}
             <div className="flex gap-2 mb-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -139,28 +204,35 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
             </div>
 
             <div className="grid grid-cols-3 gap-2 max-h-[260px] overflow-y-auto">
-              {filtered.slice(0, 30).map((img) => (
-                <button
-                  key={img.id}
-                  type="button"
-                  onClick={() => handleSelect(img)}
-                  className="relative aspect-[3/4] rounded-xl overflow-hidden border-2 border-transparent hover:border-primary focus:border-primary transition-all group"
-                >
-                  <img
-                    src={img.thumbnail_url}
-                    alt={img.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-                    <p className="text-xs font-medium text-white capitalize truncate">{img.title}</p>
-                    <p className="text-[10px] text-white/70 capitalize truncate">{img.category}</p>
-                  </div>
-                </button>
-              ))}
+              {loading ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="aspect-[3/4] rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse" />
+                ))
+              ) : images.length === 0 ? (
+                <p className="col-span-3 text-center text-sm text-slate-400 py-8">No scenes found.</p>
+              ) : (
+                images.map((img) => (
+                  <button
+                    key={img.id}
+                    type="button"
+                    onClick={() => handleSelect(img)}
+                    className="relative aspect-[3/4] rounded-xl overflow-hidden border-2 border-transparent hover:border-primary focus:border-primary transition-all group"
+                  >
+                    <img
+                      src={img.thumbnail_url}
+                      alt={img.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                      <p className="text-xs font-medium text-white capitalize truncate">{img.title}</p>
+                      <p className="text-[10px] text-white/70 capitalize truncate">{img.category}</p>
+                    </div>
+                  </button>
+                ))
+              )}
             </div>
-            {filtered.length === 0 && (
-              <p className="text-center text-sm text-slate-400 py-8">No scenes found.</p>
-            )}
           </div>
         ) : (
           <div className="flex h-[320px] flex-col items-center justify-center px-6 py-10 text-slate-400">

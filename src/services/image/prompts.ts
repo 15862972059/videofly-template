@@ -1,3 +1,18 @@
+const REMIX_PROMPT_MARKER = "Treat the selected scene image as the authoritative background";
+
+export function buildRemixSystemPrompt(_classicTitle: string): string {
+  return [
+    `${REMIX_PROMPT_MARKER}. The first reference image is the scene; keep the scene, framing, and major background details as unchanged as possible.`,
+    "The second reference image is the person; keep the person's identity, face, hairstyle, gender presentation, clothing, and overall look unchanged.",
+    "Use the reference images as the only source of truth for both the scene and the person. Do not infer or replace scene or person details from titles or text.",
+    "This is image compositing, not scene redesign. Place the person naturally into the existing scene with realistic scale, lighting, perspective, shadows, and occlusion. Do not create a new location, heavily alter the scene or outfit, or add extra people, extra limbs, or duplicate body parts.",
+  ].join(" ");
+}
+
+export function isGeneratedRemixPrompt(prompt: string): boolean {
+  return prompt.trimStart().startsWith(REMIX_PROMPT_MARKER);
+}
+
 export function buildRemixPrompt(input: {
   classicTitle: string;
   classicCategory: string;
@@ -5,21 +20,15 @@ export function buildRemixPrompt(input: {
   promptTemplate: string;
 }): string {
   const userDetails = input.userPrompt?.trim();
-  const parts = [
-    `Blend the referenced person naturally into the scene ${input.classicTitle}`,
-    `${input.classicCategory} scene`,
-    input.promptTemplate,
-    "Keep the person's identity recognizable and place them realistically within the destination",
-    "Keep the original clothing, hairstyle, body shape, and facial features unless the user explicitly asks for a change",
-    "Preserve the selected scenic background composition, landmark placement, camera framing, and overall environment",
-    "Use a full-body composition whenever possible and keep the entire person visible from head to toe",
-    "Do not crop the person, do not zoom in to a half-body portrait, and do not blur the face or background",
-    "Match perspective, scale, lighting, shadows, and color grading to the environment",
-    "photorealistic travel photo, natural composition, high detail, sharp focus, crisp facial details",
-    userDetails || "natural pose, believable integration, clean facial details",
-  ];
+  const parts = [buildRemixSystemPrompt(input.classicTitle)];
 
-  return parts.join(". ");
+  if (userDetails) {
+    parts.push(
+      `Additional refinement request: ${userDetails}. This must not override the scene and identity preservation rules.`
+    );
+  }
+
+  return parts.join(" ");
 }
 
 export function inferRemixAspectRatio(input: {

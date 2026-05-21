@@ -1,4 +1,5 @@
 import { s3mini } from "s3mini";
+import { configureGlobalFetchProxy, downloadImage } from "@/lib/proxy";
 
 export interface StorageConfig {
   endpoint: string;
@@ -15,9 +16,11 @@ export class Storage {
   private publicDomain?: string;
 
   constructor(config: StorageConfig) {
+    configureGlobalFetchProxy();
+
     const endpoint = config.endpoint.replace(/\/$/, "");
     this.endpointWithBucket = `${endpoint}/${config.bucket}`;
-    this.publicDomain = config.publicDomain?.replace(/\/$/, "");
+    this.publicDomain = normalizePublicDomain(config.publicDomain);
 
     this.client = new s3mini({
       endpoint: this.endpointWithBucket,
@@ -27,9 +30,6 @@ export class Storage {
     });
   }
 
-  /**
-   * 上传文件到 R2/S3
-   */
   async uploadFile(params: {
     key: string;
     body: Buffer;
@@ -48,24 +48,14 @@ export class Storage {
     return { url: this.getPublicUrl(params.key), key: params.key };
   }
 
-  /**
-   * 从 URL 下载文件并上传到 R2/S3
-   */
   async downloadAndUpload(params: {
     sourceUrl: string;
     key: string;
     contentType?: string;
   }): Promise<{ url: string; key: string }> {
-    const response = await fetch(params.sourceUrl);
-    if (!response.ok) {
-      throw new Error(`Failed to download: ${response.statusText}`);
-    }
+    const buffer = await downloadImage(params.sourceUrl);
 
-    const buffer = Buffer.from(await response.arrayBuffer());
-    const contentType =
-      params.contentType ||
-      response.headers.get("content-type") ||
-      "video/mp4";
+    const contentType = params.contentType || "image/png";
 
     return this.uploadFile({
       key: params.key,
@@ -74,9 +64,6 @@ export class Storage {
     });
   }
 
-  /**
-   * 获取公开 URL
-   */
   getPublicUrl(key: string): string {
     if (this.publicDomain) {
       return `${this.publicDomain}/${key}`;
@@ -85,7 +72,16 @@ export class Storage {
   }
 }
 
-// 单例工厂
+function normalizePublicDomain(domain?: string): string | undefined {
+  const trimmed = domain?.trim();
+  if (!trimmed) return undefined;
+
+  const withProtocol = /^https?:\/\//i.test(trimmed)
+    ? trimmed
+    : `https://${trimmed}`;
+  return withProtocol.replace(/\/$/, "");
+}
+
 let storageInstance: Storage | null = null;
 
 export function getStorage(): Storage {

@@ -7,8 +7,14 @@ import { BlurFade } from "@/components/magicui/blur-fade";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { LocaleLink } from "@/i18n/navigation";
+import { NEW_USER_GIFT } from "@/config/pricing-user";
 
-const benefits = ["2 free credits to start", "No credit card required", "Cancel anytime", "Commercial use on paid plans"];
+const benefits = [
+  `${NEW_USER_GIFT.credits} free credit to start`,
+  "No credit card required",
+  "Cancel anytime",
+  "Commercial use on paid plans",
+];
 
 export function CTASection() {
   return (

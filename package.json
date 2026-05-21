@@ -105,6 +105,7 @@
     "react-tweet": "^3.3.0",
     "react-wrap-balancer": "1.1.0",
     "recharts": "3.6.0",
+    "replicate": "^1.4.0",
     "resend": "2.1.0",
     "s3mini": "^0.2.0",
     "sonner": "^2.0.7",
@@ -114,6 +115,7 @@
     "three": "0.163.0",
     "three-globe": "2.31.0",
     "tw-animate-css": "^1.2.4",
+    "undici": "^8.3.0",
     "use-intl": "^4.7.0",
     "vaul": "1.1.2",
     "zod": "^4.2.1",
@@ -125,6 +127,7 @@
     "@react-email/preview-server": "5.2.5",
     "@react-email/render": "^2.0.3",
     "@tailwindcss/postcss": "^4.0.14",
+    "@testing-library/jest-dom": "^6.9.1",
     "@types/canvas-confetti": "^1.9.0",
     "@types/negotiator": "0.6.3",
     "@types/node": "20.12.12",
@@ -135,10 +138,12 @@
     "dotenv-cli": "^11.0.0",
     "drizzle-kit": "^0.31.8",
     "esbuild": "0.20.2",
+    "jsdom": "^29.1.1",
     "postcss": "^8",
     "react-email": "^5.2.5",
     "tailwindcss": "^4.0.14",
     "tsx": "^4.19.2",
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "vitest": "^4.0.0"
   }
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { countrySubcategories } from "@/data/classic-images";
 
 interface GalleryFiltersProps {
   categories: string[];
@@ -33,10 +32,6 @@ export function GalleryFilters({
     onCategoryChange(category);
     onSubcategoryChange(undefined);
   };
-
-  const subcategories = activeCategory
-    ? countrySubcategories[activeCategory] || []
-    : [];
 
   return (
     <div className="space-y-4">
@@ -83,35 +78,6 @@ export function GalleryFilters({
           </button>
         ))}
       </div>
-
-      {/* Subcategory tabs */}
-      {subcategories.length > 0 && (
-        <div className="flex flex-wrap gap-2 pl-4 border-l-2 border-primary/30">
-          <button
-            onClick={() => onSubcategoryChange(undefined)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              !activeSubcategory
-                ? "bg-secondary text-secondary-foreground"
-                : "bg-muted/50 hover:bg-muted"
-            }`}
-          >
-            All {activeCategory}
-          </button>
-          {subcategories.map((sub) => (
-            <button
-              key={sub}
-              onClick={() => onSubcategoryChange(sub)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium capitalize transition-colors ${
-                activeSubcategory === sub
-                  ? "bg-secondary text-secondary-foreground"
-                  : "bg-muted/50 hover:bg-muted"
-              }`}
-            >
-              {sub}
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

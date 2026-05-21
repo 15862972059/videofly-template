@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { ClassicImageData } from "@/types/ai-photo";
 import type { ClassicImage } from "@/db";
-import { classicImages as localImages } from "@/data/classic-images";
 import { GalleryFilters } from "@/components/gallery/gallery-filters";
 import { ClassicImageGrid } from "@/components/gallery/classic-image-grid";
 import { ClassicImageDetailDialog } from "@/components/gallery/classic-image-detail-dialog";
@@ -19,32 +18,6 @@ interface GalleryState {
   loading: boolean;
   loadingMore: boolean;
   error: string | null;
-}
-
-function getLocalCategories(): string[] {
-  const cats = [...new Set(localImages.map((img) => img.category))];
-  return cats.sort();
-}
-
-function filterLocalImages(
-  images: ClassicImageData[],
-  category?: string,
-  subcategory?: string,
-  query?: string
-): ClassicImageData[] {
-  return images.filter((img) => {
-    if (category && img.category !== category) return false;
-    if (subcategory && img.subcategory !== subcategory) return false;
-    if (query) {
-      const q = query.toLowerCase();
-      if (
-        !img.title.toLowerCase().includes(q) &&
-        !(img.description ?? "").toLowerCase().includes(q)
-      )
-        return false;
-    }
-    return true;
-  });
 }
 
 export default function GalleryPage() {
@@ -111,20 +84,14 @@ export default function GalleryPage() {
           return;
         }
       }
-      throw new Error("API fallback");
-    } catch {
-      const filtered = filterLocalImages(localImages, activeCategory, activeSubcategory, activeQuery);
-      const nextImages = filtered.slice(nextOffset, nextOffset + PAGE_SIZE);
-
-      setState({
-        images: reset ? nextImages : [...state.images, ...nextImages],
-        categories: getLocalCategories(),
-        total: filtered.length,
-        hasMore: nextOffset + nextImages.length < filtered.length,
+      throw new Error("API error");
+    } catch (err) {
+      setState((s) => ({
+        ...s,
         loading: false,
         loadingMore: false,
-        error: null,
-      });
+        error: err instanceof Error ? err.message : "Failed to load gallery",
+      }));
     }
   };
 

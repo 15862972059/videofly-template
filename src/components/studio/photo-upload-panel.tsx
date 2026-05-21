@@ -78,10 +78,9 @@ export function PhotoUploadPanel({
             <UserRound className="h-3.5 w-3.5" />
             Step 2
           </div>
-          <h3 className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">Upload Your Photo</h3>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Clear, full-body portraits work best.
-          </p>
+          <h3 className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">
+            Upload Your Photo
+          </h3>
         </div>
         {preview && (
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700">
@@ -97,7 +96,7 @@ export function PhotoUploadPanel({
             <img
               src={preview}
               alt="Uploaded preview"
-              className="h-[320px] w-full object-cover"
+              className="h-[320px] w-full object-contain"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent p-5 text-white">
               <p className="text-sm font-semibold">Portrait ready</p>

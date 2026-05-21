@@ -6,9 +6,9 @@ import { PromptPanel } from "./prompt-panel";
 import { PhotoUploadPanel } from "./photo-upload-panel";
 import { RemixResultPanel } from "./remix-result-panel";
 import { RemixScenePanel } from "./remix-scene-panel";
-import { RemixSettingsPanel } from "./remix-settings-panel";
-import type { ImageModel } from "@/ai/images/types";
-import { getSupportedAspectRatios } from "@/ai/images/types";
+import { GenerationProgress } from "./generation-progress";
+import { IMAGE_MODELS, type ImageModel, type ImageQuality } from "@/ai/images/types";
+import { getSupportedAspectRatios, normalizeImageQuality } from "@/ai/images/types";
 
 interface RemixWorkspaceProps {
   initialScene?: ClassicImageData;
@@ -22,7 +22,8 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState<{ objectKey: string; publicUrl: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [model, setModel] = useState<ImageModel>("minimax");
+  const [model, setModel] = useState<ImageModel>("gpt-image-2");
+  const [quality, setQuality] = useState<ImageQuality>("auto");
 
   useEffect(() => {
     if (initialScene) {
@@ -64,6 +65,7 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
           prompt,
           aspectRatio,
           model,
+          quality,
         }),
       });
 
@@ -81,22 +83,7 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
   };
 
   return (
-    <div className="relative grid gap-8 xl:grid-cols-[minmax(360px,460px)_minmax(0,1.35fr)]">
-      <div className="space-y-5 xl:sticky xl:top-8 self-start">
-        <RemixSettingsPanel
-          aspectRatio={aspectRatio}
-          onAspectRatioChange={setAspectRatio}
-          model={model}
-          onModelChange={setModel}
-        />
-        <RemixResultPanel
-          result={result}
-          sourceImageKey={sourceImageKey}
-          selectedScene={selectedScene}
-          aspectRatio={aspectRatio}
-        />
-      </div>
-
+    <div className="relative grid gap-8 xl:grid-cols-[minmax(0,1.35fr)_minmax(360px,460px)]">
       <div className="space-y-6">
         <div className="grid gap-6 lg:grid-cols-2">
           <RemixScenePanel
@@ -124,9 +111,32 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
               : undefined
           }
           aspectRatio={aspectRatio}
+          model={model}
+          onAspectRatioChange={setAspectRatio}
+          onModelChange={(nextModel) => {
+            setModel(nextModel);
+            setQuality(normalizeImageQuality(nextModel, quality));
+          }}
           onGenerate={handleGenerate}
           disabled={generating || uploadingSource || !selectedScene || !sourceImageKey}
           loading={generating}
+          quality={quality}
+          onQualityChange={setQuality}
+          imageInputOnly
+        />
+      </div>
+
+      <div className="space-y-5 xl:sticky xl:top-8 self-start">
+        <GenerationProgress
+          isGenerating={generating}
+          estimatedDurationMs={IMAGE_MODELS[model]?.estimatedDurationMs ?? 60_000}
+          modelName={IMAGE_MODELS[model]?.name ?? model}
+        />
+        <RemixResultPanel
+          result={result}
+          sourceImageKey={sourceImageKey}
+          selectedScene={selectedScene}
+          aspectRatio={aspectRatio}
         />
       </div>
 

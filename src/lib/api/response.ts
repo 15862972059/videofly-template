@@ -27,6 +27,10 @@ export function handleApiError(error: unknown) {
   if (error instanceof ApiError) {
     return apiError(error.message, error.status, error.details);
   }
+  if (error instanceof Error) {
+    console.error(`API Error: ${error.message}`, error);
+    return apiError(error.message, 500);
+  }
   console.error("Unexpected error:", error);
   return apiError("Internal server error", 500);
 }

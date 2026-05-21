@@ -1,53 +1,43 @@
 export * from "./types";
-export * from "./providers/minimax";
-export * from "./providers/replicate";
+export * from "./providers/ciyuan";
 
-import type { ImageModel, ImageGenerationRequest, ImageGenerationResult } from "./types";
-import { generateWithMiniMax, remixWithMiniMax } from "./providers/minimax";
-import {
-  generateWithFluxSchnell,
-  generateWithGptImage2,
-  generateWithNanoBanana2,
-} from "./providers/replicate";
-import { normalizeAspectRatio } from "./types";
+import type { ImageGenerationRequest, ImageGenerationResult } from "./types";
+import { generateWithCiyuan, remixWithCiyuan } from "./providers/ciyuan";
+import { normalizeAspectRatio, normalizeImageQuality } from "./types";
 
 export async function generateImage(
   request: ImageGenerationRequest
 ): Promise<ImageGenerationResult> {
-  const model = request.model || "minimax";
-  const aspectRatio = normalizeAspectRatio(request.aspectRatio, model) as "1:1" | "16:9" | "9:16" | "3:4";
+  const aspectRatio = normalizeAspectRatio(request.aspectRatio, "gpt-image-2") as
+    | "1:1"
+    | "16:9"
+    | "9:16"
+    | "3:4";
 
-  switch (model) {
-    case "flux-schnell":
-      return generateWithFluxSchnell({ prompt: request.prompt, aspectRatio });
-    case "gpt-image-2":
-      return generateWithGptImage2({ prompt: request.prompt, aspectRatio });
-    case "nano-banana-2":
-      return generateWithNanoBanana2({ prompt: request.prompt, aspectRatio });
-    case "minimax":
-    default:
-      return generateWithMiniMax({ prompt: request.prompt, aspectRatio });
-  }
+  return generateWithCiyuan({
+    prompt: request.prompt,
+    aspectRatio,
+    model: "gpt-image-2",
+    quality: normalizeImageQuality("gpt-image-2", request.quality),
+  });
 }
 
 export async function remixImage(request: {
   prompt: string;
+  sceneImageUrl?: string;
   sourceImageUrl: string;
   aspectRatio?: string;
-  model?: ImageModel;
+  model?: string;
+  quality?: string;
 }): Promise<ImageGenerationResult> {
-  // Currently only MiniMax supports remix
-  // For Replicate models, we'd need to implement subject_reference differently
-  const model = request.model || "minimax";
+  const aspectRatio = normalizeAspectRatio(request.aspectRatio, "gpt-image-2");
 
-  if (model !== "minimax") {
-    // Fallback to MiniMax for remix, or throw error
-    console.warn(`Remix is only supported on MiniMax. Using MiniMax for model ${model}`);
-  }
-
-  return remixWithMiniMax({
+  return remixWithCiyuan({
     prompt: request.prompt,
-    sourceImageUrl: request.sourceImageUrl,
-    aspectRatio: request.aspectRatio,
+    imageUrls: [
+      ...(request.sceneImageUrl ? [request.sceneImageUrl] : []),
+      request.sourceImageUrl,
+    ],
+    aspectRatio,
   });
 }

@@ -28,7 +28,7 @@ export function GenerationResult({
 }: GenerationResultProps) {
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = result.publicUrl;
+    link.href = `/api/v1/image/download?url=${encodeURIComponent(result.publicUrl)}`;
     link.download = "ai-art-generation.png";
     link.click();
   };

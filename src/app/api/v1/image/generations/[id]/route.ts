@@ -1,25 +1,23 @@
+import { NextRequest } from "next/server";
 import { requireAuth } from "@/lib/api/auth";
-import { apiSuccess, handleApiError, apiError } from "@/lib/api/response";
-import { getImageGenerationJobById } from "@/services/image/generation-jobs";
+import { apiSuccess, apiError, handleApiError } from "@/lib/api/response";
+import { deleteImageGenerationJob } from "@/services/image/generation-jobs";
 
-export async function GET(
-  request: Request,
+export async function DELETE(
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireAuth(request);
     const { id } = await params;
 
-    const job = await getImageGenerationJobById(id);
-    if (!job) {
+    const deleted = await deleteImageGenerationJob(id, user.id);
+
+    if (!deleted) {
       return apiError("Generation job not found", 404);
     }
 
-    if (job.userId !== user.id && !user.isAdmin) {
-      return apiError("Forbidden", 403);
-    }
-
-    return apiSuccess(job);
+    return apiSuccess({ deleted: true });
   } catch (error) {
     return handleApiError(error);
   }

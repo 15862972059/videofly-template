@@ -20,9 +20,9 @@ export interface SubscriptionPlanTranslation {
  * 定价数据配置
  *
  * 基于 PRICING_REFERENCE.md 文档：
- * - Basic: $9.90/月, $99/年, 280积分/月 (3360积分/年)
- * - Pro: $29.90/月, $299/年, 960积分/月 (11520积分/年)
- * - Ultimate: $79.90/月, $799/年, 2850积分/月 (34200积分/年)
+ * - Basic: $9.90/月, $99/年, 160积分/月 (1920积分/年)
+ * - Pro: $29.90/月, $299/年, 540积分/月 (6480积分/年)
+ * - Ultimate: $79.90/月, $799/年, 1600积分/月 (19200积分/年)
  *
  * 年付 = 月付 × 10（买 10 送 2，省 2 个月）
  *
@@ -40,8 +40,11 @@ function generatePriceData() {
   // 映射计划名称到展示 ID
   const planIdMap: Record<string, string> = {
     "Basic Plan": "basic",
+    "Basic Plan (Yearly)": "basic",
     "Pro Plan": "pro",
+    "Pro Plan (Yearly)": "pro",
     "Ultimate Plan": "ultimate",
+    "Ultimate Plan (Yearly)": "ultimate",
   };
 
   // 生成价格映射
@@ -77,14 +80,14 @@ function generatePriceData() {
       },
       benefits: {
         zh: [
-          "每月 280 积分（约 28 个视频）",
-          "高清视频生成（720P/1080P）",
+          "每月 160 积分（约 160 次快速生图）",
+          "AI 图片生成与合成",
           "快速生成通道",
           "商业使用权",
         ],
         en: [
-          "280 credits/month (~28 videos)",
-          "HD video generation (720P/1080P)",
+          "160 credits/month (~160 fast images)",
+          "AI image generation and remix",
           "Fast generation",
           "Commercial license",
         ],
@@ -109,16 +112,16 @@ function generatePriceData() {
       },
       benefits: {
         zh: [
-          "每月 960 积分（约 96 个视频）",
-          "高清视频生成（720P/1080P）",
+          "每月 540 积分（约 540 次快速生图）",
+          "AI 图片生成与合成",
           "快速生成通道",
           "无水印",
           "商业使用权",
           "优先客户支持",
         ],
         en: [
-          "960 credits/month (~96 videos)",
-          "HD video generation (720P/1080P)",
+          "540 credits/month (~540 fast images)",
+          "AI image generation and remix",
           "Fast generation",
           "No watermark",
           "Commercial license",
@@ -137,8 +140,8 @@ function generatePriceData() {
       },
       benefits: {
         zh: [
-          "每月 2,850 积分（约 285 个视频）",
-          "高清视频生成（720P/1080P）",
+          "每月 1,600 积分（约 1,600 次快速生图）",
+          "AI 图片生成与合成",
           "快速生成通道",
           "无水印",
           "商业使用权",
@@ -146,8 +149,8 @@ function generatePriceData() {
           "API 访问权限",
         ],
         en: [
-          "2,850 credits/month (~285 videos)",
-          "HD video generation (720P/1080P)",
+          "1,600 credits/month (~1,600 fast images)",
+          "AI image generation and remix",
           "Fast generation",
           "No watermark",
           "Commercial license",

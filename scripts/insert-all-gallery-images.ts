@@ -130,7 +130,7 @@ const generatedImages = [
 ];
 
 function generatePrompt(title: string, category: string): string {
-  return `Beautiful woman standing at ${title} in ${category}, iconic landmark, dramatic landscape, empty tourist spot, bright sunny day, standing photographer perspective, hyperrealistic travel photography`;
+  return `The subject standing at ${title} in ${category}, iconic landmark, dramatic landscape, empty tourist spot, bright sunny day, standing photographer perspective, hyperrealistic travel photography`;
 }
 
 async function insertImages(images: Array<{ slug: string; title: string; category: string; subcategory: string; isGenerated?: boolean }>) {

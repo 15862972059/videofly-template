@@ -107,8 +107,8 @@ export function FAQSection() {
           <BlurFade delay={0.35} inView>
             <div className="mt-10 rounded-2xl border border-emerald-900/10 bg-emerald-50 p-5 text-center text-sm text-slate-600 dark:bg-emerald-500/10 dark:text-slate-300">
               Still have questions? Contact us at{" "}
-              <a href="mailto:support@ai2art.app" className="font-semibold text-emerald-700 hover:underline dark:text-emerald-300">
-                support@ai2art.app
+              <a href="mailto:support@ar2art.net" className="font-semibold text-emerald-700 hover:underline dark:text-emerald-300">
+                support@ar2art.net
               </a>
             </div>
           </BlurFade>

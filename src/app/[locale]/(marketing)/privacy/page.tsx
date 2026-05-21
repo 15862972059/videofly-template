@@ -1,8 +1,8 @@
 import type { Locale } from "@/config/i18n-config";
 
 export const metadata = {
-    title: "Privacy Policy - VideoFly",
-    description: "Privacy Policy for VideoFly",
+    title: "Privacy Policy - ar2art",
+    description: "Privacy Policy for ar2art",
 };
 
 export default async function PrivacyPage({
@@ -18,11 +18,11 @@ export default async function PrivacyPage({
                 {locale === "zh" ? (
                     <>
                         <h1>隐私政策</h1>
-                        <p className="lead">生效日期：2026年2月8日</p>
+                        <p className="lead">生效日期：2026年5月19日</p>
 
                         <h2>1. 引言</h2>
                         <p>
-                            VideoFly（"我们"）非常重视您的隐私。本隐私政策说明了当您使用我们的服务时，我们如何收集、使用、披露和保护您的信息。
+                            ar2art（"我们"）非常重视您的隐私。本隐私政策说明了当您使用我们的服务时，我们如何收集、使用、披露和保护您的信息。
                         </p>
 
                         <h2>2. 我们收集的信息</h2>
@@ -54,39 +54,56 @@ export default async function PrivacyPage({
                             <li>为了保护我们、我们的用户或公众的权利、财产或安全。</li>
                         </ul>
 
-                        <h2>5. 数据安全</h2>
+                        <h2>5. 支付处理</h2>
+                        <p>
+                            我们使用 Creem（第三方支付处理商）来处理支付。当您购买积分或订阅时：
+                        </p>
+                        <ul>
+                            <li>您直接向 Creem 提供付款信息，我们不会存储您的完整信用卡号码。</li>
+                            <li>Creem 的隐私政策适用于您与 Creem 之间的支付交易。</li>
+                            <li>所有支付会话均通过安全加密连接处理。</li>
+                        </ul>
+
+                        <h2>6. 数据安全</h2>
                         <p>
                             我们采取合理的安全措施来保护您的信息免遭未经授权的访问、更改、披露或销毁。但是，没有任何互联网传输或电子存储方法是100%安全的，我们不能保证绝对的安全。
                         </p>
 
-                        <h2>6. 您的权利</h2>
+                        <h2>7. 您的权利</h2>
                         <p>
                             根据适用法律，您可能有权访问、更正、删除或限制我们处理您的个人信息。您可以随时通过您的账户设置或联系我们来行使这些权利。
                         </p>
 
-                        <h2>7. 儿童隐私</h2>
+                        <h2>8. 积分与订阅</h2>
+                        <ul>
+                            <li><strong>积分购买：</strong> 积分购买后不可转让、退款或兑换现金。</li>
+                            <li><strong>订阅取消：</strong> 您可以随时取消订阅。取消后将保留访问权限至当前计费周期结束。</li>
+                            <li><strong>积分过期：</strong> 积分有一定有效期，请在有效期内使用。</li>
+                        </ul>
+
+                        <h2>9. 儿童隐私</h2>
                         <p>
                             我们的服务不面向未满13岁（或您所在司法管辖区规定的其他年龄）的儿童。如果我们发现收集了儿童的个人信息，我们会采取措施尽快删除。
                         </p>
 
-                        <h2>8. 政策变更</h2>
+                        <h2>10. 政策变更</h2>
                         <p>
                             我们要保留随时更新本隐私政策的权利。如果我们做出重大变更，我们将通过服务通知您或通过电子邮件发送通知。
                         </p>
 
-                        <h2>9. 联系我们</h2>
+                        <h2>11. 联系我们</h2>
                         <p>
-                            如果您对本隐私政策有任何疑问，请联系我们：privacy@videofly.app
+                            如果您对本隐私政策有任何疑问，请联系我们：privacy@ar2art.net
                         </p>
                     </>
                 ) : (
                     <>
                         <h1>Privacy Policy</h1>
-                        <p className="lead">Effective Date: February 8, 2026</p>
+                        <p className="lead">Effective Date: May 19, 2026</p>
 
                         <h2>1. Introduction</h2>
                         <p>
-                            VideoFly ("we" or "us") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our services.
+                            ar2art ("we" or "us") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our services.
                         </p>
 
                         <h2>2. Information We Collect</h2>
@@ -118,29 +135,46 @@ export default async function PrivacyPage({
                             <li>To protect the rights, property, or safety of us, our users, or the public.</li>
                         </ul>
 
-                        <h2>5. Data Security</h2>
+                        <h2>5. Payment Processing</h2>
+                        <p>
+                            We use Creem as our third-party payment processor. When you purchase credits or subscriptions:
+                        </p>
+                        <ul>
+                            <li>You provide payment information directly to Creem. We do not store your full credit card number.</li>
+                            <li>Creem's privacy policy governs their handling of your payment transactions.</li>
+                            <li>All payment sessions are processed through secure encrypted connections.</li>
+                        </ul>
+
+                        <h2>6. Data Security</h2>
                         <p>
                             We implement reasonable security measures to protect your information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet or electronic storage is 100% secure, and we cannot guarantee absolute security.
                         </p>
 
-                        <h2>6. Your Rights</h2>
+                        <h2>7. Your Rights</h2>
                         <p>
                             Depending on applicable laws, you may have the right to access, correct, delete, or restrict the processing of your personal information. You can exercise these rights at any time through your account settings or by contacting us.
                         </p>
 
-                        <h2>7. Children's Privacy</h2>
+                        <h2>8. Credits and Subscriptions</h2>
+                        <ul>
+                            <li><strong>Credit Purchases:</strong> Credits are non-transferable, non-refundable, and cannot be exchanged for cash.</li>
+                            <li><strong>Subscription Cancellation:</strong> You may cancel your subscription at any time. You will retain access until the end of your current billing period.</li>
+                            <li><strong>Credit Expiration:</strong> Credits expire after a certain period. Please use them before expiration.</li>
+                        </ul>
+
+                        <h2>9. Children's Privacy</h2>
                         <p>
                             Our services are not intended for children under 13 (or other age as required by local law). If we discover we have collected personal information from children, we will take steps to delete it as soon as possible.
                         </p>
 
-                        <h2>8. Changes to Policy</h2>
+                        <h2>10. Changes to Policy</h2>
                         <p>
                             We reserve the right to update this Privacy Policy at any time. If we make material changes, we will notify you through the service or by email.
                         </p>
 
-                        <h2>9. Contact Us</h2>
+                        <h2>11. Contact Us</h2>
                         <p>
-                            If you have any questions about this Privacy Policy, please contact us at: privacy@videofly.app
+                            If you have any questions about this Privacy Policy, please contact us at: privacy@ar2art.net
                         </p>
                     </>
                 )}

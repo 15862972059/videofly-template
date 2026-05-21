@@ -1,24 +1,42 @@
 import { generateImage, remixImage } from "@/ai/images";
-import type { ImageModel } from "@/ai/images/types";
+import type { ImageModel, ImageQuality } from "@/ai/images/types";
+import {
+  IMAGE_MODELS,
+  getImageCreditCost,
+  normalizeImageQuality,
+} from "@/ai/images/types";
 import { creditService } from "@/services/credit";
 import { getStorage } from "@/lib/storage";
 import { getClassicImageById, getClassicImageBySlug } from "./gallery";
-import { buildRemixPrompt, buildTextPrompt, inferRemixAspectRatio } from "./prompts";
+import {
+  buildRemixPrompt,
+  buildTextPrompt,
+  inferRemixAspectRatio,
+  isGeneratedRemixPrompt,
+} from "./prompts";
+import {
+  persistGeneratedImage,
+  shouldAllowTemporaryImageUrlFallback,
+} from "./persist-result";
 import { assertPromptAllowed } from "./safety";
-import { buildImageObjectKey, validateSourceImageUrl } from "./storage";
+import {
+  buildImageObjectKey,
+  resolvePublicImageUrl,
+  resolveSceneReferenceImageUrl,
+  validateSourceImageUrl,
+} from "./storage";
 import {
   createImageGenerationJob,
   updateImageGenerationJobStatus,
 } from "./generation-jobs";
 import { checkRateLimit, incrementRateLimit } from "./rate-limit";
 
-const IMAGE_GENERATION_CREDIT_COST = 1;
-
 export async function generateTextImage(input: {
   userId: string;
   prompt: string;
   aspectRatio?: string;
   model?: ImageModel;
+  quality?: ImageQuality;
 }): Promise<{
   jobId: string;
   objectKey: string;
@@ -29,6 +47,9 @@ export async function generateTextImage(input: {
     throw new Error(`Rate limit exceeded. Resets at ${new Date(rateLimit.resetAt).toISOString()}`);
   }
 
+  const effectiveModel = "gpt-image-2";
+  const effectiveQuality = normalizeImageQuality(effectiveModel, input.quality);
+  const imageCreditCost = getImageCreditCost(effectiveModel, effectiveQuality);
   const finalPrompt = buildTextPrompt({ userPrompt: input.prompt });
   assertPromptAllowed(finalPrompt);
 
@@ -36,28 +57,38 @@ export async function generateTextImage(input: {
     userId: input.userId,
     type: "TEXT",
     prompt: finalPrompt,
-    creditsUsed: IMAGE_GENERATION_CREDIT_COST,
-    parameters: { aspectRatio: input.aspectRatio, model: input.model },
+    creditsUsed: imageCreditCost,
+    parameters: {
+      aspectRatio: input.aspectRatio,
+      model: effectiveModel,
+      quality: effectiveQuality,
+    },
   });
 
   if (!job) {
     throw new Error("Failed to create generation job");
   }
 
+  let creditFrozen = false;
+
   try {
     await creditService.freeze({
       userId: input.userId,
-      credits: IMAGE_GENERATION_CREDIT_COST,
+      credits: imageCreditCost,
       videoUuid: job.id,
     });
+    creditFrozen = true;
 
     await updateImageGenerationJobStatus(job.id, "RUNNING");
 
+    console.log(`[text-generate] Job ${job.id}: Calling AI model ${effectiveModel}...`);
     const result = await generateImage({
       prompt: finalPrompt,
       aspectRatio: (input.aspectRatio || "1:1") as "1:1" | "16:9" | "9:16" | "3:4",
-      model: input.model || "minimax",
+      model: effectiveModel,
+      quality: effectiveQuality,
     });
+    console.log(`[text-generate] Job ${job.id}: AI model returned successfully.`);
 
     const imageUrl = result.imageUrls?.[0] ?? result.base64ImageList?.[0];
     if (!imageUrl) {
@@ -70,18 +101,14 @@ export async function generateTextImage(input: {
       filename: `${job.id}.png`,
     });
 
-    const storage = getStorage();
-    const uploaded = imageUrl.startsWith("http")
-      ? await storage.downloadAndUpload({
-          sourceUrl: imageUrl,
-          key,
-          contentType: "image/png",
-        })
-      : await storage.uploadFile({
-          key,
-          body: Buffer.from(imageUrl, "base64"),
-          contentType: "image/png",
-        });
+    const uploaded = await persistGeneratedImage({
+      imageData: imageUrl,
+      key,
+      contentType: "image/png",
+      storage: getStorage(),
+      allowTemporaryUrlFallback: shouldAllowTemporaryImageUrlFallback(),
+    });
+    console.log(`[text-generate] Job ${job.id}: Image saved to ${uploaded.key}`);
 
     await updateImageGenerationJobStatus(job.id, "SUCCEEDED", {
       resultImageKey: uploaded.key,
@@ -89,6 +116,7 @@ export async function generateTextImage(input: {
     });
 
     await creditService.settle(job.id);
+    creditFrozen = false;
     await incrementRateLimit(input.userId, "image:text");
 
     return {
@@ -97,10 +125,13 @@ export async function generateTextImage(input: {
       publicUrl: uploaded.url,
     };
   } catch (error) {
+    console.error(`[text-generate] Job ${job.id} failed:`, error);
     await updateImageGenerationJobStatus(job.id, "FAILED", {
       errorMessage: error instanceof Error ? error.message : "Unknown error",
     });
-    await creditService.release(job.id);
+    if (creditFrozen) {
+      try { await creditService.release(job.id); } catch {}
+    }
     throw error;
   }
 }
@@ -113,6 +144,7 @@ export async function generateRemixImage(input: {
   prompt?: string;
   aspectRatio?: string;
   model?: ImageModel;
+  quality?: ImageQuality;
 }): Promise<{
   jobId: string;
   objectKey: string;
@@ -122,6 +154,10 @@ export async function generateRemixImage(input: {
   if (!rateLimit.allowed) {
     throw new Error(`Rate limit exceeded. Resets at ${new Date(rateLimit.resetAt).toISOString()}`);
   }
+
+  const effectiveModel = "gpt-image-2";
+  const effectiveQuality = normalizeImageQuality(effectiveModel, input.quality);
+  const imageCreditCost = getImageCreditCost(effectiveModel, effectiveQuality);
 
   let classicImage = null;
   if (input.classicImageId) {
@@ -139,18 +175,29 @@ export async function generateRemixImage(input: {
   if (!validateSourceImageUrl(sourceImageUrl)) {
     throw new Error("Invalid source image URL");
   }
+  const sceneImageUrl = await resolveSceneReferenceImageUrl(
+    classicImage.hero_image_url,
+    storage
+  );
+  if (!validateSourceImageUrl(sceneImageUrl)) {
+    throw new Error("Invalid scene image URL");
+  }
 
-  const finalPrompt = buildRemixPrompt({
-    classicTitle: classicImage.title,
-    classicCategory: classicImage.category,
-    userPrompt: input.prompt,
-    promptTemplate: classicImage.promptTemplate,
-  });
+  const isFullPrompt = input.prompt ? isGeneratedRemixPrompt(input.prompt) : false;
+
+  const finalPrompt = isFullPrompt && input.prompt
+    ? input.prompt
+    : buildRemixPrompt({
+        classicTitle: classicImage.title,
+        classicCategory: classicImage.category,
+        userPrompt: input.prompt,
+        promptTemplate: classicImage.prompt_template,
+      });
   assertPromptAllowed(finalPrompt);
 
   const finalAspectRatio = input.aspectRatio ?? inferRemixAspectRatio({
     classicTitle: classicImage.title,
-    heroImageUrl: classicImage.heroImageUrl,
+    heroImageUrl: classicImage.hero_image_url,
   });
 
   const job = await createImageGenerationJob({
@@ -159,29 +206,37 @@ export async function generateRemixImage(input: {
     classicImageId: classicImage.id,
     prompt: finalPrompt,
     sourceImageKey: input.sourceImageKey,
-    creditsUsed: IMAGE_GENERATION_CREDIT_COST,
-    parameters: { aspectRatio: finalAspectRatio, model: input.model },
+    creditsUsed: imageCreditCost,
+    parameters: {
+      aspectRatio: finalAspectRatio,
+      model: effectiveModel,
+      quality: effectiveQuality,
+    },
   });
 
   if (!job) {
     throw new Error("Failed to create generation job");
   }
 
+  let creditFrozenRemix = false;
+
   try {
     await creditService.freeze({
       userId: input.userId,
-      credits: IMAGE_GENERATION_CREDIT_COST,
+      credits: imageCreditCost,
       videoUuid: job.id,
     });
+    creditFrozenRemix = true;
 
     await updateImageGenerationJobStatus(job.id, "RUNNING");
 
-    // Note: Remix currently only supports MiniMax
     const result = await remixImage({
       prompt: finalPrompt,
+      sceneImageUrl,
       sourceImageUrl,
       aspectRatio: finalAspectRatio,
-      model: input.model,
+      model: effectiveModel,
+      quality: effectiveQuality,
     });
 
     const imageUrl = result.imageUrls?.[0] ?? result.base64ImageList?.[0];
@@ -195,17 +250,13 @@ export async function generateRemixImage(input: {
       filename: `${job.id}.png`,
     });
 
-    const uploaded = imageUrl.startsWith("http")
-      ? await storage.downloadAndUpload({
-          sourceUrl: imageUrl,
-          key,
-          contentType: "image/png",
-        })
-      : await storage.uploadFile({
-          key,
-          body: Buffer.from(imageUrl, "base64"),
-          contentType: "image/png",
-        });
+    const uploaded = await persistGeneratedImage({
+      imageData: imageUrl,
+      key,
+      contentType: "image/png",
+      storage,
+      allowTemporaryUrlFallback: shouldAllowTemporaryImageUrlFallback(),
+    });
 
     await updateImageGenerationJobStatus(job.id, "SUCCEEDED", {
       resultImageKey: uploaded.key,
@@ -213,6 +264,7 @@ export async function generateRemixImage(input: {
     });
 
     await creditService.settle(job.id);
+    creditFrozenRemix = false;
     await incrementRateLimit(input.userId, "image:remix");
 
     return {
@@ -224,7 +276,9 @@ export async function generateRemixImage(input: {
     await updateImageGenerationJobStatus(job.id, "FAILED", {
       errorMessage: error instanceof Error ? error.message : "Unknown error",
     });
-    await creditService.release(job.id);
+    if (creditFrozenRemix) {
+      try { await creditService.release(job.id); } catch {}
+    }
     throw error;
   }
 }

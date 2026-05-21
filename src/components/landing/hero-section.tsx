@@ -11,7 +11,7 @@ import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { cn } from "@/components/ui";
 import { NEW_USER_GIFT } from "@/config/pricing-user";
 
-const trustItems = ["No credit card", `${NEW_USER_GIFT.credits || 2} free credits`, "4K HD output"];
+const trustItems = ["No credit card", `${NEW_USER_GIFT.credits || 1} free credit`, "4K HD output"];
 
 export function HeroSection() {
   const locale = useLocale();
@@ -33,7 +33,7 @@ export function HeroSection() {
             <BlurFade delay={0.05} inView>
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
                 <Sparkles className="h-4 w-4" />
-                Powered by MiniMax AI
+                Powered by Evolink
               </div>
             </BlurFade>
 

@@ -1,18 +1,34 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { ImagePlus, Type } from "lucide-react";
 import { RemixWorkspace } from "@/components/studio/remix-workspace";
 import { TextToImage } from "@/components/studio/text-to-image";
-import { GenerationResult } from "@/components/studio/generation-result";
 import type { ClassicImageData } from "@/types/ai-photo";
-import { getImageBySlug } from "@/data/classic-images";
 import { cn } from "@/lib/utils";
 
-export default function StudioContent() {
+function CenteredSpinner({ text, subtext }: { text: string; subtext?: string }) {
+  return (
+    <div className="flex h-[70vh] items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="relative">
+          <div className="h-12 w-12 rounded-full border-4 border-slate-200 dark:border-slate-700" />
+          <div className="absolute inset-0 h-12 w-12 animate-spin rounded-full border-4 border-transparent border-t-slate-950 dark:border-t-white" />
+        </div>
+        <div className="text-center">
+          <p className="text-sm font-medium text-slate-950 dark:text-white">{text}</p>
+          {subtext && <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{subtext}</p>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StudioContentInner() {
   const searchParams = useSearchParams();
   const [initialScene, setInitialScene] = useState<ClassicImageData | null>(null);
+  const [sceneLoading, setSceneLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"remix" | "text2img">("remix");
   const [textResult, setTextResult] = useState<{
     jobId: string;
@@ -24,10 +40,16 @@ export default function StudioContent() {
   useEffect(() => {
     const sceneSlug = searchParams.get("scene");
     if (sceneSlug) {
-      const scene = getImageBySlug(sceneSlug);
-      if (scene) {
-        setInitialScene(scene);
-      }
+      setSceneLoading(true);
+      fetch(`/api/v1/gallery?slug=${encodeURIComponent(sceneSlug)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data.images?.[0]) {
+            setInitialScene(data.data.images[0]);
+          }
+        })
+        .catch(console.error)
+        .finally(() => setSceneLoading(false));
     }
   }, [searchParams]);
 
@@ -40,6 +62,10 @@ export default function StudioContent() {
     setTextResult(data);
     setGenerating(false);
   };
+
+  if (sceneLoading) {
+    return <CenteredSpinner text="Loading Scene" subtext="Preparing your selected scene..." />;
+  }
 
   return (
     <div className="mx-auto flex h-full w-full max-w-[1520px] flex-col">
@@ -65,23 +91,23 @@ export default function StudioContent() {
       <div className="flex-1 overflow-auto">
         {activeTab === "remix" ? (
           <RemixWorkspace initialScene={initialScene ?? undefined} />
-        ) : textResult ? (
-          <div className="max-w-xl mx-auto">
-            <GenerationResult result={textResult} aspectRatio="1:1" showActions />
-            <div className="mt-4 text-center">
-              <button
-                type="button"
-                onClick={() => setTextResult(null)}
-                className="text-sm text-slate-500 hover:text-slate-700 dark:hover:text-white"
-              >
-                Generate another image
-              </button>
-            </div>
-          </div>
         ) : (
-          <TextToImage onGenerate={handleTextResult} generating={generating} />
+          <TextToImage
+            onGenerate={handleTextResult}
+            generating={generating}
+            result={textResult}
+            onClearResult={() => setTextResult(null)}
+          />
         )}
       </div>
     </div>
+  );
+}
+
+export default function StudioContent() {
+  return (
+    <Suspense fallback={<CenteredSpinner text="Loading Studio" subtext="Preparing your creative workspace..." />}>
+      <StudioContentInner />
+    </Suspense>
   );
 }

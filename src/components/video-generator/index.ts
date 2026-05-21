@@ -1,5 +1,5 @@
 /**
- * @videofly/video-generator
+ * @ar2art/video-generator
  *
  * A fully configurable AI video/image generation input component.
  *

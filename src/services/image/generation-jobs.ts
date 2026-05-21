@@ -133,3 +133,16 @@ export async function updateImageGenerationJobStatus(
     .returning();
   return updated ?? null;
 }
+
+export async function deleteImageGenerationJob(id: string, userId: string) {
+  const [deleted] = await db
+    .delete(imageGenerationJobs)
+    .where(
+      and(
+        eq(imageGenerationJobs.id, id),
+        eq(imageGenerationJobs.userId, userId)
+      )
+    )
+    .returning();
+  return deleted ?? null;
+}

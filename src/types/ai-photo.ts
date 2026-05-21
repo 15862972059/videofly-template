@@ -22,6 +22,7 @@ export interface GenerationJobData {
   prompt?: string | null;
   source_image_key?: string | null;
   result_image_key?: string | null;
+  result_image_url?: string | null;
   credits_reserved: number;
   error_message?: string | null;
   created_at?: string;

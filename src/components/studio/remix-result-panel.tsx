@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { DownloadCloud, ImageIcon, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { ImageIcon, Sparkles } from "lucide-react";
 import { GenerationResult } from "./generation-result";
 import type { ClassicImageData } from "@/types/ai-photo";
 
@@ -22,22 +22,15 @@ export function RemixResultPanel({
   const hasSelectedScene = Boolean(selectedScene);
   const canCompare = Boolean(result && selectedScene?.hero_image_url);
 
-  const panelCopy = useMemo(() => {
-    if (result) return "Your refined composite is ready. Compare it against the original scene or download it.";
-    if (sourceImageKey && hasSelectedScene) return "Your generated portrait will appear here with quick compare and export actions.";
-    return "Choose a scene and upload a portrait to preview the final composite here.";
-  }, [hasSelectedScene, result, sourceImageKey]);
-
   return (
-    <section className="rounded-[1.75rem] border border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)] backdrop-blur">
-      <div className="flex items-start justify-between gap-4 border-b border-slate-100 dark:border-slate-800 px-5 py-5">
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 dark:bg-amber-900/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-700 dark:text-amber-400">
+    <section className="rounded-[1.5rem] border border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
+      <div className="flex items-start justify-between gap-4 border-b border-slate-100 dark:border-slate-800 px-4 py-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 dark:bg-amber-900/20 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-700 dark:text-amber-400">
             <Sparkles className="h-3.5 w-3.5" />
-            Final Result
+            Result
           </div>
-          <h3 className="text-lg font-semibold text-slate-950 dark:text-white">Preview</h3>
-          <p className="max-w-sm text-sm leading-6 text-slate-500 dark:text-slate-400">{panelCopy}</p>
+          <h3 className="text-sm font-semibold text-slate-950 dark:text-white">Preview</h3>
         </div>
 
         {canCompare && (
@@ -60,7 +53,7 @@ export function RemixResultPanel({
         )}
       </div>
 
-      <div className="p-5">
+      <div className="p-4">
         {result && (!canCompare || previewMode === "result") ? (
           <GenerationResult result={result} inline showActions aspectRatio={aspectRatio} />
         ) : selectedScene && canCompare && previewMode === "scene" ? (
@@ -72,19 +65,15 @@ export function RemixResultPanel({
             </div>
           </div>
         ) : (
-          <div className="flex min-h-[420px] flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-slate-200 dark:border-slate-700 bg-[radial-gradient(circle_at_top,_rgba(250,204,21,0.12),_transparent_45%),linear-gradient(180deg,_#f8fafc_0%,_#ffffff_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(250,204,21,0.06),_transparent_45%),linear-gradient(180deg,_#1e293b_0%,_#0f172a_100%)] px-6 py-10 text-slate-400">
-            <div className="mb-4 rounded-full bg-white dark:bg-slate-800 p-4 shadow-sm ring-1 ring-slate-100 dark:ring-slate-700">
-              <ImageIcon className="h-8 w-8 opacity-60" />
+          <div className="flex min-h-[320px] flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-slate-200 dark:border-slate-700 bg-[radial-gradient(circle_at_top,_rgba(250,204,21,0.12),_transparent_45%),linear-gradient(180deg,_#f8fafc_0%,_#ffffff_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(250,204,21,0.06),_transparent_45%),linear-gradient(180deg,_#1e293b_0%,_#0f172a_100%)] px-6 py-10 text-slate-400">
+            <div className="mb-3 rounded-full bg-white dark:bg-slate-800 p-3 shadow-sm ring-1 ring-slate-100 dark:ring-slate-700">
+              <ImageIcon className="h-6 w-6 opacity-60" />
             </div>
-            <p className="max-w-xs text-center text-sm leading-6">
+            <p className="max-w-xs text-center text-xs leading-5 text-slate-500 dark:text-slate-400">
               {sourceImageKey && hasSelectedScene
-                ? "Everything is ready. Generate a refined result to preview it here."
-                : "Upload a portrait and pair it with a destination scene to unlock the result preview."}
+                ? "Generate to preview result"
+                : "Upload a portrait and select a scene"}
             </p>
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-500">
-              <DownloadCloud className="h-3.5 w-3.5" />
-              Download and share controls appear after generation
-            </div>
           </div>
         )}
       </div>
