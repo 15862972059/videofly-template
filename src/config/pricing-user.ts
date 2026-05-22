@@ -26,9 +26,9 @@
  *
  * 🔄 Creem 配置流程：
  * 1. 在 Creem 后台创建产品（订阅和积分包）
- * 2. 复制每个产品的 Product ID（如 prod_4yNyvLWQ88n8AqJj35uOvK）
- * 3. 将 Product ID 填入下方对应产品的 id 字段
- * 4. .env.local 中无需配置 Price ID（已弃用）
+ * 2. 将 Product ID 填入 .env 环境变量
+ * 3. 产品 ID 从环境变量读取（见下方配置）
+ * 4. 价格和积分数量在此文件中修改
  *
  * ============================================
  */
@@ -120,7 +120,7 @@ export const CREDIT_EXPIRATION = {
 export const SUBSCRIPTION_PRODUCTS = [
   // ===== 月付订阅 =====
   {
-    id: "prod_jsRIeZmqn3L9NN2fiFIn6", // 从 Creem 后台复制 Basic Monthly Product ID
+    id: process.env.NEXT_PUBLIC_CREEM_PROD_STARTER ?? "prod_6A9SRQbWJXV0Q5eCHFPI1v",
     name: "Starter Plan",
     priceUsd: 9.0,
     credits: 80,
@@ -130,17 +130,17 @@ export const SUBSCRIPTION_PRODUCTS = [
     features: ["gpt_image_2_access", "commercial_use"],
   },
   {
-    id: "prod_3tlZPSRNHZSaNq21zX2Z16", // 从 Creem 后台复制 Pro Monthly Product ID
+    id: process.env.NEXT_PUBLIC_CREEM_PROD_CREATOR ?? "prod_6DEwZIYGuoKkjV0qRUiBgX",
     name: "Creator Plan",
     priceUsd: 19.0,
     credits: 220,
     period: "month" as const,
-    popular: true, // 推荐
+    popular: true,
     enabled: true,
     features: ["gpt_image_2_access", "commercial_use", "priority_support"],
   },
   {
-    id: "prod_3tlZPSRNHZSaNq22zX2Z18", // 从 Creem 后台复制 Ultimate Monthly Product ID
+    id: process.env.NEXT_PUBLIC_CREEM_PROD_STUDIO ?? "prod_JBIsy11enTfthGi3Dh0tO",
     name: "Studio Plan",
     priceUsd: 49.0,
     credits: 700,
@@ -152,30 +152,30 @@ export const SUBSCRIPTION_PRODUCTS = [
 
   // ===== 年付订阅（月付 × 10，省 2 个月） =====
   {
-    id: "prod_3tlZPSRNHZSaNq22zX2Z10", // 从 Creem 后台复制 Basic Yearly Product ID
+    id: "prod_3tlZPSRNHZSaNq22zX2Z10",
     name: "Starter Plan (Yearly)",
     priceUsd: 90,
-    credits: 960, // 80 × 12
+    credits: 960,
     period: "year" as const,
     popular: false,
     enabled: false,
     features: ["gpt_image_2_access", "commercial_use"],
   },
   {
-    id: "prod_3tlZPSRNHZSaNq22zX2Z55", // 从 Creem 后台复制 Pro Yearly Product ID
+    id: "prod_3tlZPSRNHZSaNq22zX2Z55",
     name: "Creator Plan (Yearly)",
     priceUsd: 190,
-    credits: 2640, // 220 × 12
+    credits: 2640,
     period: "year" as const,
     popular: true,
     enabled: false,
     features: ["gpt_image_2_access", "commercial_use", "priority_support"],
   },
   {
-    id: "prod_3tlZPSRNHZSaNq22zX2Z21", // 从 Creem 后台复制 Ultimate Yearly Product ID
+    id: "prod_3tlZPSRNHZSaNq22zX2Z21",
     name: "Studio Plan (Yearly)",
     priceUsd: 490,
-    credits: 8400, // 700 × 12
+    credits: 8400,
     period: "year" as const,
     popular: false,
     enabled: false,
@@ -201,33 +201,33 @@ export const SUBSCRIPTION_PRODUCTS = [
  */
 export const CREDIT_PACKAGES: CreditPackageConfig[] = [
   {
-    id: "prod_3tlZPSRNHZSaNq21zX2ZPO", // 从 Creem 后台复制 Starter Pack Product ID
+    id: process.env.NEXT_PUBLIC_CREEM_CREDITS_30 ?? "prod_z6adXPBO5ooKnA7aQkBFA",
     name: "30 Credits",
     priceUsd: 5.0,
     credits: 30,
-    popular: false, // 推荐
+    popular: false,
     enabled: true,
-    allowFreeUser: true, // 所有用户可购买
+    allowFreeUser: true,
     features: ["gpt_image_2_access", "commercial_use"],
   },
   {
-    id: "prod_3tlZPSRNHZSaNq22zX2Z12", // 从 Creem 后台复制 Standard Pack Product ID
+    id: process.env.NEXT_PUBLIC_CREEM_CREDITS_120 ?? "prod_70sgwHtOjQpnf7GrWD32M9",
     name: "120 Credits",
     priceUsd: 15.0,
     credits: 120,
     popular: false,
     enabled: true,
-    allowFreeUser: true, // 所有用户可购买
+    allowFreeUser: true,
     features: ["gpt_image_2_access", "commercial_use"],
   },
   {
-    id: "prod_3tlZPSRNHZSaNq22zX2Z13", // 从 Creem 后台复制 Pro Pack Product ID
+    id: process.env.NEXT_PUBLIC_CREEM_CREDITS_360 ?? "prod_6LZ9FdJCp91McBuoYUlXoJ",
     name: "360 Credits",
     priceUsd: 39.0,
     credits: 360,
     popular: false,
     enabled: true,
-    allowFreeUser: true, // 所有用户可购买
+    allowFreeUser: true,
     features: ["gpt_image_2_access", "commercial_use", "priority_support"],
   },
 ];
