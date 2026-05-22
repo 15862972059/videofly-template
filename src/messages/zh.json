@@ -247,24 +247,28 @@
     "history": "交易历史",
     "packages": {
       "starter": {
-        "name": "入门积分包",
-        "description": "150 积分 - 适合试用体验"
+        "name": "30 Credits",
+        "description": "???????"
       },
       "basic": {
-        "name": "基础版",
-        "description": "160 积分/月 - 适合轻度使用"
+        "name": "Starter Plan",
+        "description": "??????"
       },
       "pro": {
-        "name": "专业版",
-        "description": "540 积分/月 - 适合专业人士"
+        "name": "Creator Plan",
+        "description": "???????"
       },
       "team": {
-        "name": "旗舰版",
-        "description": "1,600 积分/月 - 适合重度用户"
+        "name": "Studio Plan",
+        "description": "????????"
       },
       "standard": {
-        "name": "标准积分包",
-        "description": "430 积分 - 性价比之选"
+        "name": "120 Credits",
+        "description": "?????????"
+      },
+      "propack": {
+        "name": "360 Credits",
+        "description": "??????????"
       }
     },
     "features": {
@@ -273,8 +277,9 @@
       "no_watermark": "无水印",
       "commercial_use": "商业使用授权",
       "priority_support": "优先支持",
-      "api_access": "API 访问",
-      "custom_models": "自定义 AI 模型"
+      "api_access": "??????",
+      "custom_models": "自定义 AI 模型",
+      "gpt_image_2_access": "GPT-Image-2 ????"
     }
   },
   "VideoGenerator": {

@@ -35,15 +35,15 @@ function getPackageKey(productId: string, productName: string): string {
 
   // For new Creem Product IDs, map from product name
   const nameToKeyMap: Record<string, string> = {
-    "Basic Plan": "basic",
-    "Pro Plan": "pro",
-    "Ultimate Plan": "team", // Use team for Ultimate
-    "Basic Plan (Yearly)": "basic",
-    "Pro Plan (Yearly)": "pro",
-    "Ultimate Plan (Yearly)": "team",
-    "Starter Pack": "starter",
-    "Standard Pack": "standard",
-    "Pro Pack": "pro",
+    "Starter Plan": "basic",
+    "Creator Plan": "pro",
+    "Studio Plan": "team",
+    "Starter Plan (Yearly)": "basic",
+    "Creator Plan (Yearly)": "pro",
+    "Studio Plan (Yearly)": "team",
+    "30 Credits": "starter",
+    "120 Credits": "standard",
+    "360 Credits": "propack",
   };
 
   return nameToKeyMap[productName] || productId;

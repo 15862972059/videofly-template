@@ -247,24 +247,28 @@
     "history": "Transaction History",
     "packages": {
       "starter": {
-        "name": "Starter Pack",
-        "description": "Perfect for trying out"
+        "name": "30 Credits",
+        "description": "A light one-time top-up"
       },
       "basic": {
-        "name": "Basic Plan",
-        "description": "Perfect for beginners"
+        "name": "Starter Plan",
+        "description": "Great for getting started"
       },
       "pro": {
-        "name": "Pro Plan",
-        "description": "Best for professionals"
+        "name": "Creator Plan",
+        "description": "Best for active creators"
       },
       "team": {
-        "name": "Team Plan",
-        "description": "For teams and businesses"
+        "name": "Studio Plan",
+        "description": "Built for studios and teams"
       },
       "standard": {
-        "name": "Standard Pack",
-        "description": "One-time credit purchase"
+        "name": "120 Credits",
+        "description": "Balanced one-time credit pack"
+      },
+      "propack": {
+        "name": "360 Credits",
+        "description": "Best value one-time top-up"
       }
     },
     "features": {
@@ -273,8 +277,9 @@
       "no_watermark": "No watermark exports",
       "commercial_use": "Commercial use license",
       "priority_support": "Priority support",
-      "api_access": "Gallery and history access",
-      "custom_models": "Custom AI art styles"
+      "api_access": "Team collaboration perks",
+      "custom_models": "Custom AI art styles",
+      "gpt_image_2_access": "GPT-Image-2 access"
     }
   },
   "VideoGenerator": {
