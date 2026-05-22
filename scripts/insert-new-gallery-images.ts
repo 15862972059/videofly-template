@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import { eq } from "drizzle-orm";
 import * as schema from "../src/db/schema";
 
 const databaseUrl = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
@@ -65,23 +66,41 @@ async function insertImages() {
     const heroImageUrl = `/images/gallery-${img.slug}.png`;
 
     try {
-      await db.insert(schema.classicImages).values({
-        id,
-        slug: img.slug,
-        title: img.title,
-        description: `Famous landmark in ${img.category}`,
-        category: img.category,
-        subcategory: img.subcategory,
-        promptTemplate: generatePrompt(img.title, img.category),
-        heroImageUrl,
-        thumbnailUrl: heroImageUrl,
-        isActive: true,
-      }).onConflictDoNothing();
+      // Check if exists
+      const existing = await db.select().from(schema.classicImages).where(eq(schema.classicImages.slug, img.slug)).limit(1);
 
-      console.log(`Inserted: ${img.title} (${img.category})`);
+      if (existing[0]) {
+        // Update existing record
+        await db.update(schema.classicImages)
+          .set({
+            heroImageUrl,
+            thumbnailUrl: heroImageUrl,
+            title: img.title,
+            category: img.category,
+            subcategory: img.subcategory,
+            promptTemplate: generatePrompt(img.title, img.category),
+          })
+          .where(eq(schema.classicImages.slug, img.slug));
+        console.log(`Updated: ${img.title} (${img.category}) - ${heroImageUrl}`);
+      } else {
+        // Insert new record
+        await db.insert(schema.classicImages).values({
+          id,
+          slug: img.slug,
+          title: img.title,
+          description: `Famous landmark in ${img.category}`,
+          category: img.category,
+          subcategory: img.subcategory,
+          promptTemplate: generatePrompt(img.title, img.category),
+          heroImageUrl,
+          thumbnailUrl: heroImageUrl,
+          isActive: true,
+        });
+        console.log(`Inserted: ${img.title} (${img.category})`);
+      }
       successCount++;
     } catch (e) {
-      console.error(`Failed to insert ${img.title}:`, e);
+      console.error(`Failed to process ${img.title}:`, e);
       failCount++;
     }
   }
