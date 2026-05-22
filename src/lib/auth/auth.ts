@@ -13,6 +13,7 @@ import {
   getProductById,
   getProductExpiryDays,
 } from "@/config/credits";
+import { buildCreemSubscriptionOrderNo } from "./creem-webhook";
 
 import { creditPackages, db, users } from "@/db";
 import * as schema from "@/db/schema";
@@ -125,7 +126,7 @@ if (env.CREEM_API_KEY) {
       persistSubscriptions: true,
       defaultSuccessUrl: "/dashboard",
 
-      onGrantAccess: async ({ product, customer, metadata }) => {
+      onGrantAccess: async ({ id, product, customer, metadata }) => {
         console.log(`[Creem] onGrantAccess called`, {
           productId: product?.id,
           productName: product?.name,
@@ -151,14 +152,18 @@ if (env.CREEM_API_KEY) {
         }
 
         // 获取订阅 ID 用于防止重复处理
-        const subscriptionId =
+        const metadataSubscriptionId =
           typeof meta.subscriptionId === "string"
             ? meta.subscriptionId
-            : (customer as { id?: string })?.id;
+            : undefined;
 
-        const orderNo = subscriptionId
-          ? `creem_sub_${subscriptionId}`
-          : `creem_${productConfig.type}_${userId}_${Date.now()}`;
+        const orderNo = buildCreemSubscriptionOrderNo({
+          subscriptionId: typeof id === "string" ? id : undefined,
+          metadataSubscriptionId,
+          customerId: (customer as { id?: string })?.id,
+          userId,
+          productType: productConfig.type,
+        });
 
         const [existing] = await db
           .select({ id: creditPackages.id })
