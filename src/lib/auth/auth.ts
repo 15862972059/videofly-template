@@ -121,7 +121,7 @@ if (env.CREEM_API_KEY) {
     creem({
       apiKey: env.CREEM_API_KEY,
       webhookSecret: env.CREEM_WEBHOOK_SECRET,
-      testMode: process.env.NODE_ENV !== "production",
+      testMode: env.CREEM_API_KEY.startsWith("creem_test_") || process.env.NODE_ENV !== "production",
       persistSubscriptions: true,
       defaultSuccessUrl: "/dashboard",
 
