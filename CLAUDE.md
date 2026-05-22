@@ -1,8 +1,8 @@
-# VideoFly - AI Video Generation Platform
+# AI2ART - AI Photo Remix and Art Generation Platform
 
 ## Project Overview
 
-VideoFly is a SaaS platform for AI-powered video generation. It's built as a standalone Next.js application with AI video generation capabilities.
+AI2ART is a SaaS platform for AI-powered photo remix and art generation. It's built as a standalone Next.js application with AI image generation and video generation capabilities.
 
 ## Tech Stack
 
@@ -17,44 +17,35 @@ VideoFly is a SaaS platform for AI-powered video generation. It's built as a sta
 ## Project Structure
 
 ```
-videofly/
+ai2art/
 ├── src/
 │   ├── app/                  # Next.js App Router pages
 │   │   ├── api/              # API Routes
 │   │   │   ├── v1/           # REST API v1
 │   │   │   ├── auth/         # Better Auth endpoints
-│   │   │   ├── trpc/         # Legacy tRPC
 │   │   │   └── webhooks/     # Webhooks (Stripe, Creem)
 │   │   └── [locale]/         # i18n pages (marketing, dashboard, tool)
 │   ├── ai/                   # AI provider abstraction
-│   │   ├── providers/        # evolink, kie providers
-│   │   └── types.ts
+│   │   ├── images/           # Image generation (MiniMax, Evolink, CIYUAN)
+│   │   └── providers/         # evolink, kie video providers
 │   ├── components/           # React components
-│   ├── config/               # Configuration
-│   │   ├── credits.ts        # Credit/Model pricing config
-│   │   └── pricing-user.ts   # User-facing pricing config
-│   ├── db/                   # Database
-│   │   ├── schema.ts         # Drizzle schema
-│   │   └── index.ts
-│   ├── lib/                  # Utilities
-│   │   ├── auth/             # Better Auth configuration
-│   │   ├── storage.ts        # R2/S3 storage
+│   │   ├── gallery/          # Gallery components
+│   │   ├── studio/           # Studio remix components
 │   │   └── ...
-│   ├── payment/              # Payment integration
-│   │   ├── index.ts          # Stripe client
-│   │   ├── plans.ts          # Subscription plans
-│   │   └── webhooks.ts       # Stripe webhooks
+│   ├── config/               # Configuration
+│   ├── db/                   # Database
+│   │   └── schema.ts         # Drizzle schema
 │   ├── services/             # Business services
-│   │   ├── credit.ts         # Credit system (freeze/settle/release)
-│   │   ├── video.ts          # Video generation lifecycle
-│   │   └── billing.ts
-│   ├── stores/               # Zustand state stores
-│   ├── hooks/                # React hooks
-│   ├── i18n/                 # Internationalization
-│   └── middleware.ts
-├── scripts/                  # Utility scripts
-├── docs/                     # Documentation
-└── public/                   # Static assets
+│   │   ├── image/            # Image generation service
+│   │   │   ├── gallery.ts    # Gallery image management
+│   │   │   ├── generation-jobs.ts
+│   │   │   └── ...
+│   │   └── video.ts          # Video generation lifecycle
+│   ├── lib/                  # Utilities
+│   └── stores/               # Zustand state stores
+├── scripts/                  # Utility scripts (gallery generation)
+├── public/images/            # Gallery images (gallery-*.png)
+└── docs/                     # Documentation
 ```
 
 ## Core Modules
@@ -278,6 +269,8 @@ STORAGE_DOMAIN=...
 # AI Providers
 EVOLINK_API_KEY=...
 KIE_API_KEY=...
+MINIMAX_API_KEY=...          # For image generation
+MINIMAX_API_URL=...         # Optional, defaults to api.minimaxi.com
 AI_CALLBACK_URL=https://your-domain.com/api/v1/video/callback
 AI_CALLBACK_SECRET=...
 
@@ -326,6 +319,87 @@ pnpm script:add-credits   # Add credits to user
 pnpm script:check-credits # Check user credits
 pnpm script:reset-credits # Reset user credits
 ```
+
+## Gallery Image Generation
+
+The gallery feature allows users to select famous landmarks/travel destinations as photo remix templates. Images are generated using MiniMax image generation API and stored in `public/images/` with database records in `classic_images` table.
+
+### Image Generation Flow
+
+1. **Write prompts** following the template below
+2. **Generate images** using MiniMax API via `scripts/generate-new-gallery-images.ts`
+3. **Insert to database** using `scripts/insert-new-gallery-images.ts`
+4. **Commit to GitHub** with the new images
+
+### Prompt Template
+
+```
+[Landmark name] in [Country/City] completely empty of people, bright clear sunny [region] midday with crystal blue sky, [detailed landmark description], a [marked position/platform/terrace] where visitors normally stand for photos but currently empty, [additional architectural/natural details], warm [regional] sunlight, eye-level perspective from a standing photographer, 16:9 hyperrealistic travel photography, empty tourist attraction no humans
+```
+
+### Prompt Requirements
+
+**Strict Rules:**
+- **NO people** - The scene must be completely empty
+- **Photographer perspective** - Eye-level from standing position (approximately 170cm height)
+- **Bright sunny midday** - Crystal clear blue sky, strong sunlight
+- **Designated photo spot** - Include a visible marker/platform where tourists normally stand
+- **Famous landmarks** - Must be well-known打卡景点 (tourist check-in spots)
+- **No humans in image** - No silhouettes, shadows, or any human presence
+
+**Content Rules:**
+- Generated from photographer's standing eye-level
+- Must预留 a "photo spot" position for user to composite their photo
+- Focus on iconic architecture/landscape features
+- Use specific location details (e.g., "Victoria Memorial in front of Buckingham Palace")
+
+### Image Storage
+
+- **Image files**: `public/images/gallery-{slug}.png` (16:9 aspect ratio)
+- **Database**: `classic_images` table
+- **Slug format**: `{country}-{location}` (e.g., `uk-london`, `japan-fuji`)
+
+### Database Schema
+
+```sql
+classic_images (
+  id, slug, title, description,
+  category, subcategory,
+  prompt_template, hero_image_url, thumbnail_url,
+  is_active, created_at, updated_at
+)
+```
+
+### Scripts
+
+**Generate images:**
+```bash
+MINIMAX_API_KEY="your-api-key" npx tsx scripts/generate-new-gallery-images.ts
+```
+
+**Insert to database:**
+```bash
+# Set DATABASE_URL from .env first
+export $(grep DATABASE_URL .env | xargs)
+npx tsx scripts/insert-new-gallery-images.ts
+```
+
+**Update existing records (upsert):**
+The insert scripts use insert-or-update pattern to ensure new images replace old records correctly.
+
+### Existing Categories
+
+Gallery categories are country-based. Current categories include:
+- Europe: Sweden, Denmark, Croatia, Hungary, Slovenia, Romania, Bulgaria, Latvia, Estonia, Malta, UK, Greece, Italy, France, Germany, Austria, Poland, Czech, Portugal, Russia, Finland, Ireland, Belgium, Netherlands
+- Southeast Asia: Cambodia, Myanmar, Malaysia, Singapore, Philippines, Thailand, Indonesia, Vietnam, Japan
+- Middle East: UAE, Israel, Saudi Arabia, Qatar, Lebanon, Oman, Bahrain, Macau, Jordan, Turkey
+- Africa: Egypt, Morocco, South Africa, Tanzania
+- Americas: USA, Brazil, Mexico, Peru, Canada, Australia
+- Central Asia: Georgia, Armenia, Azerbaijan, Kazakhstan, Uzbekistan
+
+**Do NOT create new categories** - use existing country categories only.
+
+---
 
 ## Architecture Decisions
 
