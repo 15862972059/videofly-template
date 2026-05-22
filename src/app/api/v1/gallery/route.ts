@@ -19,12 +19,15 @@ export async function GET(request: Request) {
     const category = searchParams.get("category") ?? undefined;
     const subcategory = searchParams.get("subcategory") ?? undefined;
     const query = searchParams.get("q") ?? undefined;
-    const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")!) : undefined;
-    const offset = searchParams.get("offset") ? parseInt(searchParams.get("offset")!) : undefined;
+    const limit = searchParams.get("limit") ? Number.parseInt(searchParams.get("limit")!) : undefined;
+    const offset = searchParams.get("offset") ? Number.parseInt(searchParams.get("offset")!) : undefined;
+    const includeCategories = searchParams.get("includeCategories") !== "false";
 
-    const images = await listClassicImages({ category, subcategory, query, limit, offset });
-    const categories = await getGalleryCategories();
-    const total = await countClassicImages({ category, subcategory, query });
+    const [images, categories, total] = await Promise.all([
+      listClassicImages({ category, subcategory, query, limit, offset }),
+      includeCategories ? getGalleryCategories() : Promise.resolve(undefined),
+      countClassicImages({ category, subcategory, query }),
+    ]);
 
     return apiSuccess({ images, categories, total });
   } catch (error) {

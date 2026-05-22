@@ -20,12 +20,11 @@ export function ClassicImageGrid({ images, onSelect }: ClassicImageGridProps) {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-      {images.map((image, index) => (
+      {images.map((image) => (
         <ClassicImageCard
           key={image.id}
           image={image}
           onSelect={onSelect}
-          priority={index < 6}
         />
       ))}
     </div>

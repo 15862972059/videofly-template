@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { ClassicImageData } from "@/types/ai-photo";
 import type { ClassicImage } from "@/db";
@@ -22,6 +22,7 @@ interface GalleryState {
 
 export default function GalleryPage() {
   const router = useRouter();
+  const requestIdRef = useRef(0);
   const [state, setState] = useState<GalleryState>({
     images: [],
     categories: [],
@@ -43,7 +44,9 @@ export default function GalleryPage() {
   }, [activeCategory, activeSubcategory, activeQuery]);
 
   const fetchGallery = async (reset = false) => {
+    const requestId = ++requestIdRef.current;
     const nextOffset = reset ? 0 : state.images.length;
+    const shouldLoadCategories = state.categories.length === 0;
 
     setState((s) => ({
       ...s,
@@ -59,11 +62,14 @@ export default function GalleryPage() {
       if (activeQuery) params.set("q", activeQuery);
       params.set("limit", PAGE_SIZE.toString());
       params.set("offset", nextOffset.toString());
+      if (!shouldLoadCategories) params.set("includeCategories", "false");
 
       const res = await fetch(`/api/v1/gallery?${params}`);
       if (res.ok) {
         const data = await res.json();
         if (data.success && Array.isArray(data.data.images)) {
+          if (requestId !== requestIdRef.current) return;
+
           const nextImages = data.data.images as (ClassicImageData | ClassicImage)[];
           const total = Number(data.data.total ?? nextImages.length);
 
@@ -86,6 +92,8 @@ export default function GalleryPage() {
       }
       throw new Error("API error");
     } catch (err) {
+      if (requestId !== requestIdRef.current) return;
+
       setState((s) => ({
         ...s,
         loading: false,

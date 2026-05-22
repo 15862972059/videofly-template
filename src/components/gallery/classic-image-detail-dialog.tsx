@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import {
@@ -81,11 +82,15 @@ export function ClassicImageDetailDialog({
 
         <div className="space-y-4">
           <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden bg-muted">
-            <img
-              src={heroUrl}
-              alt={title}
-              className="absolute inset-0 w-full h-full object-contain"
-            />
+            {heroUrl && (
+              <Image
+                src={heroUrl}
+                alt={title}
+                fill
+                sizes="70vw"
+                className="object-contain"
+              />
+            )}
           </div>
 
           <div>
