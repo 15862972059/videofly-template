@@ -56,25 +56,25 @@ NEXT_PUBLIC_BILLING_PROVIDER='creem'
 
 | 产品名称 | 价格 | 周期 | 积分 | Product ID |
 |---------|------|------|------|------------|
-| Basic Plan | $9.90 | 月付 | 280 | 需创建 |
-| Pro Plan ⭐ | $29.90 | 月付 | 960 | 需创建 |
-| Ultimate Plan | $79.90 | 月付 | 2,850 | 需创建 |
+| Basic Plan | $5.00 | 月付 | 70 | 需创建 |
+| Pro Plan ⭐ | $15.00 | 月付 | 220 | 需创建 |
+| Ultimate Plan | $39.00 | 月付 | 600 | 需创建 |
 
 #### 2. 年付订阅（Yearly Subscriptions）
 
 | 产品名称 | 价格 | 周期 | 积分 | Product ID |
 |---------|------|------|------|------------|
-| Basic Plan (Yearly) | $99.00 | 年付 | 3,360 | 需创建 |
-| Pro Plan (Yearly) ⭐ | $299.00 | 年付 | 11,520 | 需创建 |
-| Ultimate Plan (Yearly) | $799.00 | 年付 | 34,200 | 需创建 |
+| Basic Plan (Yearly) | $50.00 | 年付 | 840 | 需创建 |
+| Pro Plan (Yearly) ⭐ | $150.00 | 年付 | 2,640 | 需创建 |
+| Ultimate Plan (Yearly) | $390.00 | 年付 | 7,200 | 需创建 |
 
 #### 3. 一次性积分包（One-time Credit Packages）
 
 | 产品名称 | 价格 | 积分 | 购买限制 | Product ID |
 |---------|------|------|---------|------------|
-| Starter Pack | $14.90 | 280 | 所有用户 | 需创建 |
-| Standard Pack ⭐ | $39.90 | 960 | 仅订阅用户 | 需创建 |
-| Pro Pack | $99.90 | 2,850 | 仅订阅用户 | 需创建 |
+| Starter Pack | $5.00 | 50 | 所有用户 | 需创建 |
+| Standard Pack ⭐ | $12.00 | 130 | 仅订阅用户 | 需创建 |
+| Pro Pack | $30.00 | 350 | 仅订阅用户 | 需创建 |
 
 ### 创建步骤
 
@@ -87,17 +87,16 @@ NEXT_PUBLIC_BILLING_PROVIDER='creem'
 ```yaml
 产品类型: Subscription (订阅)
 产品名称: Basic Plan
-描述: 280 credits/month - Perfect for individuals
-
+描述: 70 credits/month - Perfect for individuals
 定价:
   - 货币: USD
-  - 价格: 9.90
+  - 价格: 5.00
   - 计费周期: Monthly (月付)
   - Trial Period: 0 (无试用期)
 
 元数据 (Metadata - 可选):
-  - credits: "280"
-  - features: "hd_videos,fast_generation"
+  - credits: "70"
+  - features: "gpt_image_2_access,commercial_use"
 ```
 
 4. 点击 **Create Product**
@@ -110,10 +109,10 @@ NEXT_PUBLIC_BILLING_PROVIDER='creem'
 
 ```yaml
 产品名称: Basic Plan (Yearly)
-价格: 99.00
+价格: 50.00
 计费周期: Yearly (年付)
 元数据:
-  - credits: "3360"
+  - credits: "840"
 ```
 
 #### 步骤 3：创建一次性积分包
@@ -125,15 +124,15 @@ NEXT_PUBLIC_BILLING_PROVIDER='creem'
 ```yaml
 产品类型: One-time
 产品名称: Starter Pack
-描述: 280 credits - One-time purchase
+描述: 50 credits - One-time purchase
 
 定价:
   - 货币: USD
-  - 价格: 14.90
+  - 价格: 5.00
   - 一次性购买
 
 元数据:
-  - credits: "280"
+  - credits: "50"
   - allow_free_user: "true"
 ```
 
@@ -143,19 +142,19 @@ NEXT_PUBLIC_BILLING_PROVIDER='creem'
 
 ```markdown
 ## 月付订阅
-- [ ] Basic Plan ($9.90/mo, 280 credits) → Product ID: _________
-- [ ] Pro Plan ($29.90/mo, 960 credits) → Product ID: _________
-- [ ] Ultimate Plan ($79.90/mo, 2,850 credits) → Product ID: _________
+- [ ] Basic Plan ($5.00/mo, 70 credits) → Product ID: _________
+- [ ] Pro Plan ($15.00/mo, 220 credits) → Product ID: _________
+- [ ] Ultimate Plan ($39.00/mo, 600 credits) → Product ID: _________
 
 ## 年付订阅
-- [ ] Basic Plan Yearly ($99/yr, 3,360 credits) → Product ID: _________
-- [ ] Pro Plan Yearly ($299/yr, 11,520 credits) → Product ID: _________
-- [ ] Ultimate Plan Yearly ($799/yr, 34,200 credits) → Product ID: _________
+- [ ] Basic Plan Yearly ($50/yr, 840 credits) → Product ID: _________
+- [ ] Pro Plan Yearly ($150/yr, 2,640 credits) → Product ID: _________
+- [ ] Ultimate Plan Yearly ($390/yr, 7,200 credits) → Product ID: _________
 
 ## 积分包
-- [ ] Starter Pack ($14.90, 280 credits) → Product ID: _________
-- [ ] Standard Pack ($39.90, 960 credits) → Product ID: _________
-- [ ] Pro Pack ($99.90, 2,850 credits) → Product ID: _________
+- [ ] Starter Pack ($5.00, 50 credits) → Product ID: _________
+- [ ] Standard Pack ($12.00, 130 credits) → Product ID: _________
+- [ ] Pro Pack ($30.00, 350 credits) → Product ID: _________
 ```
 
 ---

@@ -1,25 +1,25 @@
-# Creem Product Checklist
+# Creem Product Checklist (Plan B)
 
-This checklist reflects the current image-generation credit economy.
+This checklist reflects the new credit economy based on **Plan B** (where 1 credit = 0.2 RMB cost, exchange rate 7.2).
 
 ## Subscription Products
 
 | Product | Type | Price | Credits | Billing |
 | --- | --- | ---: | ---: | --- |
-| Basic Plan | Subscription | $9.90 | 160 | Monthly |
-| Pro Plan | Subscription | $29.90 | 540 | Monthly |
-| Ultimate Plan | Subscription | $79.90 | 1,600 | Monthly |
-| Basic Plan (Yearly) | Subscription | $99.00 | 1,920 | Yearly |
-| Pro Plan (Yearly) | Subscription | $299.00 | 6,480 | Yearly |
-| Ultimate Plan (Yearly) | Subscription | $799.00 | 19,200 | Yearly |
+| Basic Plan | Subscription | $5.00 | 70 | Monthly |
+| Pro Plan | Subscription | $15.00 | 220 | Monthly |
+| Ultimate Plan | Subscription | $39.00 | 600 | Monthly |
+| Basic Plan (Yearly) | Subscription | $50.00 | 840 | Yearly |
+| Pro Plan (Yearly) | Subscription | $150.00 | 2,640 | Yearly |
+| Ultimate Plan (Yearly) | Subscription | $390.00 | 7,200 | Yearly |
 
 ## One-Time Credit Packages
 
 | Product | Type | Price | Credits | Buyer |
 | --- | --- | ---: | ---: | --- |
-| Starter Pack | One-time | $9.90 | 150 | All users |
-| Standard Pack | One-time | $24.90 | 430 | Subscribers |
-| Pro Pack | One-time | $59.90 | 1,100 | Subscribers |
+| Starter Pack | One-time | $5.00 | 50 | All users |
+| Standard Pack | One-time | $12.00 | 130 | Subscribers |
+| Pro Pack | One-time | $30.00 | 350 | Subscribers |
 
 ## Metadata
 

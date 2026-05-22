@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { HeroSection } from "@/components/landing/hero-section";
 import { PhotoRemixSection } from "@/components/landing/photo-remix-section";
 import { ModelIntroSection } from "@/components/landing/model-intro-section";
@@ -78,9 +80,29 @@ export default async function HomePage({ params }: HomePageProps) {
       <ShowcaseSection />
       <FeaturesSection />
       <HowItWorks />
-      <PricingSection />
+      <Suspense fallback={<PricingSectionFallback />}>
+        <PricingSection />
+      </Suspense>
       <CTASection />
       <FAQSection />
     </>
+  );
+}
+
+function PricingSectionFallback() {
+  return (
+    <section className="relative overflow-hidden py-24 md:py-32">
+      <div className="container mx-auto px-4">
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <div className="mx-auto h-10 w-48 rounded-full bg-slate-200/80 dark:bg-white/10" />
+          <div className="mx-auto mt-4 h-5 w-80 max-w-full rounded-full bg-slate-100 dark:bg-white/5" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {[0, 1, 2].map((item) => (
+            <div key={item} className="h-80 rounded-2xl border border-slate-200/80 bg-white/70 dark:border-white/10 dark:bg-white/5" />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

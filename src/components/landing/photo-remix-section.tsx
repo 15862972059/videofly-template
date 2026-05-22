@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { ArrowRight, ImagePlus, Lightbulb, MapPin, Sparkles, Upload } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -247,7 +248,13 @@ export function PhotoRemixSection() {
                     className="group overflow-hidden rounded-2xl border border-emerald-900/10 bg-white shadow-sm dark:bg-white/5"
                   >
                     <div className="relative aspect-[5/6] overflow-hidden">
-                      <img src={destination.image} alt={`${destination.title} scene template`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                      <Image
+                        src={destination.image}
+                        alt={`${destination.title} scene template`}
+                        fill
+                        sizes="(min-width: 768px) 25vw, 50vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
                       <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-1 text-[10px] font-semibold text-emerald-700 shadow-sm">
                         {destination.tag}
                       </span>
@@ -272,8 +279,14 @@ function PreviewCard({ label, title, image, emphasis = false }: { label: string;
     <div className={cn("rounded-2xl border bg-white p-3 shadow-sm dark:bg-slate-950/40", emphasis ? "border-emerald-300" : "border-emerald-900/10")}>
       <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">{label}</div>
       <div className="mb-3 text-sm font-semibold text-slate-800 dark:text-white">{title}</div>
-      <div className="aspect-[3/4] overflow-hidden rounded-xl bg-slate-100">
-        <img src={image} alt={title} className="h-full w-full object-cover" />
+      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-slate-100">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          sizes="(min-width: 768px) 30vw, 90vw"
+          className="object-cover"
+        />
       </div>
     </div>
   );

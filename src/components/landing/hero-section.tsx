@@ -1,72 +1,52 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Check, Images, Sparkles, Type, WandSparkles } from "lucide-react";
-import { motion } from "framer-motion";
-import { useLocale } from "next-intl";
 
-import { BlurFade } from "@/components/magicui/blur-fade";
-import { Meteors } from "@/components/magicui/meteors";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { cn } from "@/components/ui";
 import { NEW_USER_GIFT } from "@/config/pricing-user";
+import { LocaleLink } from "@/i18n/navigation";
 
 const trustItems = ["No credit card", `${NEW_USER_GIFT.credits || 1} free credit`, "4K HD output"];
 
 export function HeroSection() {
-  const locale = useLocale();
-
   return (
     <section id="generator" className="relative overflow-hidden bg-[radial-gradient(circle_at_50%_8%,rgba(34,197,94,0.18),transparent_34%),linear-gradient(180deg,rgba(240,253,244,0.9)_0%,rgba(248,250,252,0.95)_74%,var(--background)_100%)] pb-20 pt-14 dark:bg-[radial-gradient(circle_at_50%_8%,rgba(34,197,94,0.14),transparent_34%),linear-gradient(180deg,rgba(6,20,18,0.92)_0%,rgba(2,6,23,0.98)_74%,var(--background)_100%)]">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <Meteors number={12} minDelay={0.8} maxDelay={3} minDuration={4} maxDuration={9} />
-      </div>
-
       <div className="container mx-auto px-4">
         <div className="mx-auto flex min-h-[760px] max-w-5xl lg:max-w-7xl flex-col lg:grid lg:grid-cols-[1.15fr_0.85fr] items-center justify-center gap-9 lg:gap-12 text-center lg:text-left py-10">
           
           {/* Left Column: Text Copy & CTAs */}
           <div className="flex flex-col items-center lg:items-start justify-center gap-9 w-full">
-            <motion.div
-              initial={{ opacity: 0, y: -24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: "easeOut" }}
-              className="space-y-6 w-full flex flex-col items-center lg:items-start"
-            >
-              <BlurFade delay={0.05} inView>
-                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
-                  <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                  Powered by GPT-Image-2 (Ultimate Creative Engine)
-                </div>
-              </BlurFade>
+            <div className="space-y-6 w-full flex flex-col items-center lg:items-start">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
+                <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                Powered by GPT-Image-2 (Ultimate Creative Engine)
+              </div>
 
-              <BlurFade delay={0.1} inView>
-                <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-slate-800 dark:text-white md:text-6xl lg:text-6xl xl:text-7xl">
-                  Turn Any Photo Into World-Class AI Art
-                </h1>
-              </BlurFade>
+              <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-slate-800 dark:text-white md:text-6xl lg:text-6xl xl:text-7xl">
+                Turn Any Photo Into World-Class AI Art
+              </h1>
 
-              <BlurFade delay={0.18} inView>
-                <p className="max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-300 md:text-lg">
-                  Choose a destination, upload your portrait, and let AI2ART remix it using <strong>GPT-Image-2</strong>, the world's most powerful creative generation engine, into a polished artwork.
-                </p>
-              </BlurFade>
+              <p className="max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-300 md:text-lg">
+                Choose a destination, upload your portrait, and let AI2ART remix it using <strong>GPT-Image-2</strong>, the world's most powerful creative generation engine, into a polished artwork.
+              </p>
 
-              <BlurFade delay={0.24} inView className="flex flex-wrap justify-center lg:justify-start gap-2">
+              <div className="flex flex-wrap justify-center lg:justify-start gap-2">
                 {trustItems.map((item) => (
                   <span key={item} className="inline-flex items-center gap-1.5 rounded-full bg-white/75 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm ring-1 ring-emerald-900/10 dark:bg-white/10 dark:text-slate-300">
                     <Check className="h-3.5 w-3.5 text-emerald-600" />
                     {item}
                   </span>
                 ))}
-              </BlurFade>
-            </motion.div>
+              </div>
+            </div>
 
-            <BlurFade delay={0.32} inView className="w-full max-w-3xl">
+            <div className="w-full max-w-3xl">
               <div className="relative rounded-[2rem] border border-white/80 bg-white/78 p-4 shadow-[0_24px_90px_rgba(16,185,129,0.22)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/70">
                 <div className="absolute -inset-8 -z-10 rounded-[3rem] bg-emerald-300/25 blur-3xl" />
                 <div className="flex flex-col gap-4 rounded-[1.5rem] border border-emerald-900/10 bg-white/80 p-5 dark:bg-white/5 sm:flex-row sm:items-center sm:justify-center lg:justify-start">
-                  <Link href={`/${locale}/studio`} className="w-full sm:w-auto">
+                  <LocaleLink href="/studio" className="w-full sm:w-auto">
                     <ShimmerButton
                       shimmerColor="#ffffff"
                       borderRadius="999px"
@@ -77,16 +57,16 @@ export function HeroSection() {
                       Start Creating Free
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </ShimmerButton>
-                  </Link>
-                  <Link
-                    href={`/${locale}/gallery`}
+                  </LocaleLink>
+                  <LocaleLink
+                    href="/gallery"
                     className={cn(
                       "inline-flex h-12 items-center justify-center gap-2 rounded-full border border-emerald-900/10 bg-white px-7 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-emerald-50 dark:bg-white/10 dark:text-white dark:hover:bg-white/15",
                     )}
                   >
                     <Images className="h-4 w-4" />
                     Browse Scenes
-                  </Link>
+                  </LocaleLink>
                 </div>
 
                 <div className="mt-4 grid gap-3 md:grid-cols-[1.1fr_1.1fr_0.8fr]">
@@ -114,25 +94,25 @@ export function HeroSection() {
                   </div>
                 </div>
               </div>
-            </BlurFade>
+            </div>
           </div>
 
           {/* Right Column: Floating Cards Deck */}
           <div className="hero-deck w-full">
             <div className="hero-card hero-card-1">
-              <img src="/images/homepage/case323.jpg" alt="AI Photo Remix Case 323" />
+              <Image src="/images/homepage/case323.jpg" alt="AI Photo Remix Case 323" fill sizes="(min-width: 1024px) 270px, 48vw" />
               <span>Remix #323</span>
             </div>
             <div className="hero-card hero-card-2">
-              <img src="/images/homepage/case369.jpg" alt="AI Photo Remix Case 369" />
+              <Image src="/images/homepage/case369.jpg" alt="AI Photo Remix Case 369" fill sizes="(min-width: 1024px) 230px, 44vw" />
               <span>Remix #369</span>
             </div>
             <div className="hero-card hero-card-3">
-              <img src="/images/homepage/case378.jpg" alt="AI Photo Remix Case 378" />
+              <Image src="/images/homepage/case378.jpg" alt="AI Photo Remix Case 378" fill sizes="(min-width: 1024px) 210px, 38vw" />
               <span>Remix #378</span>
             </div>
             <div className="hero-card hero-card-4">
-              <img src="/images/homepage/5.21.png" alt="AI Art Case 5.21" />
+              <Image src="/images/homepage/5.21.png" alt="AI Art Case 5.21" fill sizes="(min-width: 1024px) 285px, 52vw" />
               <span>Remix #5.21</span>
             </div>
           </div>

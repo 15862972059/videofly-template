@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -63,8 +64,14 @@ export function CTASection() {
                 viewport={{ once: true }}
                 className="relative overflow-hidden rounded-3xl border border-emerald-900/10 bg-emerald-50 p-4 dark:bg-emerald-500/10"
               >
-                <div className="aspect-video overflow-hidden rounded-2xl bg-slate-200">
-                  <img src="/images/homepage/photo-remix-result.png" alt="AI2ART generated travel portrait preview" className="h-full w-full object-cover" />
+                <div className="relative aspect-video overflow-hidden rounded-2xl bg-slate-200">
+                  <Image
+                    src="/images/homepage/case323.jpg"
+                    alt="AI2ART generated travel portrait preview"
+                    fill
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
                 </div>
                 <div className="mt-4 rounded-2xl bg-white p-4 shadow-sm dark:bg-slate-950/40">
                   <div className="mb-2 flex items-center justify-between text-sm">
