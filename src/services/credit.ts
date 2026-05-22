@@ -359,6 +359,20 @@ export class CreditService {
     const expiredAt = new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000);
 
     return db.transaction(async (trx) => {
+      await trx.execute(
+        sql`select pg_advisory_xact_lock(hashtext(${params.orderNo}))`
+      );
+
+      const [existingPackage] = await trx
+        .select({ id: creditPackages.id })
+        .from(creditPackages)
+        .where(eq(creditPackages.orderNo, params.orderNo))
+        .limit(1);
+
+      if (existingPackage) {
+        return { packageId: existingPackage.id };
+      }
+
       const [pkgResult] = await trx
         .insert(creditPackages)
         .values({
