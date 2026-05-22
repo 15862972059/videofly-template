@@ -158,7 +158,7 @@ export const SUBSCRIPTION_PRODUCTS = [
     credits: 840, // 70 × 12
     period: "year" as const,
     popular: false,
-    enabled: true,
+    enabled: false,
     features: ["gpt_image_2_access", "commercial_use"],
   },
   {
@@ -168,7 +168,7 @@ export const SUBSCRIPTION_PRODUCTS = [
     credits: 2640, // 220 × 12
     period: "year" as const,
     popular: true,
-    enabled: true,
+    enabled: false,
     features: ["gpt_image_2_access", "commercial_use", "priority_support"],
   },
   {
@@ -178,7 +178,7 @@ export const SUBSCRIPTION_PRODUCTS = [
     credits: 7200, // 600 × 12
     period: "year" as const,
     popular: false,
-    enabled: true,
+    enabled: false,
     features: ["gpt_image_2_access", "commercial_use", "priority_support", "api_access"],
   },
 ];

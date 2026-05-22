@@ -59,13 +59,13 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-2",
       question: "How much does the Basic plan cost?",
       answer:
-        "The Basic monthly plan is $5.00/month with 70 credits. The yearly plan is $50 with 840 credits, saving you 2 months of payments.",
+        "The Basic monthly plan is $5.00/month with 70 credits.",
     },
     {
       id: "item-3",
       question: "What's included in the Pro plan?",
       answer:
-        "The Pro plan provides 220 credits per month at $15.00/month. The yearly plan is $150 with 2,640 credits. The Pro plan includes priority support, commercial license, and full access to the GPT-Image-2 model. It's our most popular choice.",
+        "The Pro plan provides 220 credits per month at $15.00/month. The Pro plan includes priority support, commercial license, and full access to the GPT-Image-2 model. It's our most popular choice.",
     },
     {
       id: "item-4",
@@ -77,7 +77,7 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-5",
       question: "What's the difference between subscription and one-time purchase?",
       answer:
-        "Subscriptions automatically recharge your credits monthly. Monthly subscription credits are valid for 30 days. One-time credit packages require a single payment and credits are valid for 1 year. Subscribers enjoy better per-credit rates, and yearly plans save 17%.",
+        "Subscriptions automatically recharge your credits monthly. Monthly subscription credits are valid for 30 days. One-time credit packages require a single payment and credits are valid for 1 year. Subscribers enjoy better per-credit rates.",
     },
     {
       id: "item-6",

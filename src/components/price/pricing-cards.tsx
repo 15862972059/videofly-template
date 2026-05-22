@@ -1,13 +1,9 @@
 "use client";
-
-import { useState } from "react";
 import Balancer from "react-wrap-balancer";
 import { useTranslations, useLocale } from "next-intl";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import * as Icons from "@/components/ui/icons";
-import { Switch } from "@/components/ui/switch";
-
 import { BillingFormButton } from "@/components/price/billing-form-button";
 import { priceDataMap, type SubscriptionPlanTranslation } from "@/config/price/price-data";
 import { useSigninModal } from "@/hooks/use-signin-modal";
@@ -25,13 +21,8 @@ export function PricingCards({
 }: PricingCardsProps) {
   const t = useTranslations('PricingCards');
   const locale = useLocale();
-  const isYearlyDefault = true;
-  const [isYearly, setIsYearly] = useState<boolean>(isYearlyDefault);
   const signInModal = useSigninModal();
-  const pricingData = priceDataMap[locale] || priceDataMap['en'];
-  const toggleBilling = () => {
-    setIsYearly(!isYearly);
-  };
+  const pricingData = priceDataMap[locale] || priceDataMap.en;
   return (
     <section className="container flex flex-col items-center text-center">
       <div className="mx-auto mb-10 flex w-full flex-col gap-5">
@@ -41,17 +32,6 @@ export function PricingCards({
         <h2 className="font-heading text-3xl leading-[1.1] md:text-5xl">
           {t('slogan')}
         </h2>
-      </div>
-
-      <div className="mb-4 flex items-center gap-5">
-        <span>{t('monthly_bill')}</span>
-        <Switch
-          checked={isYearly}
-          onCheckedChange={toggleBilling}
-          role="switch"
-          aria-label="switch-year"
-        />
-        <span>{t('annual_bill')}</span>
       </div>
 
       <div className="mx-auto grid max-w-screen-lg gap-5 bg-inherit py-5 md:grid-cols-3 lg:grid-cols-3">
@@ -68,16 +48,7 @@ export function PricingCards({
               <div className="flex flex-row">
                 <div className="flex items-end">
                   <div className="flex text-left text-3xl font-semibold leading-6">
-                    {isYearly && offer.prices.monthly > 0 ? (
-                      <>
-                        <span className="mr-2 text-muted-foreground line-through">
-                          ${offer.prices.monthly}
-                        </span>
-                        <span>${offer.prices.yearly / 12}</span>
-                      </>
-                    ) : (
-                      `$${offer.prices.monthly}`
-                    )}
+                    {`$${offer.prices.monthly}`}
                   </div>
                   <div className="-mb-1 ml-2 text-left text-sm font-medium">
                     <div>{t('mo')}</div>
@@ -86,9 +57,7 @@ export function PricingCards({
               </div>
               {offer.prices.monthly > 0 ? (
                 <div className="text-left text-sm text-muted-foreground">
-                  {isYearly
-                    ? `$${offer.prices.yearly} ${t('annual_info')}`
-                    : `${t('monthly_info')}`}
+                  {t('monthly_info')}
                 </div>
               ) : null}
             </div>
@@ -116,7 +85,7 @@ export function PricingCards({
 
               {userId && subscriptionPlan ? (
                 <BillingFormButton
-                  year={isYearly}
+                  year={false}
                   offer={offer}
                   subscriptionPlan={subscriptionPlan}
                 />

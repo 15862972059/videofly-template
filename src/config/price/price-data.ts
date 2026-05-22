@@ -34,8 +34,9 @@ export interface SubscriptionPlanTranslation {
  */
 function generatePriceData() {
   // 按 period 和 name 分组产品
-  const monthlyProducts = SUBSCRIPTION_PRODUCTS.filter(p => p.period === "month");
-  const yearlyProducts = SUBSCRIPTION_PRODUCTS.filter(p => p.period === "year");
+  const enabledProducts = SUBSCRIPTION_PRODUCTS.filter((product) => product.enabled);
+  const monthlyProducts = enabledProducts.filter((product) => product.period === "month");
+  const yearlyProducts = enabledProducts.filter((product) => product.period === "year");
 
   // 映射计划名称到展示 ID
   const planIdMap: Record<string, string> = {
@@ -52,7 +53,7 @@ function generatePriceData() {
   const creditsMap: Record<string, { monthly: number; yearly: number }> = {};
   const popularMap: Record<string, boolean> = {};
 
-  for (const product of SUBSCRIPTION_PRODUCTS) {
+  for (const product of enabledProducts) {
     const planId = planIdMap[product.name];
     if (!planId) continue;
 

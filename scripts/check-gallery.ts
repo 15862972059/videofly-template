@@ -1,6 +1,5 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { eq } from "drizzle-orm";
 import * as schema from "../src/db/schema";
 import "dotenv/config";
 
@@ -14,22 +13,26 @@ const sql = postgres(databaseUrl, { ssl: "require" });
 const db = drizzle(sql, { schema });
 
 async function main() {
-  // Check Denmark entries
-  const denmark = await db.select().from(schema.classicImages).where(eq(schema.classicImages.category, 'Denmark'));
-  console.log('Denmark count:', denmark.length);
-  denmark.forEach(d => console.log(' -', d.slug, d.title, d.id));
+  const images = await db.select().from(schema.classicImages);
+  console.log("Total images:", images.length);
 
-  // Check all unique category+subcategory combos
-  const cats = await db
-    .selectDistinct({
-      category: schema.classicImages.category,
-      subcategory: schema.classicImages.subcategory,
-    })
-    .from(schema.classicImages)
-    .orderBy(schema.classicImages.category, schema.classicImages.subcategory);
+  const missingPng: string[] = [];
+  const hasPng: string[] = [];
 
-  console.log('\nAll categories/subcategories (' + cats.length + '):');
-  cats.forEach(c => console.log(`  ${c.category} / ${c.subcategory}`));
+  for (const img of images) {
+    if (img.heroImageUrl && img.heroImageUrl.endsWith(".png")) {
+      hasPng.push(img.slug);
+    } else {
+      missingPng.push(`${img.slug} -> ${img.heroImageUrl}`);
+    }
+  }
+
+  console.log("\nHas PNG:", hasPng.length);
+  console.log("Missing PNG:", missingPng.length);
+  if (missingPng.length > 0) {
+    console.log("\nMissing PNG images:");
+    missingPng.forEach(m => console.log(" ", m));
+  }
 
   await sql.end();
 }

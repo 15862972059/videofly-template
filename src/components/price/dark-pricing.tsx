@@ -27,7 +27,7 @@ interface DarkPricingProps {
   dictCredits: CreditsDictionary;
 }
 
-type PricingTab = "onetime" | "monthly" | "yearly";
+type PricingTab = "onetime" | "monthly";
 type FeatureItem = {
   text: string;
   included: boolean;
@@ -85,11 +85,6 @@ export function DarkPricing({
 
   const monthlyProducts = useMemo(
     () => allSubscriptionProducts.filter((p) => p.billingPeriod === "month"),
-    [allSubscriptionProducts]
-  );
-
-  const yearlyProducts = useMemo(
-    () => allSubscriptionProducts.filter((p) => p.billingPeriod === "year"),
     [allSubscriptionProducts]
   );
 
@@ -164,8 +159,6 @@ export function DarkPricing({
         return onetimeProducts;
       case "monthly":
         return monthlyProducts;
-      case "yearly":
-        return yearlyProducts;
       default:
         return [];
     }
@@ -195,16 +188,6 @@ export function DarkPricing({
             onClick={() => setActiveTab("monthly")}
           >
             {t("monthly")}
-          </TabButton>
-          <TabButton
-            active={activeTab === "yearly"}
-            onClick={() => setActiveTab("yearly")}
-            showBadge
-          >
-            {t("yearly")}
-            <span className="ml-1.5 rounded-md bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
-              20% OFF
-            </span>
           </TabButton>
         </div>
       </div>
@@ -268,6 +251,7 @@ interface TabButtonProps {
 function TabButton({ active, children, onClick, showBadge }: TabButtonProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={cn(
         "relative rounded-md px-6 py-2.5 text-sm font-semibold transition-all duration-200",
@@ -383,6 +367,7 @@ function PricingCard({
         {userId ? (
           isCurrent ? (
             <button
+              type="button"
               onClick={onPortal}
               className={cn(
                 "w-full rounded-lg py-2.5 text-sm font-semibold transition-colors flex items-center justify-center gap-2",
@@ -400,6 +385,7 @@ function PricingCard({
                 <TooltipTrigger asChild>
                   <span className="w-full">
                     <button
+                      type="button"
                       disabled={isPending || isRestricted}
                       onClick={() => onCheckout(product)}
                       className={cn(
@@ -436,6 +422,7 @@ function PricingCard({
           )
         ) : (
           <button
+            type="button"
             onClick={signInModal.onOpen}
             className={cn(
               "w-full rounded-lg py-2.5 text-sm font-semibold transition-colors",

@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import Balancer from "react-wrap-balancer";
+import { Check } from "lucide-react";
+import { toast } from "sonner";
 
 import { creem } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
@@ -15,14 +17,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/components/ui";
-import { toast } from "sonner";
-import { Check } from "lucide-react";
-
 import { useSigninModal } from "@/hooks/use-signin-modal";
 import {
-  canPurchasePackages,
   getLocalizedOnetimePackages,
   getLocalizedSubscriptionPackages,
   type CreditsDictionary,
@@ -35,18 +31,11 @@ interface CreemPricingProps {
   dictCredits: CreditsDictionary;
 }
 
-type PricingTab = "onetime" | "monthly" | "yearly";
+type PricingTab = "onetime" | "monthly";
 
 function formatPrice(cents: number): string {
   const value = (cents / 100).toFixed(cents % 100 === 0 ? 0 : 2);
   return `$${value}`;
-}
-
-// 计算年付折扣（年付 = 月付 × 10，买 10 送 2）
-function calculateYearlyDiscount(): string {
-  // 月付12个月 vs 年付10个月的价格
-  // 折扣 = (12 - 10) / 12 = 16.67% ≈ 17%
-  return "17% OFF";
 }
 
 export function CreemPricing({
@@ -62,7 +51,6 @@ export function CreemPricing({
   const [loadingProductId, setLoadingProductId] = useState<string | null>(null);
   const signInModal = useSigninModal();
 
-  // 组织产品数据
   const allSubscriptionProducts = useMemo(
     () =>
       getLocalizedSubscriptionPackages(dictCredits).sort(
@@ -80,17 +68,13 @@ export function CreemPricing({
   );
 
   const monthlyProducts = useMemo(
-    () => allSubscriptionProducts.filter((p) => p.billingPeriod === "month"),
-    [allSubscriptionProducts]
-  );
-
-  const yearlyProducts = useMemo(
-    () => allSubscriptionProducts.filter((p) => p.billingPeriod === "year"),
+    () => allSubscriptionProducts.filter((product) => product.billingPeriod === "month"),
     [allSubscriptionProducts]
   );
 
   useEffect(() => {
     if (!userId) return;
+
     let active = true;
     setIsCheckingAccess(true);
 
@@ -102,8 +86,10 @@ export function CreemPricing({
           console.error("Creem access check failed:", error);
           return;
         }
+
         const subscription =
           data && "subscription" in data ? data.subscription : undefined;
+
         setHasAccess(!!data?.hasAccessGranted);
         setActiveProductId(subscription?.productId ?? null);
       })
@@ -125,9 +111,9 @@ export function CreemPricing({
     setLoadingProductId(product.id);
     startTransition(async () => {
       const origin = window.location.origin;
-      // 支付成功后跳转到 credits 页面，同时将当前页面作为 returnTo 参数
       const currentPath = window.location.pathname;
       const returnTo = encodeURIComponent(currentPath);
+
       const { data, error } = await creem.createCheckout({
         productId: product.id,
         successUrl: `${origin}/credits?payment=success&returnTo=${returnTo}`,
@@ -155,7 +141,6 @@ export function CreemPricing({
       window.location.href = data.url;
     });
   };
-  const buyCreditsLabel = dictCredits.buy_credits ?? "Buy Credits";
 
   const handlePortal = async () => {
     const { data, error } = await creem.createPortal();
@@ -178,7 +163,6 @@ export function CreemPricing({
 
   return (
     <section className="container py-12 md:py-20">
-      {/* 标题区 */}
       <div className="mx-auto mb-12 max-w-2xl text-center">
         <p className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground">
           {dictPrice.pricing}
@@ -187,24 +171,16 @@ export function CreemPricing({
           {dictPrice.slogan}
         </h2>
         <p className="mt-4 text-muted-foreground">
-          选择适合您的积分方案，灵活满足不同需求
+          Choose between flexible one-time credit packs and monthly subscriptions.
         </p>
       </div>
 
-      {/* Tab 切换 */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as PricingTab)} className="w-full">
-        <TabsList className="mx-auto grid max-w-2xl grid-cols-3">
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as PricingTab)} className="w-full">
+        <TabsList className="mx-auto grid max-w-xl grid-cols-2">
           <TabsTrigger value="onetime">一次性积分包</TabsTrigger>
           <TabsTrigger value="monthly">按月订阅</TabsTrigger>
-          <TabsTrigger value="yearly" className="relative">
-            按年订阅
-            <Badge className="absolute -top-2 -right-2 h-5 px-2 bg-destructive text-xs">
-              {calculateYearlyDiscount()}
-            </Badge>
-          </TabsTrigger>
         </TabsList>
 
-        {/* 一次性积分包 */}
         <TabsContent value="onetime" className="mt-8">
           <PricingGrid
             products={onetimeProducts}
@@ -214,7 +190,7 @@ export function CreemPricing({
             isPending={isPending}
             isCheckingAccess={isCheckingAccess}
             loadingProductId={loadingProductId}
-            isOnetime={true}
+            isOnetime
             dictPrice={dictPrice}
             dictCredits={dictCredits}
             onCheckout={handleCheckout}
@@ -223,7 +199,6 @@ export function CreemPricing({
           />
         </TabsContent>
 
-        {/* 按月订阅 */}
         <TabsContent value="monthly" className="mt-8">
           <PricingGrid
             products={monthlyProducts}
@@ -241,28 +216,8 @@ export function CreemPricing({
             signInModal={signInModal}
           />
         </TabsContent>
-
-        {/* 按年订阅 */}
-        <TabsContent value="yearly" className="mt-8">
-          <PricingGrid
-            products={yearlyProducts}
-            activeProductId={activeProductId}
-            hasAccess={hasAccess}
-            userId={userId}
-            isPending={isPending}
-            isCheckingAccess={isCheckingAccess}
-            loadingProductId={loadingProductId}
-            isOnetime={false}
-            dictPrice={dictPrice}
-            dictCredits={dictCredits}
-            onCheckout={handleCheckout}
-            onPortal={handlePortal}
-            signInModal={signInModal}
-          />
-        </TabsContent>
       </Tabs>
 
-      {/* 底部联系信息 */}
       <p className="mt-16 text-center text-base text-muted-foreground">
         <Balancer>
           Email{" "}
@@ -280,10 +235,6 @@ export function CreemPricing({
     </section>
   );
 }
-
-// ============================================
-// PricingGrid Component
-// ============================================
 
 interface PricingGridProps {
   products: LocalizedPackage[];
@@ -306,7 +257,6 @@ function PricingGrid({
   activeProductId,
   hasAccess,
   userId,
-  isPending,
   isCheckingAccess,
   loadingProductId,
   isOnetime,
@@ -328,8 +278,8 @@ function PricingGrid({
 
   return (
     <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
-      {products.map((product, index) => {
-        const isRecommended = product.popular; // 使用产品配置的 popular 字段
+      {products.map((product) => {
+        const isRecommended = product.popular;
         const isCurrent = activeProductId === product.id && hasAccess;
         const isLoading = loadingProductId === product.id;
         const isFreeUserAccessible = isOnetime && product.allowFreeUser === true;
@@ -337,26 +287,24 @@ function PricingGrid({
         return (
           <Card
             key={product.id}
-            className={cn(
-              "flex flex-col transition-shadow hover:shadow-lg",
-              isRecommended && "border-primary border-2 relative"
-            )}
+            className={[
+              "relative flex flex-col transition-shadow hover:shadow-lg",
+              isRecommended ? "border-2 border-primary" : "",
+            ].join(" ").trim()}
           >
-            {/* 推荐标签 - 更醒目 */}
             {isRecommended && (
-              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 bg-linear-gradient-to-r from-primary to-primary/80 px-3 py-1 text-sm font-semibold shadow-md">
-                ⭐ 推荐
-              </Badge>
+              <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-sm font-semibold text-primary-foreground shadow-md">
+                推荐
+              </div>
             )}
 
-            <CardHeader className={cn("pb-4", isRecommended && "pt-6")}>
+            <CardHeader className={isRecommended ? "pb-4 pt-6" : "pb-4"}>
               <div className="flex items-start justify-between">
                 <CardTitle className="text-lg">{product.displayName}</CardTitle>
-                {/* 免费用户可买标签 */}
                 {isFreeUserAccessible && (
-                  <Badge variant="secondary" className="text-xs">
+                  <div className="rounded-full bg-muted px-2.5 py-1 text-xs text-muted-foreground">
                     免费用户可买
-                  </Badge>
+                  </div>
                 )}
               </div>
 
@@ -366,23 +314,23 @@ function PricingGrid({
                     {formatPrice(product.price.amount)}
                   </span>
                   {product.billingPeriod && (
-                    <span className="text-muted-foreground text-sm">
+                    <span className="text-sm text-muted-foreground">
                       /{product.billingPeriod === "year" ? "年" : "月"}
                     </span>
                   )}
                 </div>
               </div>
 
-              {product.displayDescription && (
+              {product.displayDescription ? (
                 <CardDescription>{product.displayDescription}</CardDescription>
-              )}
+              ) : null}
             </CardHeader>
 
             <CardContent className="flex-1">
               <ul className="space-y-3">
                 {product.localizedFeatures.map((feature) => (
                   <li key={feature} className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <Check className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                     <span className="text-sm">{feature}</span>
                   </li>
                 ))}
@@ -392,17 +340,13 @@ function PricingGrid({
             <CardFooter>
               {userId ? (
                 isCurrent ? (
-                  <Button
-                    variant="default"
-                    className="w-full"
-                    onClick={onPortal}
-                  >
+                  <Button variant="default" className="w-full" onClick={onPortal}>
                     {dictPrice.manage_subscription}
                   </Button>
                 ) : (
                   <Button
                     variant={isRecommended ? "default" : "outline"}
-                    className="w-full relative"
+                    className="w-full"
                     disabled={isLoading || isCheckingAccess}
                     onClick={() => onCheckout(product)}
                   >
