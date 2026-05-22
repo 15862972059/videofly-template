@@ -8,7 +8,7 @@ import { cn } from "@/components/ui";
 import { NEW_USER_GIFT } from "@/config/pricing-user";
 import { LocaleLink } from "@/i18n/navigation";
 
-const trustItems = ["No credit card", `${NEW_USER_GIFT.credits || 1} free credit`, "4K HD output"];
+const trustItems = ["No credit card", `${NEW_USER_GIFT.credits || 1} free credit`, "HD output"];
 
 export function HeroSection() {
   return (
