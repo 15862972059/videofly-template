@@ -22,7 +22,6 @@ import { useNotificationDeduplication } from "@/hooks/use-notification-deduplica
 import { videoTaskStorage } from "@/lib/video-task-storage";
 import { videoHistoryStorage, type VideoHistoryItem } from "@/lib/video-history-storage";
 import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
-import { UpgradeModal } from "@/components/upgrade/upgrade-modal";
 import { siteConfig } from "@/config/site";
 import type { Video } from "@/db";
 import type { ToolPageConfig } from "@/config/tool-pages";
@@ -659,9 +658,6 @@ export function ToolPageLayout({
             />
           </div>
         </div>
-
-        {/* 全局升级弹窗 */}
-        <UpgradeModal />
       </>
     );
   }
@@ -734,9 +730,6 @@ export function ToolPageLayout({
 
         </div>
       </div>
-
-      {/* 全局升级弹窗 */}
-      <UpgradeModal />
     </>
   );
 }
