@@ -563,7 +563,7 @@ export function VideoGeneratorInput({
         { id: "start", label: texts.start ?? "Start", subLabel: "", required: true },
         { id: "end", label: texts.end ?? "End", subLabel: texts.optional ?? "(Opt)", required: false },
       ];
-    } else if (mode?.uploadType === "characters") {
+    }if (mode?.uploadType === "characters") {
       return [
         { id: "char1", label: "Image1", subLabel: "", required: true },
         { id: "char2", label: "Image2", subLabel: texts.optional ?? "(Opt)", required: false },

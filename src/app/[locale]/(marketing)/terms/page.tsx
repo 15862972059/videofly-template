@@ -1,8 +1,8 @@
 import type { Locale } from "@/config/i18n-config";
 
 export const metadata = {
-    title: "Terms of Service - ar2art",
-    description: "Terms of Service for ar2art",
+    title: "Terms of Service - AI2ART",
+    description: "Terms of Service for AI2ART",
 };
 
 export default async function TermsPage() {
@@ -14,12 +14,12 @@ export default async function TermsPage() {
 
                 <h2>1. Acceptance of Terms</h2>
                 <p>
-                    Welcome to ar2art ("we," "our," or "us"). By accessing or using our website and services, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to any part of these Terms, you do not have permission to access the Service.
+                    Welcome to AI2ART ("we," "our," or "us"). By accessing or using our website and services, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to any part of these Terms, you do not have permission to access the Service.
                 </p>
 
                 <h2>2. Description of Service</h2>
                 <p>
-                    ar2art is an AI-powered video and image generation platform that allows users to create video and image content from text, images, and other inputs. We strive to provide high-quality services but do not guarantee that generated content will always meet your exact expectations.
+                    AI2ART is an AI-powered video and image generation platform that allows users to create video and image content from text, images, and other inputs. We strive to provide high-quality services but do not guarantee that generated content will always meet your exact expectations.
                 </p>
 
                 <h2>3. User Accounts</h2>
@@ -30,7 +30,9 @@ export default async function TermsPage() {
                 <h2>4. Usage Guidelines</h2>
                 <p>You agree not to use the Service to:</p>
                 <ul>
-                    <li>Generate content that is illegal, harmful, threatening, abusive, harassing, defamatory, obscene, or otherwise objectionable.</li>
+                    <li>Generate content that is illegal, harmful, threatening, abusive, harassing, defamatory, obscene, or otherwise objectionable. Generating any NSFW (Not Safe For Work), adult, sexually explicit, sexually suggestive, or obscene content is strictly prohibited.</li>
+                    <li>Create deepfakes, face swaps, impersonation, or face manipulation of another person without clear permission.</li>
+                    <li>Upload or remix photos unless you own them, have licensed them, or have permission from the people shown in them.</li>
                     <li>Infringe upon the intellectual property or other rights of any person or entity.</li>
                     <li>Interfere with or disrupt the integrity or performance of the Service.</li>
                     <li>Attempt to gain unauthorized access to the Service or its related systems or networks.</li>
@@ -64,7 +66,7 @@ export default async function TermsPage() {
 
                 <h2>9. Limitation of Liability</h2>
                 <p>
-                    To the maximum extent permitted by law, ar2art shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill.
+                    To the maximum extent permitted by law, AI2ART shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill.
                 </p>
 
                 <h2>10. Changes to Terms</h2>
@@ -74,7 +76,7 @@ export default async function TermsPage() {
 
                 <h2>11. Contact Us</h2>
                 <p>
-                    If you have any questions about these Terms, please contact us at: support@ar2art.net
+                    If you have any questions about these Terms, please contact us at: support@ai2art.net
                 </p>
             </div>
         </div>

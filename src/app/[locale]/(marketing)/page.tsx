@@ -36,8 +36,8 @@ export async function generateMetadata({ params }: PageMetadataProps) {
   };
 
   const descriptions = {
-    en: "Turn any photo into world-class AI art. Choose a destination scene, upload a portrait, remix with MiniMax AI, and export polished images.",
-    zh: "Turn any photo into world-class AI art. Choose a destination scene, upload a portrait, remix with MiniMax AI, and export polished images.",
+    en: "Turn authorized photos into polished AI art. Choose a destination scene, upload a portrait you have rights to use, and export polished images.",
+    zh: "Turn authorized photos into polished AI art. Choose a destination scene, upload a portrait you have rights to use, and export polished images.",
   };
 
   const canonicalUrl = `${siteConfig.url}${locale === i18n.defaultLocale ? "" : `/${locale}`}`;

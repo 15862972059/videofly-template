@@ -46,7 +46,7 @@ export default async function LoginPage({
             className="mx-auto"
             width="64"
             height="64"
-            alt="ar2art Logo - AI Video Generation Platform"
+            alt="AI2ART Logo - AI Photo Remix & Art Generation Platform"
           />
           <h1 className="text-2xl font-semibold tracking-tight">
             {t("welcome_back")}

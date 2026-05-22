@@ -37,7 +37,7 @@ export function CTASection() {
                   Limited Time Offer
                 </div>
                 <h2 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-white md:text-5xl">
-                  Ready to create amazing AI artwork?
+                  Ready to create polished AI artwork?
                 </h2>
                 <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">
                   Join creators using AI2ART to turn ordinary portraits into destination-ready images, campaign assets, and personal art.
@@ -81,7 +81,7 @@ export function CTASection() {
                   <div className="h-2 overflow-hidden rounded-full bg-emerald-100 dark:bg-emerald-950">
                     <div className="h-full w-full rounded-full bg-emerald-600" />
                   </div>
-                  <p className="mt-3 text-center text-xs text-slate-500 dark:text-slate-400">Ready in 2-5 minutes</p>
+                  <p className="mt-3 text-center text-xs text-slate-500 dark:text-slate-400">Generation times may vary</p>
                 </div>
               </motion.div>
             </div>

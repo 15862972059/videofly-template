@@ -35,7 +35,7 @@ export const ResetPasswordEmail = ({
   locale = "en",
   translations,
   resetUrl,
-  appUrl = "https://ar2art.net",
+  appUrl = "https://ai2art.net",
 }: ResetPasswordEmailProps) => {
   const currentYear = new Date().getFullYear();
 
@@ -66,7 +66,7 @@ export const ResetPasswordEmail = ({
                 color: "#18181b",
               }}
             >
-              ar2art
+              AI2ART
             </Text>
           </Section>
 

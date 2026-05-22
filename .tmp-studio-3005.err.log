@@ -1,0 +1,309 @@
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of D:\dev\cc\ai2art\node_modules\.pnpm\next-intl@4.7.0_next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_reac_47fd4o6ogg2ddvslmnfvkgiukm\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
+<w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of D:\dev\cc\ai2art\node_modules\.pnpm\next-intl@4.7.0_next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_reac_47fd4o6ogg2ddvslmnfvkgiukm\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
+<w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of D:\dev\cc\ai2art\node_modules\.pnpm\next-intl@4.7.0_next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_reac_47fd4o6ogg2ddvslmnfvkgiukm\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
+<w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⨯ Failed to generate static paths for /[locale]/pricing:
+[Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ⨯ Failed to generate static paths for /[locale]/pricing:
+[Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ⨯ Failed to generate static paths for /[locale]/gallery:
+[Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\gallery\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ⨯ Failed to generate static paths for /[locale]/gallery:
+[Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\gallery\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ⨯ Failed to generate static paths for /[locale]/gallery:
+[Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\gallery\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ⨯ Failed to generate static paths for /[locale]/gallery:
+[Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\gallery\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\pricing\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en/pricing'
+}
+ ⨯ Failed to generate static paths for /[locale]:
+[Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en'
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/@formatjs+icu-messageformat-parser@2.11.4.js'
+Require stack:
+- D:\dev\cc\ai2art\.next\server\webpack-runtime.js
+- D:\dev\cc\ai2art\.next\server\app\[locale]\(marketing)\page.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\require.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\load-components.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\build\utils.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\server\dev\static-paths-worker.js
+- D:\dev\cc\ai2art\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@opentelemetry+api@1.8.0_react-dom@19.2.3_react@19.2.3__react@19.2.3\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/en'
+}

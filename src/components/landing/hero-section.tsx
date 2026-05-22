@@ -21,15 +21,15 @@ export function HeroSection() {
             <div className="space-y-6 w-full flex flex-col items-center lg:items-start">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
                 <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                Powered by GPT-Image-2 (Ultimate Creative Engine)
+                Powered by GPT-Image-2
               </div>
 
               <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-slate-800 dark:text-white md:text-6xl lg:text-6xl xl:text-7xl">
-                Turn Any Photo Into World-Class AI Art
+                Turn Your Photos Into Polished AI Art
               </h1>
 
               <p className="max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-300 md:text-lg">
-                Choose a destination, upload your portrait, and let AI2ART remix it using <strong>GPT-Image-2</strong>, the world's most powerful creative generation engine, into a polished artwork.
+                Choose a destination, upload a photo you have rights to use, and let AI2ART remix it with <strong>GPT-Image-2</strong> into polished artwork.
               </p>
 
               <div className="flex flex-wrap justify-center lg:justify-start gap-2">
@@ -82,15 +82,15 @@ export function HeroSection() {
                   <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/60 p-4 text-left dark:bg-emerald-500/5">
                     <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
                       <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
-                      Ultimate Model
+                      AI Model
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                      100% powered by <strong className="text-emerald-700 dark:text-emerald-300 font-bold">GPT-Image-2</strong>, the most powerful creative engine for details and face-preservation.
+                      Powered by <strong className="text-emerald-700 dark:text-emerald-300 font-bold">GPT-Image-2</strong> for detailed, style-aware image generation.
                     </p>
                   </div>
                   <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/80 p-4 text-left dark:bg-emerald-500/10 flex flex-col justify-center">
-                    <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">30s</div>
-                    <p className="mt-1 text-[10px] text-slate-600 dark:text-slate-300 leading-tight">to start a remix workflow</p>
+                    <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">Fast</div>
+                    <p className="mt-1 text-[10px] text-slate-600 dark:text-slate-300 leading-tight">template-based remix workflow</p>
                   </div>
                 </div>
               </div>
@@ -108,8 +108,8 @@ export function HeroSection() {
               <span>Remix #369</span>
             </div>
             <div className="hero-card hero-card-3">
-              <Image src="/images/homepage/case378.jpg" alt="AI Photo Remix Case 378" fill sizes="(min-width: 1024px) 210px, 38vw" />
-              <span>Remix #378</span>
+              <Image src="/images/homepage/case443.jpg" alt="AI food poster generation example" fill sizes="(min-width: 1024px) 210px, 38vw" />
+              <span>Poster Remix</span>
             </div>
             <div className="hero-card hero-card-4">
               <Image src="/images/homepage/5.21.png" alt="AI Art Case 5.21" fill sizes="(min-width: 1024px) 285px, 52vw" />

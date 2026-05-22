@@ -1,0 +1,14 @@
+{"lvl":"info","msg":"no configuration paths supplied","t":"2026-05-22T17:10:53.7808201+08:00"}
+{"lvl":"info","msg":"using configuration at default config path","path":"C:\\Users\\yeahua\\AppData\\Local\\ngrok\\ngrok.yml","t":"2026-05-22T17:10:53.7859802+08:00"}
+{"err":"\u003cnil\u003e","lvl":"info","msg":"open config file","path":"C:\\Users\\yeahua\\AppData\\Local\\ngrok\\ngrok.yml","t":"2026-05-22T17:10:53.7867954+08:00"}
+{"enabled":false,"lvl":"info","msg":"FIPS 140 mode","t":"2026-05-22T17:10:53.7872986+08:00"}
+{"addr":"127.0.0.1:4040","allow_hosts":null,"lvl":"info","msg":"starting web service","obj":"web","t":"2026-05-22T17:10:53.8439796+08:00"}
+{"lvl":"info","msg":"client session established","obj":"tunnels.session","t":"2026-05-22T17:10:55.4020026+08:00"}
+{"lvl":"info","msg":"tunnel session started","obj":"tunnels.session","t":"2026-05-22T17:10:55.4025157+08:00"}
+{"addr":"http://localhost:3000","lvl":"info","msg":"started tunnel","name":"command_line","obj":"tunnels","t":"2026-05-22T17:10:55.9822056+08:00","url":"https://equation-malt-tusk.ngrok-free.dev"}
+{"id":"a56f5ef18e5b51f0","lvl":"info","msg":"start","pg":"/api/tunnels","t":"2026-05-22T17:11:11.2022885+08:00"}
+{"dur":"521.8µs","id":"a56f5ef18e5b51f0","lvl":"info","msg":"end","pg":"/api/tunnels","status":200,"t":"2026-05-22T17:11:11.2028103+08:00"}
+{"id":"3556c7aadf59","l":"[::1]:3000","lvl":"info","msg":"join connections","obj":"join","r":"35.163.182.153:43404","t":"2026-05-22T17:11:22.3144015+08:00"}
+{"id":"f17c75d283a5","l":"[::1]:3000","lvl":"info","msg":"join connections","obj":"join","r":"3.74.66.138:61269","t":"2026-05-22T17:13:32.1300058+08:00"}
+{"id":"90a6c18dfd7f","l":"[::1]:3000","lvl":"info","msg":"join connections","obj":"join","r":"3.74.66.138:17366","t":"2026-05-22T17:15:08.0146725+08:00"}
+{"id":"03e6c9d4da8e","l":"[::1]:3000","lvl":"info","msg":"join connections","obj":"join","r":"3.74.66.138:60802","t":"2026-05-22T17:15:08.7336449+08:00"}

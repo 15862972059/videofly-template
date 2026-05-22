@@ -10,7 +10,7 @@ import { LocaleLink } from "@/i18n/navigation";
 
 const steps = [
   { icon: ImagePlus, step: "01", title: "Pick a Scene", text: "Start with a destination template or a visual reference from the gallery.", meta: "20+ scenes" },
-  { icon: Upload, step: "02", title: "Upload Portrait", text: "Add a clean portrait or full-body shot. AI2ART keeps the person recognizable.", meta: "PNG, JPG, WebP" },
+  { icon: Upload, step: "02", title: "Upload Portrait", text: "Add a clean portrait or full-body shot you own or have permission to use.", meta: "PNG, JPG, WebP" },
   { icon: MessageSquareText, step: "03", title: "Refine Prompt", text: "Use prompt seeds or ask the built-in Q&A helper for scene ideas.", meta: "guided prompts" },
   { icon: Download, step: "04", title: "Export Artwork", text: "Download the finished image and keep every generation in your history.", meta: "HD output" },
 ];

@@ -11,7 +11,7 @@ interface WelcomeEmailProps extends BaseEmailProps {
 
 export default function WelcomeEmail({
   name = "there",
-  appUrl = "https://ar2art.net",
+  appUrl = "https://ai2art.net",
   locale,
   messages,
 }: WelcomeEmailProps) {
@@ -62,9 +62,9 @@ WelcomeEmail.PreviewProps = {
       },
       welcome: {
         greeting: "Hi {name},",
-        title: "Welcome to ar2art!",
-        body: "Thank you for joining ar2art! We're thrilled to have you on board.",
-        features: "With ar2art, you can:",
+        title: "Welcome to AI2ART!",
+        body: "Thank you for joining AI2ART! We're thrilled to have you on board.",
+        features: "With AI2ART, you can:",
         featuresList: {
           generate: "Generate stunning AI videos in minutes",
           models: "Use multiple AI models like Sora 2, Veo 3.1, and more",
@@ -76,5 +76,5 @@ WelcomeEmail.PreviewProps = {
     },
   },
   name: "John Doe",
-  appUrl: "https://ar2art.net",
+  appUrl: "https://ai2art.net",
 };

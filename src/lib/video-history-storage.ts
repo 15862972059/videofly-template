@@ -41,7 +41,7 @@ interface VideoHistoryStorageData {
 // ============================================================================
 
 class VideoHistoryStorage {
-  private readonly STORAGE_KEY = "ar2art_video_history";
+  private readonly STORAGE_KEY = "ai2art_video_history";
   private readonly MAX_ITEMS = 20;
 
   /**

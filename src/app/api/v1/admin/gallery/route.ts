@@ -13,8 +13,8 @@ export async function GET(request: Request) {
     await requireAdmin(request);
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category") ?? undefined;
-    const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")!) : undefined;
-    const offset = searchParams.get("offset") ? parseInt(searchParams.get("offset")!) : undefined;
+    const limit = searchParams.get("limit") ? Number.parseInt(searchParams.get("limit")!) : undefined;
+    const offset = searchParams.get("offset") ? Number.parseInt(searchParams.get("offset")!) : undefined;
 
     const images = await listClassicImages({ category, isActive: undefined, limit, offset });
     const total = await countClassicImages({ category, isActive: undefined });

@@ -1,7 +1,7 @@
 /**
  * Email Templates
  *
- * All email templates and utilities for ar2art
+ * All email templates and utilities for AI2ART
  */
 
 export { MagicLinkEmail } from "./magic-link-email";

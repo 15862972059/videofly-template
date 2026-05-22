@@ -4,9 +4,9 @@
  * Reads prompts from public/images/prompts_new_40.md
  */
 
-import * as fs from "fs";
-import * as path from "path";
-import * as os from "os";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import * as os from "node:os";
 
 const PROMPTS_FILE = path.join(process.cwd(), "public/images/prompts_new_40.md");
 const OUTPUT_DIR = path.join(process.cwd(), "public/images/generated");

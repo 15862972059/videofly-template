@@ -27,7 +27,7 @@ export default async function PrivacyPolicyPage() {
 
         <h2>1. Introduction</h2>
         <p>
-          ar2art ("we" or "us") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our services.
+          AI2ART ("we" or "us") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our services.
         </p>
 
         <h2>2. Information We Collect</h2>
@@ -98,7 +98,7 @@ export default async function PrivacyPolicyPage() {
 
         <h2>11. Contact Us</h2>
         <p>
-          If you have any questions about this Privacy Policy, please contact us at: privacy@ar2art.net
+          If you have any questions about this Privacy Policy, please contact us at: privacy@ai2art.net
         </p>
       </div>
     </div>

@@ -88,7 +88,7 @@ export const headerTools = [
 export const headerDocs = {
   id: "docs",
   title: "Docs",
-  href: "https://docs.ar2art.net",
+  href: "https://docs.ai2art.net",
   external: true,
 };
 

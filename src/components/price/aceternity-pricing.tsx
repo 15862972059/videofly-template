@@ -231,9 +231,9 @@ export function AceternityPricing({
               Email{" "}
               <a
                 className="font-medium text-primary hover:underline"
-                href="mailto:support@ar2art.net"
+                href="mailto:support@ai2art.net"
               >
-                support@ar2art.net
+                support@ai2art.net
               </a>{" "}
               {dictPrice.contact}
               <br />

@@ -76,7 +76,7 @@ export function configureGlobalFetchProxy(): void {
     globalThis.fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
       // Clean up Content-Length header to prevent duplicate content-length errors
       // with undici dispatcher loaded.
-      if (init && init.headers) {
+      if (init?.headers) {
         const headers = init.headers;
         if (headers instanceof Headers) {
           headers.delete('content-length');

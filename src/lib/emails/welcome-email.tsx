@@ -37,7 +37,7 @@ export const WelcomeEmail = ({
   name = "",
   locale = "en",
   translations,
-  appUrl = "https://ar2art.net",
+  appUrl = "https://ai2art.net",
 }: WelcomeEmailProps) => {
   const currentYear = new Date().getFullYear();
 
@@ -68,7 +68,7 @@ export const WelcomeEmail = ({
                 color: "#18181b",
               }}
             >
-              ar2art
+              AI2ART
             </Text>
           </Section>
 

@@ -132,7 +132,7 @@ export function PhotoRemixSection() {
             <StepCard icon={MapPin} step="01" title="Choose Scene" text="Browse curated destination templates from Paris to Santorini." />
           </BlurFade>
           <BlurFade inView delay={0.12}>
-            <StepCard icon={Upload} step="02" title="Upload Your Photo" text="Use a portrait or full-body shot. AI2ART preserves identity and outfit." />
+            <StepCard icon={Upload} step="02" title="Upload Your Photo" text="Use a portrait or full-body shot you own or have permission to use." />
           </BlurFade>
           <BlurFade inView delay={0.19}>
             <StepCard icon={ImagePlus} step="03" title="AI Remix" text="Generate a final portrait that feels shot in the selected place." />

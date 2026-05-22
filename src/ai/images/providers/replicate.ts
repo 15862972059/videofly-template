@@ -10,7 +10,6 @@ function mapAspectRatio(ratio: string | undefined): string {
       return "9:16";
     case "3:4":
       return "3:4";
-    case "1:1":
     default:
       return "1:1";
   }

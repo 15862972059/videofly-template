@@ -1,5 +1,5 @@
 /**
- * @ar2art/video-generator
+ * @ai2art/video-generator
  *
  * A fully configurable AI video/image generation input component.
  *

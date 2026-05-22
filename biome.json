@@ -66,7 +66,9 @@
         "noSvgWithoutTitle": "off",
         "useKeyWithClickEvents": "off",
         "useAltText": "off",
-        "useMediaCaption": "off"
+        "useMediaCaption": "off",
+        "useButtonType": "off",
+        "noLabelWithoutControl": "off"
       }
     }
   },

@@ -22,6 +22,12 @@ function classifyError(error: unknown) {
   if (msg.includes("blocked by safety policy")) {
     return { message: "Your prompt was blocked by safety policy. Please modify your prompt and try again.", status: 400 };
   }
+  if (msg.includes("violates our content policy")) {
+    return { message: "Your prompt violates our content policy. Please revise it and try again.", status: 400 };
+  }
+  if (msg.includes("Creem moderation")) {
+    return { message: "Content safety screening is temporarily unavailable. Please try again shortly.", status: 503 };
+  }
 
   return { message: process.env.NODE_ENV === "development" ? msg : "Internal server error", status: 500 };
 }

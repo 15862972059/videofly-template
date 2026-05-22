@@ -17,13 +17,14 @@ const footerSections = [
     links: [
       { title: "Privacy Policy", href: "/privacy" },
       { title: "Terms of Service", href: "/terms" },
+      { title: "Acceptable Use", href: "/acceptable-use" },
     ],
   },
   {
     title: "Support",
     links: [
       { title: "FAQ", href: "/#faq" },
-      { title: "Contact", href: "mailto:support@ar2art.net" },
+      { title: "Contact", href: "mailto:support@ai2art.net" },
     ],
   },
 ];
@@ -41,7 +42,7 @@ export function LandingFooter() {
               AI2ART
             </LocaleLink>
             <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
-              Transform portraits into world-class AI artwork with curated destination scenes.
+              Transform portraits into polished AI artwork with curated destination scenes.
             </p>
           </div>
 
@@ -69,7 +70,7 @@ export function LandingFooter() {
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-emerald-900/10 pt-8 text-sm text-slate-500 dark:text-slate-400 sm:flex-row">
           <p>© {currentYear} AI2ART. All rights reserved.</p>
-          <p>Built for fast, polished AI image creation.</p>
+          <p>Independent product. Not affiliated with or endorsed by underlying AI model providers.</p>
         </div>
       </div>
     </footer>

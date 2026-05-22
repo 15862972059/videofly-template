@@ -32,11 +32,11 @@ export function MainNav({
     <div className="flex gap-6 md:gap-10">
       <div className="flex items-center">
         <LocaleLink href="/" className="hidden items-center space-x-2 md:flex">
-          <div className="text-3xl">ar2art</div>
+          <div className="text-3xl">AI2ART</div>
         </LocaleLink>
 
         <a
-          href="https://docs.ar2art.net"
+          href="https://docs.ai2art.net"
           target="_blank"
           rel="noopener noreferrer"
           className="ml-4 hidden md:flex lg:flex xl:flex"

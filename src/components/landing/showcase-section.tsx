@@ -42,10 +42,10 @@ const showcaseImages = [
   },
   {
     id: 5,
-    title: "AI Review Thumbnail Design",
-    prompt: "Bold tech review thumbnail featuring a public figure portrait, black background, bright yellow headline text, rounded photo frame, high-contrast YouTube cover style.",
-    image: "/images/homepage/case378.jpg",
-    tag: "Thumbnail",
+    title: "Mount Fuji Travel Portrait",
+    prompt: "Cinematic travel portrait with blooming cherry blossoms, Mt. Fuji backdrop, soft natural daylight, premium editorial photography style.",
+    image: "/images/homepage/gallery-japan-fuji-mix.png",
+    tag: "Travel",
   },
   {
     id: 6,

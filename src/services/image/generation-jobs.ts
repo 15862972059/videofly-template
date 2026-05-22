@@ -80,7 +80,7 @@ export async function getImageGenerationJobById(id: string) {
 }
 
 export async function createImageGenerationJob(input: CreateImageGenerationJobInput) {
-  const id = input.parameters?.["id"] as string ?? `job_${nanoid(12)}`;
+  const id = input.parameters?.id as string ?? `job_${nanoid(12)}`;
   const [job] = await db
     .insert(imageGenerationJobs)
     .values({

@@ -13,7 +13,7 @@ const primaryFeatures = [
   {
     icon: Image,
     title: "Photo Remix",
-    description: "Place portraits into curated scenes while preserving identity, clothing, and natural composition.",
+    description: "Place authorized portraits into curated scenes while keeping the result natural and coherent.",
     stat: { value: 4, suffix: "K", label: "Max output" },
   },
   {
@@ -47,7 +47,7 @@ export function FeaturesSection() {
               Everything You Need
             </div>
             <h2 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-white md:text-5xl">
-              Powerful features to create world-class AI art
+              Practical features to create polished AI art
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
               A quieter, more focused AI art workflow: scenes, portraits, prompt help, and export-ready results in one place.

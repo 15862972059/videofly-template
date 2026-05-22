@@ -52,8 +52,8 @@ MagicLinkEmail.PreviewProps = {
       },
       magicLink: {
         greeting: "Hi {name},",
-        title: "Sign In to ar2art",
-        body: "We received a request to sign in to your ar2art account.",
+        title: "Sign In to AI2ART",
+        body: "We received a request to sign in to your AI2ART account.",
         instruction: "Click the button below to sign in:",
         button: "Sign In",
         validity: "This link will expire in 24 hours.",
@@ -63,5 +63,5 @@ MagicLinkEmail.PreviewProps = {
     },
   },
   name: "John Doe",
-  magicLink: "https://ar2art.net/auth/callback?token=abc123",
+  magicLink: "https://ai2art.net/auth/callback?token=abc123",
 };

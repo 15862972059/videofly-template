@@ -19,6 +19,7 @@ import {
   shouldAllowTemporaryImageUrlFallback,
 } from "./persist-result";
 import { assertPromptAllowed } from "./safety";
+import { assertCreemPromptAllowed } from "@/services/moderation/creem";
 import {
   buildImageObjectKey,
   resolvePublicImageUrl,
@@ -51,6 +52,9 @@ export async function generateTextImage(input: {
   const effectiveQuality = normalizeImageQuality(effectiveModel, input.quality);
   const imageCreditCost = getImageCreditCost(effectiveModel, effectiveQuality);
   const finalPrompt = buildTextPrompt({ userPrompt: input.prompt });
+  await assertCreemPromptAllowed(finalPrompt, {
+    externalId: `user_${input.userId}:image_text`,
+  });
   assertPromptAllowed(finalPrompt);
 
   const job = await createImageGenerationJob({
@@ -193,6 +197,9 @@ export async function generateRemixImage(input: {
         userPrompt: input.prompt,
         promptTemplate: classicImage.prompt_template,
       });
+  await assertCreemPromptAllowed(finalPrompt, {
+    externalId: `user_${input.userId}:image_remix`,
+  });
   assertPromptAllowed(finalPrompt);
 
   const finalAspectRatio = input.aspectRatio ?? inferRemixAspectRatio({

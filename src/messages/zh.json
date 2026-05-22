@@ -88,7 +88,7 @@
   },
   "Showcase": {
     "badge": "亲眼见证",
-    "title": "使用 ar2art 创作",
+    "title": "使用 AI2ART 创作",
     "subtitle": "AI 生成的精彩视频",
     "description": "探索我们社区使用 AI 视频生成创作的精彩作品。从电影级风景到产品动画，无所不能。",
     "ctaText": "准备好创作自己的杰作了吗？",
@@ -178,7 +178,7 @@
   "CTA": {
     "badge": "限时优惠",
     "title": "准备好创作精彩视频了吗？",
-    "subtitle": "加入数千名正在使用 ar2art 的创作者",
+    "subtitle": "加入数千名正在使用 AI2ART 的创作者",
     "description": "立即开始使用我们的免费试用创建专业视频",
     "getStarted": "免费开始",
     "learnMore": "了解更多",
@@ -200,11 +200,11 @@
   },
   "FAQ": {
     "title": "常见问题",
-    "subtitle": "关于 ar2art 的一切",
+    "subtitle": "关于 AI2ART 的一切",
     "contact": "还有其他问题？请联系我们",
     "general": {
-      "question": "什么是 ar2art？",
-      "answer": "ar2art 是一个领先的 AI 视频生成平台，让您能在几分钟内将文本和图片转化为高质量视频。由 Sora 2 和 Veo 3.1 等先进模型驱动，无需昂贵的设备即可让您的创意变为现实。"
+      "question": "什么是 AI2ART？",
+      "answer": "AI2ART 是一个领先的 AI 视频生成平台，让您能在几分钟内将文本和图片转化为高质量视频。由 Sora 2 和 Veo 3.1 等先进模型驱动，无需昂贵的设备即可让您的创意变为现实。"
     },
     "commercial": {
       "question": "我可以将视频用于商业用途吗？",
@@ -224,14 +224,14 @@
     },
     "support": {
       "question": "如何获取支持？",
-      "answer": "我们的专属支持团队 7x24 小时待命。您可以通过网站上的联系表格或发送邮件至 support@AI2ART.app 联系我们。"
+      "answer": "我们的专属支持团队 7x24 小时待命。您可以通过网站上的联系表格或发送邮件至 support@ai2art.net 联系我们。"
     }
   },
   "Footer": {
     "product": "产品",
     "company": "公司",
     "legal": "法律",
-    "copyright": "© {year} ar2art. 保留所有权利。",
+    "copyright": "© {year} AI2ART. 保留所有权利。",
     "privacy": "隐私政策",
     "terms": "服务条款",
     "cookie": "Cookie 政策"
@@ -368,7 +368,7 @@
   },
   "SignInModal": {
     "signin_title": "登录您的账户",
-    "signin_subtitle": "立即开始使用 ar2art",
+    "signin_subtitle": "立即开始使用 AI2ART",
     "privacy": "继续即表示您同意我们的服务条款和隐私政策。",
     "continue_google": "使用 Google 继续",
     "continue_email": "使用邮箱继续",
@@ -377,10 +377,10 @@
     "terms_notice": "继续即表示您同意我们的服务条款和隐私政策。"
   },
   "MainNav": {
-    "introducing": "介绍 ar2art"
+    "introducing": "介绍 AI2ART"
   },
   "SiteFooter": {
-    "copyright": "© {currentYear} ar2art. 保留所有权利。"
+    "copyright": "© {currentYear} AI2ART. 保留所有权利。"
   },
   "Mail": {
     "common": {
@@ -388,11 +388,11 @@
       "copyright": "© {year} 保留所有权利。"
     },
     "welcome": {
-      "subject": "欢迎加入 ar2art！",
+      "subject": "欢迎加入 AI2ART！",
       "greeting": "您好 {name}，",
-      "title": "欢迎来到 ar2art！",
-      "body": "感谢您注册 ar2art！我们很高兴您的加入。",
-      "features": "使用 ar2art，您可以：",
+      "title": "欢迎来到 AI2ART！",
+      "body": "感谢您注册 AI2ART！我们很高兴您的加入。",
+      "features": "使用 AI2ART，您可以：",
       "featuresList": {
         "generate": "在几分钟内生成精彩的 AI 视频",
         "models": "使用 Sora 2、Veo 3.1 等多种 AI 模型",
@@ -405,7 +405,7 @@
       "subject": "重置您的密码",
       "greeting": "您好 {name}，",
       "title": "重置您的密码",
-      "body": "我们收到了您重置 ar2art 账户密码的请求。",
+      "body": "我们收到了您重置 AI2ART 账户密码的请求。",
       "instruction": "点击下方按钮重置您的密码：",
       "button": "重置密码",
       "validity": "此链接将在 30 分钟后过期，且只能使用一次。",
@@ -414,10 +414,10 @@
       "footer": "如果您没有请求此操作，请忽略此邮件。"
     },
     "magicLink": {
-      "subject": "登录 ar2art",
+      "subject": "登录 AI2ART",
       "greeting": "您好 {name}，",
-      "title": "登录 ar2art",
-      "body": "我们收到了您登录 ar2art 账户的请求。",
+      "title": "登录 AI2ART",
+      "body": "我们收到了您登录 AI2ART 账户的请求。",
       "instruction": "点击下方按钮登录：",
       "button": "登录",
       "validity": "此链接将在 24 小时后过期。",
@@ -427,11 +427,11 @@
   },
   "Emails": {
     "welcome": {
-      "subject": "欢迎加入 ar2art！",
+      "subject": "欢迎加入 AI2ART！",
       "greeting": "您好 {name}，",
-      "title": "欢迎来到 ar2art！",
-      "body": "感谢您注册 ar2art！我们很高兴您的加入。",
-      "features": "使用 ar2art，您可以：",
+      "title": "欢迎来到 AI2ART！",
+      "body": "感谢您注册 AI2ART！我们很高兴您的加入。",
+      "features": "使用 AI2ART，您可以：",
       "featuresList": {
         "generate": "在几分钟内生成精彩的 AI 视频",
         "models": "使用 Sora 2、Veo 3.1 等多种 AI 模型",
@@ -439,20 +439,20 @@
       },
       "cta": "开始创作视频",
       "footer": "如果您有任何问题，欢迎随时联系我们的支持团队。",
-      "copyright": "© {year} ar2art. 保留所有权利。"
+      "copyright": "© {year} AI2ART. 保留所有权利。"
     },
     "resetPassword": {
       "subject": "重置您的密码",
       "greeting": "您好 {name}，",
       "title": "重置您的密码",
-      "body": "我们收到了您重置 ar2art 账户密码的请求。",
+      "body": "我们收到了您重置 AI2ART 账户密码的请求。",
       "instruction": "点击下方按钮重置您的密码：",
       "button": "重置密码",
       "validity": "此链接将在 30 分钟后过期，且只能使用一次。",
       "ignore": "如果您没有请求重置密码，可以安全地忽略此邮件。",
       "security": "出于安全考虑，此链接将在 30 分钟后过期。",
       "footer": "如果您没有请求此操作，请忽略此邮件。",
-      "copyright": "© {year} ar2art. 保留所有权利。"
+      "copyright": "© {year} AI2ART. 保留所有权利。"
     }
   },
   "dashboard": {

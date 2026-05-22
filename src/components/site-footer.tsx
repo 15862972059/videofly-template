@@ -24,7 +24,7 @@ export function SiteFooter({
             src="/images/avatars/saasfly-logo.svg"
             width="36"
             height="36"
-            alt="ar2art Logo"
+            alt="AI2ART Logo"
           />
           <p className="text-center text-sm leading-loose md:text-left">
             {t('copyright', { currentYear })}

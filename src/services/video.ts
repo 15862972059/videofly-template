@@ -14,6 +14,11 @@ import { generateSignedCallbackUrl } from "@/ai/utils/callback-signature";
 import { emitVideoEvent } from "@/lib/video-events";
 import { ApiError } from "@/lib/api/error";
 import { getConfiguredAIProvider } from "@/ai/provider-config";
+import {
+  CreemModerationRejectedError,
+  CreemModerationUnavailableError,
+  assertCreemPromptAllowed,
+} from "@/services/moderation/creem";
 
 export interface GenerateVideoParams {
   userId: string;
@@ -148,6 +153,30 @@ export class VideoService {
           provider: actualProvider,
         }
       );
+    }
+
+    try {
+      await assertCreemPromptAllowed(params.prompt, {
+        externalId: `user_${params.userId}:video`,
+      });
+    } catch (error) {
+      if (error instanceof CreemModerationRejectedError) {
+        throw new ApiError(
+          "Your prompt violates our content policy. Please revise it and try again.",
+          400,
+          { code: "PROMPT_REJECTED" }
+        );
+      }
+
+      if (error instanceof CreemModerationUnavailableError) {
+        throw new ApiError(
+          "Content safety screening is temporarily unavailable. Please try again shortly.",
+          503,
+          { code: "MODERATION_UNAVAILABLE" }
+        );
+      }
+
+      throw error;
     }
 
     const videoUuid = `vid_${nanoid(21)}`;

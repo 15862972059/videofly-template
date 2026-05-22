@@ -8,8 +8,8 @@ export async function GET(request: Request) {
     const user = await requireAuth(request);
     const { searchParams } = new URL(request.url);
 
-    const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")!) : 20;
-    const offset = searchParams.get("offset") ? parseInt(searchParams.get("offset")!) : 0;
+    const limit = searchParams.get("limit") ? Number.parseInt(searchParams.get("limit")!) : 20;
+    const offset = searchParams.get("offset") ? Number.parseInt(searchParams.get("offset")!) : 0;
     const type = searchParams.get("type") as "TEXT" | "REMIX" | undefined;
     const status = searchParams.get("status") as "QUEUED" | "RUNNING" | "SUCCEEDED" | "FAILED" | undefined;
 

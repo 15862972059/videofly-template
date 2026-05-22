@@ -1,0 +1,473 @@
+   ▲ Next.js 15.5.9
+   - Local:        http://localhost:3005
+   - Network:      http://198.18.0.1:3005
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 3.7s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 998ms (189 modules)
+ ○ Compiling /[locale]/gallery ...
+ ✓ Compiled /[locale]/gallery in 13.4s (6036 modules)
+ GET /gallery 200 in 13497ms
+ GET /gallery 200 in 2706ms
+ ○ Compiling /api/v1/gallery ...
+ ✓ Compiled /api/v1/gallery in 1306ms (6029 modules)
+ GET /gallery 200 in 452ms
+ ○ Compiling /[locale] ...
+ GET /api/v1/gallery?limit=15&offset=0 200 in 5511ms
+ ✓ Compiled /[locale] in 5.8s (8643 modules)
+ GET /gallery 200 in 556ms
+ GET / 200 in 10821ms
+ ○ Compiling /api/v1/credit/balance ...
+ ✓ Compiled /api/v1/credit/balance in 1094ms (8646 modules)
+ GET /gallery 200 in 795ms
+ GET / 200 in 3265ms
+ GET /api/v1/credit/balance 200 in 5796ms
+ GET / 200 in 2061ms
+ GET /api/v1/credit/balance 200 in 2150ms
+ GET / 200 in 1132ms
+ ○ Compiling /[locale]/studio ...
+ ✓ Compiled /[locale]/studio in 2.2s (8725 modules)
+ GET /studio 200 in 6799ms
+ GET /api/v1/credit/balance 200 in 2251ms
+ GET / 200 in 1223ms
+ GET /gallery 200 in 39ms
+ ○ Compiling /api/v1/gallery ...
+ ✓ Compiled /api/v1/gallery in 730ms (5871 modules)
+ GET /api/v1/gallery?limit=15&offset=0 200 in 4696ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 1734ms
+ ✓ Compiled in 2s (8731 modules)
+ GET /gallery 200 in 1108ms
+ GET / 200 in 4326ms
+ GET /gallery 200 in 4555ms
+ ✓ Compiled in 2.8s (8731 modules)
+ ○ Compiling /api/v1/gallery ...
+ ✓ Compiled /api/v1/gallery in 1710ms (5868 modules)
+ ✓ Compiled in 0ms (5868 modules)
+ GET /gallery 200 in 2717ms
+ ✓ Compiled in 0ms (5868 modules)
+ ✓ Compiled in 0ms (5868 modules)
+ ✓ Compiled in 1ms (5868 modules)
+ GET / 200 in 4693ms
+ GET /gallery 200 in 2704ms
+ GET /gallery 200 in 6552ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 6832ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 6841ms
+ GET / 200 in 6338ms
+ ✓ Compiled in 1032ms (8739 modules)
+ GET /gallery 200 in 567ms
+ GET /gallery 200 in 6758ms
+ ○ Compiling /api/v1/credit/balance ...
+ ✓ Compiled /api/v1/credit/balance in 1418ms (5871 modules)
+ GET /gallery 200 in 687ms
+ GET /gallery 200 in 4437ms
+ GET / 200 in 4462ms
+ GET /gallery 200 in 4033ms
+ GET / 200 in 4083ms
+ GET /api/v1/credit/balance 200 in 6116ms
+ ✓ Compiled in 1116ms (8742 modules)
+ GET /gallery 200 in 350ms
+ GET /gallery 200 in 3576ms
+ GET / 200 in 3634ms
+ ✓ Compiled in 1263ms (8742 modules)
+ GET /gallery 200 in 830ms
+ GET /gallery 200 in 3982ms
+ GET / 200 in 4024ms
+ GET /gallery 200 in 1446ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 2792ms
+ GET /api/v1/credit/balance 200 in 4526ms
+ ✓ Compiled in 490ms (2871 modules)
+ GET /gallery 200 in 92ms
+ GET /gallery 200 in 1177ms
+ GET /gallery 200 in 1179ms
+ ✓ Compiled in 1023ms (8742 modules)
+ GET /gallery 200 in 289ms
+ GET /gallery 200 in 3963ms
+ GET /gallery 200 in 3964ms
+ ✓ Compiled in 1655ms (8742 modules)
+ GET /gallery 200 in 243ms
+ GET /gallery 200 in 3374ms
+ GET /gallery 200 in 3499ms
+ GET /gallery 200 in 1337ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 2854ms
+ GET /api/v1/credit/balance 200 in 4467ms
+ GET /api/v1/gallery?limit=15&offset=15&includeCategories=false 200 in 625ms
+ GET /api/v1/gallery?category=France&limit=15&offset=0&includeCategories=false 200 in 560ms
+ GET / 200 in 1274ms
+ GET /gallery 200 in 32ms
+ GET /api/v1/credit/balance 200 in 2236ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 560ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 598ms
+ GET /api/v1/gallery?category=Australia&limit=15&offset=0&includeCategories=false 200 in 617ms
+ ✓ Compiled in 1085ms (2871 modules)
+ GET /gallery 200 in 86ms
+ GET /gallery 200 in 1160ms
+ GET /gallery 200 in 1197ms
+ GET /api/v1/gallery?category=UK&limit=15&offset=0&includeCategories=false 200 in 579ms
+ GET /gallery 200 in 1185ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 564ms
+ GET /api/v1/credit/balance 200 in 2181ms
+ GET /api/v1/gallery?category=UK&limit=15&offset=0&includeCategories=false 200 in 572ms
+ GET /api/v1/gallery?category=UAE&limit=15&offset=0&includeCategories=false 200 in 577ms
+ GET /api/v1/gallery?category=USA&limit=15&offset=0&includeCategories=false 200 in 553ms
+ GET /api/v1/gallery?category=UK&limit=15&offset=0&includeCategories=false 200 in 565ms
+ GET /gallery 200 in 1174ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 621ms
+ GET /api/v1/credit/balance 200 in 2184ms
+ GET /api/v1/gallery?category=UK&limit=15&offset=0&includeCategories=false 200 in 555ms
+ GET / 200 in 1185ms
+ GET /gallery 200 in 57ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 659ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 670ms
+ GET /gallery 200 in 1188ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 559ms
+ GET /api/v1/credit/balance 200 in 2146ms
+ GET /api/v1/gallery?category=UK&limit=15&offset=0&includeCategories=false 200 in 562ms
+ ✓ Compiled in 4.9s (8742 modules)
+ GET /gallery 200 in 430ms
+ GET /gallery 200 in 3485ms
+ GET /gallery 200 in 3552ms
+ ✓ Compiled in 1817ms (8742 modules)
+ GET /gallery 200 in 396ms
+ GET /gallery 200 in 3614ms
+ GET /gallery 200 in 3679ms
+ ✓ Compiled in 514ms (2871 modules)
+ GET /gallery 200 in 416ms
+ GET /gallery 200 in 1496ms
+ GET /gallery 200 in 1515ms
+ ✓ Compiled in 782ms (2871 modules)
+ GET /gallery 200 in 124ms
+ GET /gallery 200 in 1207ms
+ GET /gallery 200 in 1217ms
+ ✓ Compiled in 673ms (2871 modules)
+ GET /gallery 200 in 682ms
+ GET /gallery 200 in 1771ms
+ GET /gallery 200 in 1796ms
+ ✓ Compiled in 3s (8727 modules)
+ GET /gallery 200 in 814ms
+ GET /gallery 200 in 4396ms
+ GET /gallery 200 in 4397ms
+ ✓ Compiled in 1122ms (8727 modules)
+ GET /gallery 200 in 113ms
+ GET /gallery 200 in 4307ms
+ GET /gallery 200 in 4396ms
+ ✓ Compiled in 1168ms (8727 modules)
+ GET /gallery 200 in 696ms
+ GET /gallery 200 in 3801ms
+ GET /gallery 200 in 4000ms
+ ✓ Compiled in 1069ms (2869 modules)
+ GET /gallery 200 in 90ms
+ GET /gallery 200 in 1119ms
+ GET /gallery 200 in 1181ms
+ ✓ Compiled in 552ms (2869 modules)
+ GET /gallery 200 in 357ms
+ GET /gallery 200 in 1402ms
+ GET /gallery 200 in 1448ms
+ GET /gallery 200 in 1329ms
+ ○ Compiling /api/v1/credit/balance ...
+ ✓ Compiled /api/v1/credit/balance in 2.3s (5866 modules)
+ ✓ Compiled (5869 modules)
+ GET /gallery 200 in 1264ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 8745ms
+ GET /gallery 200 in 4435ms
+ GET /gallery 200 in 4532ms
+ GET /api/v1/credit/balance 200 in 10385ms
+ GET /api/v1/gallery?category=UK&limit=15&offset=0&includeCategories=false 200 in 571ms
+ ✓ Compiled in 5s (8738 modules)
+ GET /gallery 200 in 581ms
+ GET /gallery 200 in 6437ms
+ GET /gallery 200 in 6840ms
+ GET /gallery 200 in 5084ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 617ms
+ GET /api/v1/gallery?category=UK&limit=15&offset=0&includeCategories=false 200 in 564ms
+ GET /api/v1/gallery?category=USA&limit=15&offset=0&includeCategories=false 200 in 553ms
+ GET /api/v1/gallery?category=UAE&limit=15&offset=0&includeCategories=false 200 in 700ms
+ ✓ Compiled in 460ms (2869 modules)
+ GET /gallery 200 in 88ms
+ GET /gallery 200 in 1149ms
+ GET /gallery 200 in 1157ms
+ GET /api/v1/gallery?category=Turkmenistan&limit=15&offset=0&includeCategories=false 200 in 550ms
+ GET /api/v1/gallery?category=Turkey&limit=15&offset=0&includeCategories=false 200 in 580ms
+ GET /api/v1/gallery?category=UK&limit=15&offset=0&includeCategories=false 200 in 541ms
+ ✓ Compiled in 462ms (2869 modules)
+ GET /gallery 200 in 500ms
+ GET /gallery 200 in 1557ms
+ GET /gallery 200 in 1570ms
+ ✓ Compiled in 2s (8735 modules)
+ GET /gallery 200 in 989ms
+ GET /gallery 200 in 4055ms
+ GET /gallery 200 in 4112ms
+ ✓ Compiled in 614ms (2869 modules)
+ GET /gallery 200 in 510ms
+ GET /gallery 200 in 1539ms
+ GET /gallery 200 in 1575ms
+ ○ Compiling /[locale]/pricing ...
+ ✓ Compiled /[locale]/pricing in 2.8s (8728 modules)
+ GET /pricing 200 in 9274ms
+ ○ Compiling /api/v1/credit/balance ...
+ ✓ Compiled /api/v1/credit/balance in 815ms (5872 modules)
+ GET /gallery 200 in 295ms
+ GET /gallery 200 in 3326ms
+ GET /gallery 200 in 3384ms
+ GET /pricing 200 in 3418ms
+ GET /api/v1/credit/balance 200 in 5243ms
+ GET /gallery 200 in 3995ms
+ ○ Compiling /api/v1/credit/balance ...
+ ✓ Compiled /api/v1/credit/balance in 1562ms (5872 modules)
+ ✓ Compiled in 0ms (5875 modules)
+ ✓ Compiled in 0ms (5875 modules)
+ ✓ Compiled in 0ms (5875 modules)
+ GET /gallery 200 in 3003ms
+ GET /gallery 200 in 147ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 6604ms
+ GET /pricing 200 in 6104ms
+ GET /gallery 200 in 6134ms
+ GET /gallery 200 in 6189ms
+ GET /pricing 200 in 3261ms
+ GET /gallery 200 in 3350ms
+ GET /gallery 200 in 3395ms
+ GET /api/v1/credit/balance 200 in 8865ms
+ GET /api/v1/gallery?category=UK&limit=15&offset=0&includeCategories=false 200 in 558ms
+ ✓ Compiled in 1395ms (2870 modules)
+ GET /gallery 200 in 156ms
+ GET /gallery 200 in 3780ms
+ GET /pricing 200 in 3821ms
+ GET /gallery 200 in 4309ms
+ ✓ Compiled in 452ms (2870 modules)
+ GET /gallery 200 in 151ms
+ GET /pricing 200 in 1152ms
+ GET /gallery 200 in 1168ms
+ GET /gallery 200 in 1225ms
+ ✓ Compiled in 410ms (2870 modules)
+ GET /gallery 200 in 799ms
+ GET /gallery 200 in 1562ms
+ GET /gallery 200 in 1612ms
+ GET /pricing 200 in 1888ms
+ ✓ Compiled in 419ms (2870 modules)
+ GET /gallery 200 in 697ms
+ GET /gallery 200 in 1688ms
+ GET /gallery 200 in 1751ms
+ GET /pricing 200 in 1790ms
+ ✓ Compiled in 399ms (2870 modules)
+ GET /gallery 200 in 152ms
+ GET /pricing 200 in 1089ms
+ GET /gallery 200 in 1226ms
+ GET /gallery 200 in 1226ms
+ ✓ Compiled in 1386ms (2870 modules)
+ GET /gallery 200 in 143ms
+ GET /gallery 200 in 3833ms
+ GET /pricing 200 in 3834ms
+ GET /gallery 200 in 3845ms
+ ✓ Compiled in 1364ms (2870 modules)
+ GET /gallery 200 in 137ms
+ GET /gallery 200 in 1142ms
+ GET /gallery 200 in 1169ms
+ GET /pricing 200 in 1222ms
+ ✓ Compiled in 1358ms (2870 modules)
+ GET /gallery 200 in 679ms
+ GET /gallery 200 in 1687ms
+ GET /gallery 200 in 1700ms
+ GET /pricing 200 in 1759ms
+ ✓ Compiled in 3.1s (2870 modules)
+ GET /gallery 200 in 219ms
+ GET /gallery 200 in 3950ms
+ GET /gallery 200 in 3950ms
+ GET /pricing 200 in 3951ms
+ ✓ Compiled in 487ms (2870 modules)
+ GET /gallery 200 in 163ms
+ GET /gallery 200 in 1149ms
+ GET /gallery 200 in 1149ms
+ GET /pricing 200 in 1225ms
+ ✓ Compiled in 1409ms (2870 modules)
+ GET /gallery 200 in 117ms
+ GET /gallery 200 in 1137ms
+ GET /gallery 200 in 1143ms
+ GET /pricing 200 in 1199ms
+ ✓ Compiled in 3.7s (8734 modules)
+ GET /gallery 200 in 1074ms
+ ✓ Compiled in 1513ms (8734 modules)
+ GET /gallery 200 in 578ms
+ GET /gallery 200 in 4618ms
+ GET /gallery 200 in 4652ms
+ GET /pricing 200 in 4911ms
+ GET /gallery 200 in 3675ms
+ GET /gallery 200 in 3746ms
+ GET /pricing 200 in 4170ms
+ ✓ Compiled in 2.1s (8734 modules)
+ GET /gallery 200 in 378ms
+ GET /gallery 200 in 3449ms
+ GET /gallery 200 in 3500ms
+ GET /pricing 200 in 3601ms
+ ✓ Compiled in 1293ms (8734 modules)
+ GET /gallery 200 in 1561ms
+ GET /gallery 200 in 4036ms
+ GET /gallery 200 in 4063ms
+ GET /pricing 200 in 4721ms
+ ✓ Compiled in 1936ms (8734 modules)
+ GET /gallery 200 in 402ms
+ GET /gallery 200 in 3547ms
+ GET /gallery 200 in 3548ms
+ GET /pricing 200 in 3558ms
+ ✓ Compiled in 7.1s (8734 modules)
+ GET /gallery 200 in 589ms
+ GET /gallery 200 in 5935ms
+ GET /gallery 200 in 6057ms
+ GET /pricing 200 in 6058ms
+ ✓ Compiled in 4.6s (8734 modules)
+ GET /gallery 200 in 492ms
+ GET /gallery 200 in 3641ms
+ GET /gallery 200 in 3656ms
+ GET /pricing 200 in 3694ms
+ ✓ Compiled in 564ms (2870 modules)
+ GET /gallery 200 in 1298ms
+ GET /gallery 200 in 2123ms
+ GET /gallery 200 in 2127ms
+ GET /pricing 200 in 2407ms
+ ✓ Compiled in 555ms (2870 modules)
+ GET /gallery 200 in 639ms
+ GET /gallery 200 in 1673ms
+ GET /gallery 200 in 1673ms
+ GET /pricing 200 in 1716ms
+ ✓ Compiled in 4.3s (8734 modules)
+ GET /gallery 200 in 429ms
+ GET /gallery 200 in 3605ms
+ GET /gallery 200 in 3610ms
+ GET /pricing 200 in 3811ms
+ ✓ Compiled in 446ms (2870 modules)
+ GET /gallery 200 in 143ms
+ GET /gallery 200 in 1186ms
+ GET /gallery 200 in 1189ms
+ GET /pricing 200 in 1258ms
+ GET /pricing 200 in 1546ms
+ ○ Compiling /api/v1/credit/balance ...
+ ✓ Compiled /api/v1/credit/balance in 3s (5872 modules)
+ GET /gallery 200 in 257ms
+ GET /gallery 200 in 3304ms
+ GET /pricing 200 in 3435ms
+ GET /gallery 200 in 3460ms
+ GET /api/v1/credit/balance 200 in 7822ms
+ ✓ Compiled in 2.2s (8742 modules)
+ GET /gallery 200 in 394ms
+ GET /gallery 200 in 3456ms
+ GET /pricing 200 in 3557ms
+ GET /gallery 200 in 3577ms
+ GET /pricing 200 in 1370ms
+ GET /api/v1/credit/balance 200 in 2253ms
+ ✓ Compiled in 1563ms (2870 modules)
+ GET /gallery 200 in 143ms
+ GET /gallery 200 in 1158ms
+ GET /gallery 200 in 1179ms
+ GET /pricing 200 in 1249ms
+   Reload env: .env
+ ✓ Compiled in 4.9s (8923 modules)
+ GET /gallery 200 in 881ms
+ GET /gallery 200 in 4085ms
+ GET /pricing 200 in 4093ms
+ GET /gallery 200 in 4125ms
+   Reload env: .env
+ ✓ Compiled in 3.1s (8923 modules)
+ GET /gallery 200 in 451ms
+ GET /pricing 200 in 3584ms
+ GET /gallery 200 in 3588ms
+[Credit] User NJDMQbku17zTPSIWHiaHgkY7M50NnkPf already received welcome credits, skipping
+ GET /gallery 200 in 4730ms
+   Reload env: .env
+ ✓ Compiled in 26.5s (8941 modules)
+ GET /gallery 200 in 16023ms
+ ○ Compiling /api/v1/gallery ...
+ ✓ Compiled /api/v1/gallery in 2.3s (5872 modules)
+ GET /gallery 200 in 7212ms
+ GET /gallery 200 in 23190ms
+ GET /gallery 200 in 23191ms
+ GET /pricing 200 in 23192ms
+ GET /gallery 200 in 7254ms
+ GET /pricing 200 in 7257ms
+ ○ Compiling /api/v1/credit/balance ...
+ ✓ Compiled /api/v1/credit/balance in 887ms (5875 modules)
+ GET /api/v1/gallery?limit=15&offset=0 200 in 6322ms
+ GET /gallery 200 in 1811ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 4183ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 4359ms
+ GET /pricing 200 in 4158ms
+ GET /gallery 200 in 4834ms
+ GET /gallery 200 in 4868ms
+ GET /api/v1/credit/balance 200 in 6480ms
+ GET /api/v1/credit/balance 200 in 2112ms
+ GET /api/v1/credit/balance 200 in 2178ms
+ ✓ Compiled in 2.9s (8734 modules)
+ GET /gallery 200 in 777ms
+ GET /gallery 200 in 4594ms
+ GET /gallery 200 in 4596ms
+ GET /pricing 200 in 4597ms
+ ✓ Compiled in 1175ms (8734 modules)
+ GET /gallery 200 in 444ms
+ GET /pricing 200 in 3563ms
+ GET /gallery 200 in 3569ms
+ GET /gallery 200 in 3602ms
+ ✓ Compiled in 1282ms (8734 modules)
+ GET /gallery 200 in 835ms
+ GET /pricing 200 in 3962ms
+ GET /gallery 200 in 4110ms
+ GET /gallery 200 in 4151ms
+ ✓ Compiled in 3.3s (8734 modules)
+ GET /gallery 200 in 480ms
+ GET /gallery 200 in 3630ms
+ GET /gallery 200 in 3751ms
+ GET /pricing 200 in 3752ms
+   Reload env: .env
+ ✓ Compiled in 4.7s (8923 modules)
+ GET /gallery 200 in 776ms
+ GET /gallery 200 in 783ms
+ GET /gallery 200 in 783ms
+ GET /pricing 200 in 785ms
+ GET /gallery 200 in 456ms
+ ○ Compiling /api/v1/gallery ...
+ ✓ Compiled /api/v1/gallery in 2.3s (5872 modules)
+ GET / 200 in 2400ms
+ ○ Compiling /api/v1/credit/balance ...
+ ✓ Compiled /api/v1/credit/balance in 966ms (5875 modules)
+ GET /api/v1/credit/balance 401 in 1301ms
+ GET /gallery 200 in 969ms
+ GET /gallery 200 in 970ms
+ GET / 200 in 974ms
+ GET /pricing 200 in 977ms
+ GET /api/v1/gallery?limit=15&offset=0 200 in 10383ms
+ GET /pricing 200 in 55ms
+ GET /api/v1/credit/balance 401 in 18ms
+ ✓ Compiled in 3.3s (2870 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 2.4s (8725 modules)
+ GET /gallery 404 in 2904ms
+ GET /pricing 404 in 2905ms
+ GET /gallery 404 in 2906ms
+ GET /pricing 404 in 2907ms
+ GET /gallery 200 in 2252ms
+ GET /gallery 200 in 2252ms
+ GET /pricing 200 in 2255ms
+ GET /pricing 200 in 2255ms
+ GET /gallery 200 in 467ms
+ GET /gallery 200 in 460ms
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 3.7s (9065 modules)
+ GET /pricing 500 in 5332ms
+ GET /pricing 500 in 5298ms
+ GET /pricing 500 in 2636ms
+ GET /pricing 500 in 2711ms
+   Reload env: .env
+ ✓ Compiled in 1008ms (9254 modules)
+ GET /pricing 500 in 887ms
+ ✓ Compiled in 1512ms (9065 modules)
+ GET /pricing 200 in 11ms
+ GET /pricing 500 in 551ms
+   Reload env: .env
+ ✓ Compiled in 6.2s (9263 modules)
+ GET /pricing 200 in 2606ms
+ GET /pricing 200 in 2606ms
+ GET /pricing 500 in 2073ms
+ GET /pricing 500 in 2072ms
+ GET /pricing 500 in 617ms
+ GET / 200 in 997ms
+ GET / 500 in 759ms
+ GET / 500 in 1133ms
+[?25h

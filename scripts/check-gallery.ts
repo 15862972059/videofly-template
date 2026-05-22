@@ -20,7 +20,7 @@ async function main() {
   const hasPng: string[] = [];
 
   for (const img of images) {
-    if (img.heroImageUrl && img.heroImageUrl.endsWith(".png")) {
+    if (img.heroImageUrl?.endsWith(".png")) {
       hasPng.push(img.slug);
     } else {
       missingPng.push(`${img.slug} -> ${img.heroImageUrl}`);

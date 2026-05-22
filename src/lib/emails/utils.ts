@@ -41,7 +41,7 @@ export interface EmailTranslations {
  * 获取指定语言的邮件翻译
  */
 export async function getEmailTranslations(
-  locale: string = "en"
+  locale = "en"
 ): Promise<EmailTranslations> {
   const messages = await getMessages({ locale });
 
@@ -163,7 +163,7 @@ export async function sendWelcomeEmail(props: {
  * await sendResetPasswordEmail({
  *   to: "user@example.com",
  *   name: "John",
- *   resetUrl: "https://ar2art.net/reset-password?token=xxx",
+ *   resetUrl: "https://ai2art.net/reset-password?token=xxx",
  *   locale: "en",
  * });
  * ```

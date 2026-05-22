@@ -1,8 +1,8 @@
 import type { Locale } from "@/config/i18n-config";
 
 export const metadata = {
-    title: "Privacy Policy - ar2art",
-    description: "Privacy Policy for ar2art",
+    title: "Privacy Policy - AI2ART",
+    description: "Privacy Policy for AI2ART",
 };
 
 export default async function PrivacyPage() {
@@ -14,7 +14,7 @@ export default async function PrivacyPage() {
 
                 <h2>1. Introduction</h2>
                 <p>
-                    ar2art ("we" or "us") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our services.
+                    AI2ART ("we" or "us") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our services.
                 </p>
 
                 <h2>2. Information We Collect</h2>
@@ -85,7 +85,7 @@ export default async function PrivacyPage() {
 
                 <h2>11. Contact Us</h2>
                 <p>
-                    If you have any questions about this Privacy Policy, please contact us at: privacy@ar2art.net
+                    If you have any questions about this Privacy Policy, please contact us at: privacy@ai2art.net
                 </p>
             </div>
         </div>

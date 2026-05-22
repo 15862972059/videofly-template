@@ -102,7 +102,7 @@ export function CreationCard({
     if (video.videoUrl) {
       const link = document.createElement("a");
       link.href = video.videoUrl;
-      link.download = `ar2art-${video.uuid}.mp4`;
+      link.download = `ai2art-${video.uuid}.mp4`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

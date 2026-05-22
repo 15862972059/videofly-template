@@ -21,7 +21,7 @@ const faqData = [
   },
   {
     question: "Will it preserve my identity and outfit?",
-    answer: "The photo remix workflow is designed to preserve identity, clothing, and composition while adapting lighting, scenery, and style to the selected template.",
+    answer: "The photo remix workflow is designed to keep recognizable details from photos you own or have permission to use while adapting lighting, scenery, and style to the selected template.",
   },
   {
     question: "Can I use generated images commercially?",
@@ -107,8 +107,8 @@ export function FAQSection() {
           <BlurFade delay={0.35} inView>
             <div className="mt-10 rounded-2xl border border-emerald-900/10 bg-emerald-50 p-5 text-center text-sm text-slate-600 dark:bg-emerald-500/10 dark:text-slate-300">
               Still have questions? Contact us at{" "}
-              <a href="mailto:support@ar2art.net" className="font-semibold text-emerald-700 hover:underline dark:text-emerald-300">
-                support@ar2art.net
+              <a href="mailto:support@ai2art.net" className="font-semibold text-emerald-700 hover:underline dark:text-emerald-300">
+                support@ai2art.net
               </a>
             </div>
           </BlurFade>
