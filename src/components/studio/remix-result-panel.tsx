@@ -12,6 +12,10 @@ interface RemixResultPanelProps {
   aspectRatio: "1:1" | "3:4" | "9:16" | "16:9";
 }
 
+function getSceneDisplayUrl(scene: ClassicImageData) {
+  return scene.thumbnail_url || scene.hero_image_url;
+}
+
 export function RemixResultPanel({
   result,
   sourceImageKey,
@@ -20,7 +24,8 @@ export function RemixResultPanel({
 }: RemixResultPanelProps) {
   const [previewMode, setPreviewMode] = useState<"result" | "scene">("result");
   const hasSelectedScene = Boolean(selectedScene);
-  const canCompare = Boolean(result && selectedScene?.hero_image_url);
+  const sceneDisplayUrl = selectedScene ? getSceneDisplayUrl(selectedScene) : "";
+  const canCompare = Boolean(result && sceneDisplayUrl);
 
   return (
     <section className="rounded-[1.5rem] border border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
@@ -58,10 +63,10 @@ export function RemixResultPanel({
           <GenerationResult result={result} inline showActions aspectRatio={aspectRatio} />
         ) : selectedScene && canCompare && previewMode === "scene" ? (
           <div className="relative overflow-hidden rounded-[1.5rem] border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800" style={{ aspectRatio: aspectRatio === "9:16" ? "9 / 16" : aspectRatio === "16:9" ? "16 / 9" : aspectRatio === "1:1" ? "1 / 1" : "3 / 4" }}>
-            <img src={selectedScene.hero_image_url} alt={selectedScene.title} className="h-full w-full object-cover" />
+            <img src={sceneDisplayUrl} alt={selectedScene.title} className="h-full w-full object-cover" />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent p-4 text-white">
               <p className="text-sm font-semibold">{selectedScene.title}</p>
-              <p className="text-xs text-white/75">{selectedScene.category}{selectedScene.subcategory ? ` • ${selectedScene.subcategory}` : ""}</p>
+              <p className="text-xs text-white/75">{selectedScene.category}{selectedScene.subcategory ? ` - ${selectedScene.subcategory}` : ""}</p>
             </div>
           </div>
         ) : (

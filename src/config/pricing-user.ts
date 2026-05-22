@@ -81,7 +81,7 @@ export const NEW_USER_GIFT = {
   /** 是否启用赠送 */
   enabled: true,
   /** 赠送积分数量 */
-  credits: 5,  // 1 gpt-image-2 auto generation
+  credits: 1,  // 1 gpt-image-2 generation
   /** 积分有效期（天）*/
   validDays: 30,
 };
@@ -122,64 +122,64 @@ export const SUBSCRIPTION_PRODUCTS = [
   {
     id: "prod_jsRIeZmqn3L9NN2fiFIn6", // 从 Creem 后台复制 Basic Monthly Product ID
     name: "Basic Plan",
-    priceUsd: 9.9,
-    credits: 160,
+    priceUsd: 5.0,
+    credits: 70,
     period: "month" as const,
     popular: false,
     enabled: true,
-    features: ["hd_videos", "fast_generation"],
+    features: ["gpt_image_2_access", "commercial_use"],
   },
   {
     id: "prod_3tlZPSRNHZSaNq21zX2Z16", // 从 Creem 后台复制 Pro Monthly Product ID
     name: "Pro Plan",
-    priceUsd: 29.9,
-    credits: 540,
+    priceUsd: 15.0,
+    credits: 220,
     period: "month" as const,
     popular: true, // 推荐
     enabled: true,
-    features: ["hd_videos", "fast_generation", "no_watermark", "commercial_use"],
+    features: ["gpt_image_2_access", "commercial_use", "priority_support"],
   },
   {
     id: "prod_3tlZPSRNHZSaNq22zX2Z18", // 从 Creem 后台复制 Ultimate Monthly Product ID
     name: "Ultimate Plan",
-    priceUsd: 79.9,
-    credits: 1600,
+    priceUsd: 39.0,
+    credits: 600,
     period: "month" as const,
     popular: false,
     enabled: true,
-    features: ["hd_videos", "fast_generation", "no_watermark", "commercial_use", "priority_support", "api_access"],
+    features: ["gpt_image_2_access", "commercial_use", "priority_support", "api_access"],
   },
 
-  // ===== 年付订阅（月付 × 10，买 10 送 2） =====
+  // ===== 年付订阅（月付 × 10，省 2 个月） =====
   {
     id: "prod_3tlZPSRNHZSaNq22zX2Z10", // 从 Creem 后台复制 Basic Yearly Product ID
     name: "Basic Plan (Yearly)",
-    priceUsd: 99, // 月付 × 10 (省 2 个月)
-    credits: 1920, // 160 × 12
+    priceUsd: 50,
+    credits: 840, // 70 × 12
     period: "year" as const,
     popular: false,
     enabled: true,
-    features: ["hd_videos", "fast_generation"],
+    features: ["gpt_image_2_access", "commercial_use"],
   },
   {
     id: "prod_3tlZPSRNHZSaNq22zX2Z55", // 从 Creem 后台复制 Pro Yearly Product ID
     name: "Pro Plan (Yearly)",
-    priceUsd: 299, // 月付 × 10 (省 2 个月)
-    credits: 6480, // 540 × 12
+    priceUsd: 150,
+    credits: 2640, // 220 × 12
     period: "year" as const,
     popular: true,
     enabled: true,
-    features: ["hd_videos", "fast_generation", "no_watermark", "commercial_use"],
+    features: ["gpt_image_2_access", "commercial_use", "priority_support"],
   },
   {
     id: "prod_3tlZPSRNHZSaNq22zX2Z21", // 从 Creem 后台复制 Ultimate Yearly Product ID
     name: "Ultimate Plan (Yearly)",
-    priceUsd: 799, // 月付 × 10 (省 2 个月)
-    credits: 19200, // 1600 × 12
+    priceUsd: 390,
+    credits: 7200, // 600 × 12
     period: "year" as const,
     popular: false,
     enabled: true,
-    features: ["hd_videos", "fast_generation", "no_watermark", "commercial_use", "priority_support", "api_access"],
+    features: ["gpt_image_2_access", "commercial_use", "priority_support", "api_access"],
   },
 ];
 
@@ -203,32 +203,32 @@ export const CREDIT_PACKAGES: CreditPackageConfig[] = [
   {
     id: "prod_3tlZPSRNHZSaNq21zX2ZPO", // 从 Creem 后台复制 Starter Pack Product ID
     name: "Starter Pack",
-    priceUsd: 9.9,
-    credits: 150,
+    priceUsd: 5.0,
+    credits: 50,
     popular: true, // 推荐
     enabled: true,
     allowFreeUser: true, // 所有用户可购买
-    features: ["hd_videos", "fast_generation"],
+    features: ["gpt_image_2_access", "commercial_use"],
   },
   {
     id: "prod_3tlZPSRNHZSaNq22zX2Z12", // 从 Creem 后台复制 Standard Pack Product ID
     name: "Standard Pack",
-    priceUsd: 24.9,
-    credits: 430,
+    priceUsd: 12.0,
+    credits: 130,
     popular: false,
     enabled: true,
     allowFreeUser: false, // 仅订阅用户
-    features: ["hd_videos", "fast_generation", "no_watermark"],
+    features: ["gpt_image_2_access", "commercial_use"],
   },
   {
     id: "prod_3tlZPSRNHZSaNq22zX2Z13", // 从 Creem 后台复制 Pro Pack Product ID
     name: "Pro Pack",
-    priceUsd: 59.9,
-    credits: 1100,
+    priceUsd: 30.0,
+    credits: 350,
     popular: false,
     enabled: true,
     allowFreeUser: false, // 仅订阅用户
-    features: ["hd_videos", "fast_generation", "no_watermark", "commercial_use"],
+    features: ["gpt_image_2_access", "commercial_use", "priority_support"],
   },
 ];
 
@@ -240,8 +240,8 @@ export const CREDIT_PACKAGES: CreditPackageConfig[] = [
  * 图片生成积分配置
  */
 export const IMAGE_MODEL_PRICING = {
-  /** Lowest-cost image generation starts at 5 site credits. */
-  minCreditCost: 5,
+  /** Lowest-cost image generation starts at 1 site credits. */
+  minCreditCost: 1,
   /** Primary low-cost model for new user trial. */
   trialModel: "gpt-image-2",
   /** Primary low-cost quality for new user trial. */

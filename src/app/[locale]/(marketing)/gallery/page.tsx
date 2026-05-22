@@ -116,52 +116,54 @@ export default function GalleryPage() {
         </p>
       </div>
 
-      <GalleryFilters
-        categories={state.categories}
-        activeCategory={activeCategory}
-        activeSubcategory={activeSubcategory}
-        activeQuery={activeQuery}
-        onCategoryChange={setActiveCategory}
-        onSubcategoryChange={setActiveSubcategory}
-        onQueryChange={setActiveQuery}
-      />
+      <div className="mt-8 grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start">
+        <GalleryFilters
+          categories={state.categories}
+          activeCategory={activeCategory}
+          activeSubcategory={activeSubcategory}
+          activeQuery={activeQuery}
+          onCategoryChange={setActiveCategory}
+          onSubcategoryChange={setActiveSubcategory}
+          onQueryChange={setActiveQuery}
+        />
 
-      <div className="mt-8">
-        {state.loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div
-                key={i}
-                className="aspect-[3/4] rounded-xl bg-muted animate-pulse"
-              />
-            ))}
-          </div>
-        ) : state.error ? (
-          <div className="text-center py-12 text-destructive">
-            {state.error}
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <ClassicImageGrid images={state.images} onSelect={handleSelect} />
-
-            <div className="flex flex-col items-center gap-3">
-              <p className="text-sm text-muted-foreground">
-                Showing {state.images.length} of {state.total} scenes
-              </p>
-
-              {state.hasMore && (
-                <button
-                  type="button"
-                  onClick={() => void fetchGallery(false)}
-                  disabled={state.loadingMore}
-                  className="rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {state.loadingMore ? "Loading..." : "Load more"}
-                </button>
-              )}
+        <div className="min-w-0">
+          {state.loading ? (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="aspect-[3/4] rounded-xl bg-muted animate-pulse"
+                />
+              ))}
             </div>
-          </div>
-        )}
+          ) : state.error ? (
+            <div className="text-center py-12 text-destructive">
+              {state.error}
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <ClassicImageGrid images={state.images} onSelect={handleSelect} />
+
+              <div className="flex flex-col items-center gap-3">
+                <p className="text-sm text-muted-foreground">
+                  Showing {state.images.length} of {state.total} scenes
+                </p>
+
+                {state.hasMore && (
+                  <button
+                    type="button"
+                    onClick={() => void fetchGallery(false)}
+                    disabled={state.loadingMore}
+                    className="cursor-pointer rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {state.loadingMore ? "Loading..." : "Load more"}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <ClassicImageDetailDialog

@@ -30,12 +30,6 @@ export const sidebarNavigation: NavGroup[] = [
         href: "/studio",
         icon: "Sparkles",
       },
-      {
-        id: "gallery",
-        title: "Gallery",
-        href: "/gallery",
-        icon: "Images",
-      },
     ],
   },
   {

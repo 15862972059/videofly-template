@@ -63,20 +63,24 @@ export function GenerationProgress({
   }, [estimatedDurationMs]);
 
   useEffect(() => {
-    if (isGenerating) {
-      startTimeRef.current = Date.now();
-      setElapsed(0);
-      setProgress(0);
-      frameRef.current = requestAnimationFrame(tick);
-    } else {
+    if (!isGenerating) {
       cancelAnimationFrame(frameRef.current);
-      if (progress > 0) {
-        // Animate to 100% when done
-        setProgress(100);
-      }
+      return;
     }
+
+    startTimeRef.current = Date.now();
+    setElapsed(0);
+    setProgress(0);
+    frameRef.current = requestAnimationFrame(tick);
+
     return () => cancelAnimationFrame(frameRef.current);
-  }, [isGenerating, tick, progress]);
+  }, [isGenerating, tick]);
+
+  useEffect(() => {
+    if (!isGenerating && progress > 0 && progress < 100) {
+      setProgress(100);
+    }
+  }, [isGenerating, progress]);
 
   if (!isGenerating && progress === 0) return null;
 
