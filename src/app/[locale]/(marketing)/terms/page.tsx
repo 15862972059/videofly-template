@@ -10,7 +10,7 @@ export default async function TermsPage() {
         <div className="container mx-auto max-w-4xl py-12 md:py-24">
             <div className="prose prose-gray dark:prose-invert max-w-none">
                 <h1>Terms of Service</h1>
-                <p className="lead">Effective Date: May 19, 2026</p>
+                <p className="lead">Effective Date: May 24, 2026</p>
 
                 <h2>1. Acceptance of Terms</h2>
                 <p>
@@ -19,7 +19,7 @@ export default async function TermsPage() {
 
                 <h2>2. Description of Service</h2>
                 <p>
-                    AI2ART is an AI-powered video and image generation platform that allows users to create video and image content from text, images, and other inputs. We strive to provide high-quality services but do not guarantee that generated content will always meet your exact expectations.
+                    AI2ART is an AI-powered image and video generation platform that allows users to create or remix content from text prompts, uploaded images, and other inputs. We provide a custom interface on top of third-party AI models and related infrastructure. We are an independent service and are not affiliated with, endorsed by, or sponsored by the underlying model providers.
                 </p>
 
                 <h2>3. User Accounts</h2>
@@ -50,7 +50,9 @@ export default async function TermsPage() {
                 <ul>
                     <li><strong>Credit Purchases:</strong> Credits are non-transferable, non-refundable, and cannot be exchanged for cash.</li>
                     <li><strong>Subscriptions:</strong> Subscriptions are billed monthly or annually. Except as required by law, all fees are non-refundable.</li>
-                    <li><strong>Subscription Cancellation:</strong> You may cancel your subscription at any time. You will retain access until the end of your current billing period.</li>
+                    <li><strong>Subscription Management:</strong> Subscribers can manage billing, invoices, payment methods, and cancellation from within the product through the Creem customer portal.</li>
+                    <li><strong>Subscription Cancellation:</strong> You may cancel your subscription at any time. If you cancel at period end, you will retain access until the end of your current billing period. If you choose immediate cancellation where available, access may stop sooner.</li>
+                    <li><strong>Refund Requests:</strong> Refund requests must be submitted to support@ai2art.net. We review refund eligibility under these Terms, our posted policies, and applicable law.</li>
                     <li><strong>Credit Expiration:</strong> Credits expire after a certain period. Please use them before expiration.</li>
                 </ul>
 
@@ -59,22 +61,27 @@ export default async function TermsPage() {
                     We use Creem as our third-party payment processor. All payments are processed by Creem, and Creem's terms and conditions apply to your purchases. We do not store your full credit card information.
                 </p>
 
-                <h2>8. Disclaimer of Warranties</h2>
+                <h2>8. Customer Support</h2>
+                <p>
+                    Support is available at support@ai2art.net. For billing, cancellation, and refund-related requests, contact us using that email address. We aim to respond to customer support requests within 3 business days.
+                </p>
+
+                <h2>9. Disclaimer of Warranties</h2>
                 <p>
                     The Service is provided on an "AS IS" and "AS AVAILABLE" basis, without any warranties of any kind, express or implied. We do not warrant that the Service will be uninterrupted, timely, secure, or error-free.
                 </p>
 
-                <h2>9. Limitation of Liability</h2>
+                <h2>10. Limitation of Liability</h2>
                 <p>
                     To the maximum extent permitted by law, AI2ART shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill.
                 </p>
 
-                <h2>10. Changes to Terms</h2>
+                <h2>11. Changes to Terms</h2>
                 <p>
                     We reserve the right to modify these Terms at any time. Modified terms will become effective upon posting to the website. Your continued use of the Service after changes constitutes your acceptance of the modified Terms.
                 </p>
 
-                <h2>11. Contact Us</h2>
+                <h2>12. Contact Us</h2>
                 <p>
                     If you have any questions about these Terms, please contact us at: support@ai2art.net
                 </p>
