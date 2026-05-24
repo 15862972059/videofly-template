@@ -377,7 +377,7 @@ function PricingCard({
                   : "border border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground"
               )}
             >
-              {dictPrice.manage_subscription}
+              {dictPrice.manage_cancel_subscription ?? dictPrice.manage_subscription}
             </button>
           ) : (
             <TooltipProvider>

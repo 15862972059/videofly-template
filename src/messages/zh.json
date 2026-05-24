@@ -320,6 +320,7 @@
     "contact": "获取支持。",
     "contact_2": "我们随时为您提供帮助。",
     "manage_subscription": "管理订阅",
+    "manage_cancel_subscription": "管理或取消订阅",
     "upgrade": "升级"
   },
   "PricingFaq": {
@@ -526,6 +527,20 @@
         "expired": "已过期",
         "system_adjust": "管理员调整"
       }
+    },
+    "subscription": {
+      "title": "订阅",
+      "description": "打开 Creem 门户来管理账单、发票、支付方式或取消订阅。",
+      "loading": "检查中...",
+      "activeLabel": "已订阅",
+      "inactiveLabel": "暂无有效订阅",
+      "portalHint": "通过安全的 Creem 客户门户管理或取消订阅。",
+      "periodEnd": "当前周期结束于 {date}",
+      "manageCancelButton": "管理或取消订阅",
+      "viewPlansButton": "查看套餐",
+      "portalErrorTitle": "门户打开失败",
+      "portalErrorDescription": "无法打开客户门户。",
+      "missingPortalDescription": "Creem 未返回门户链接。"
     },
     "settings": {
       "title": "账单",

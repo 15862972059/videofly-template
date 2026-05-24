@@ -320,6 +320,7 @@
     "contact": "for support.",
     "contact_2": "We're here to help.",
     "manage_subscription": "Manage Subscription",
+    "manage_cancel_subscription": "Manage or Cancel Subscription",
     "upgrade": "Upgrade"
   },
   "PricingFaq": {
@@ -526,6 +527,20 @@
         "expired": "Expired",
         "system_adjust": "Admin Adjust"
       }
+    },
+    "subscription": {
+      "title": "Subscription",
+      "description": "Open the Creem portal to manage billing, invoices, payment method, or cancellation.",
+      "loading": "Checking...",
+      "activeLabel": "Active",
+      "inactiveLabel": "No active plan",
+      "portalHint": "Manage or cancel through the secure Creem customer portal.",
+      "periodEnd": "Current period ends on {date}",
+      "manageCancelButton": "Manage or Cancel Subscription",
+      "viewPlansButton": "View Plans",
+      "portalErrorTitle": "Portal error",
+      "portalErrorDescription": "Failed to open the customer portal.",
+      "missingPortalDescription": "Missing portal URL from Creem."
     },
     "settings": {
       "title": "Billing",

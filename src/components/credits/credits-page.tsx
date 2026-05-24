@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useCreditBalance, useCreditHistory } from "@/hooks/use-credits";
 import { BalanceCard, CreditHistory } from "@/components/credits";
+import { SubscriptionManagementCard } from "@/components/billing";
 
 interface CreditsPageProps {
   locale: string;
@@ -92,8 +93,11 @@ export function CreditsPage({ locale }: CreditsPageProps) {
         <h1 className="text-2xl font-semibold">{t("title")}</h1>
       </div>
 
-      {/* Balance Card */}
-      <BalanceCard balance={balance ?? null} onBuyCredits={handleBuyCredits} />
+      {/* Balance and subscription controls */}
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
+        <BalanceCard balance={balance ?? null} onBuyCredits={handleBuyCredits} />
+        <SubscriptionManagementCard />
+      </div>
 
       {/* Credit History */}
       <CreditHistory

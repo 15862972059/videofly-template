@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 import { Mail, IdCard, Calendar } from "lucide-react";
 import { useBilling } from "@/hooks/use-billing";
 import { AvatarFallback } from "@/components/user/avatar-fallback";
-import { BillingList } from "@/components/billing";
+import { BillingList, SubscriptionManagementCard } from "@/components/billing";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 
@@ -117,6 +117,8 @@ export function SettingsPage({ locale, userEmail, userId }: SettingsPageProps) {
           </div>
         </CardContent>
       </Card>
+
+      <SubscriptionManagementCard />
 
       {/* Billing History */}
       <BillingList

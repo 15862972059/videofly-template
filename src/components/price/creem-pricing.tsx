@@ -341,7 +341,7 @@ function PricingGrid({
               {userId ? (
                 isCurrent ? (
                   <Button variant="default" className="w-full" onClick={onPortal}>
-                    {dictPrice.manage_subscription}
+                    {dictPrice.manage_cancel_subscription ?? dictPrice.manage_subscription}
                   </Button>
                 ) : (
                   <Button
