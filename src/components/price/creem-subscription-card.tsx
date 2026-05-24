@@ -1,74 +1,50 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 
-import { creem } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import * as Icons from "@/components/ui/icons";
 import { toast } from "sonner";
+import { useSubscriptionStatus } from "@/hooks/use-subscription";
 
 interface CreemSubscriptionCardProps {
   dict: Record<string, string>;
 }
 
 export function CreemSubscriptionCard({ dict }: CreemSubscriptionCardProps) {
-  const [hasAccess, setHasAccess] = useState(false);
-  const [planLabel, setPlanLabel] = useState<string | null>(null);
-  const [endsAt, setEndsAt] = useState<Date | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isPending, startTransition] = useTransition();
+  const {
+    data,
+    isLoading,
+    openPortal,
+    isOpeningPortal,
+  } = useSubscriptionStatus();
 
-  useEffect(() => {
-    let active = true;
-    setIsLoading(true);
+  const hasAccess = !!data?.hasAccess;
+  const planLabel = data?.productId ?? null;
+  const endsAt = useMemo(
+    () => (data?.periodEnd ? new Date(data.periodEnd) : null),
+    [data?.periodEnd]
+  );
 
-    creem
-      .hasAccessGranted()
-      .then(({ data, error }) => {
-        if (!active) return;
-        if (error) {
-          console.error("Creem access check failed:", error);
+  const handlePortal = () => {
+    openPortal()
+      .then((portal) => {
+        if (!portal?.url) {
+          toast.error("Portal error", {
+            description: "Missing portal URL from Creem.",
+          });
           return;
         }
 
-        const subscription =
-          data && "subscription" in data ? data.subscription : undefined;
-        setHasAccess(!!data?.hasAccessGranted);
-        setPlanLabel(subscription?.productId ?? null);
-        setEndsAt(
-          subscription?.periodEnd ? new Date(subscription.periodEnd) : null
-        );
+        window.location.href = portal.url;
       })
-      .finally(() => {
-        if (active) setIsLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const handlePortal = () => {
-    startTransition(async () => {
-      const { data, error } = await creem.createPortal();
-      if (error) {
+      .catch((error: Error) => {
         toast.error("Portal error", {
           description: error.message ?? "Failed to open customer portal.",
         });
-        return;
-      }
-
-      if (data && "url" in data && data.url) {
-        window.location.href = data.url;
-        return;
-      }
-
-      toast.error("Portal error", {
-        description: "Missing portal URL from Creem.",
       });
-    });
   };
 
   const content = hasAccess && planLabel && endsAt
@@ -94,7 +70,7 @@ export function CreemSubscriptionCard({ dict }: CreemSubscriptionCardProps) {
       </CardContent>
       <CardFooter className="gap-2">
         {hasAccess ? (
-          <Button onClick={handlePortal} disabled={isPending || isLoading}>
+          <Button onClick={handlePortal} disabled={isOpeningPortal || isLoading}>
             {dict.manage_subscription}
           </Button>
         ) : (

@@ -9,6 +9,7 @@ import {
   CreditTransType,
   creditService,
 } from "@/services/credit";
+import { syncCreemSubscription } from "@/services/creem-subscription";
 import {
   getProductById,
   getProductExpiryDays,
@@ -134,12 +135,30 @@ if (env.CREEM_API_KEY) {
       persistSubscriptions: true,
       defaultSuccessUrl: "/dashboard",
 
-      onGrantAccess: async ({ reason, product, metadata }) => {
+      onGrantAccess: async ({
+        reason,
+        id,
+        status,
+        product,
+        metadata,
+        current_period_end_date,
+      }) => {
+        const userId = metadata?.referenceId as string | undefined;
         console.log(`[Creem] onGrantAccess called`, {
           reason,
+          subscriptionId: id,
+          status,
           productId: product?.id,
           productName: product?.name,
-          referenceId: metadata?.referenceId,
+          referenceId: userId,
+        });
+
+        await syncCreemSubscription({
+          userId,
+          productId: product?.id,
+          subscriptionId: id,
+          status: status ?? reason.replace("subscription_", ""),
+          currentPeriodEnd: current_period_end_date,
         });
       },
 
@@ -199,6 +218,14 @@ if (env.CREEM_API_KEY) {
 
         console.log(`[Creem] Processing subscription: ${productName}, credits: ${credits}, userId: ${userId}`);
 
+        await syncCreemSubscription({
+          userId,
+          productId: product?.id,
+          subscriptionId: subscriptionData.id,
+          status: subscriptionData.status,
+          currentPeriodEnd: subscriptionData.current_period_end_date,
+        });
+
         await creditService.recharge({
           userId,
           credits,
@@ -211,15 +238,83 @@ if (env.CREEM_API_KEY) {
         console.log(`[Creem] Subscription processed: ${orderNo}`);
       },
 
-      onRevokeAccess: async ({ customer, product }) => {
-        console.log("Creem access revoked:", { customer, product });
+      onRevokeAccess: async ({
+        reason,
+        id,
+        status,
+        customer,
+        product,
+        metadata,
+        current_period_end_date,
+      }) => {
+        const userId = metadata?.referenceId as string | undefined;
+        console.log("Creem access revoked:", { reason, customer, product, userId });
+
+        await syncCreemSubscription({
+          userId,
+          productId: product?.id,
+          subscriptionId: id,
+          status: status ?? reason.replace("subscription_", ""),
+          currentPeriodEnd: current_period_end_date,
+        });
       },
 
       // 处理一次性购买（checkout.completed 事件不触发 onGrantAccess）
+      onSubscriptionCanceled: async (subscriptionData) => {
+        await syncCreemSubscription({
+          userId: subscriptionData.metadata?.referenceId as string | undefined,
+          productId: subscriptionData.product?.id,
+          subscriptionId: subscriptionData.id,
+          status: subscriptionData.status,
+          currentPeriodEnd: subscriptionData.current_period_end_date,
+        });
+      },
+
+      onSubscriptionUnpaid: async (subscriptionData) => {
+        await syncCreemSubscription({
+          userId: subscriptionData.metadata?.referenceId as string | undefined,
+          productId: subscriptionData.product?.id,
+          subscriptionId: subscriptionData.id,
+          status: subscriptionData.status,
+          currentPeriodEnd: subscriptionData.current_period_end_date,
+        });
+      },
+
+      onSubscriptionUpdate: async (subscriptionData) => {
+        await syncCreemSubscription({
+          userId: subscriptionData.metadata?.referenceId as string | undefined,
+          productId: subscriptionData.product?.id,
+          subscriptionId: subscriptionData.id,
+          status: subscriptionData.status,
+          currentPeriodEnd: subscriptionData.current_period_end_date,
+        });
+      },
+
+      onSubscriptionPastDue: async (subscriptionData) => {
+        await syncCreemSubscription({
+          userId: subscriptionData.metadata?.referenceId as string | undefined,
+          productId: subscriptionData.product?.id,
+          subscriptionId: subscriptionData.id,
+          status: subscriptionData.status,
+          currentPeriodEnd: subscriptionData.current_period_end_date,
+        });
+      },
+
       onCheckoutCompleted: async (checkoutData) => {
         // 只处理一次性购买（onetime）
         // billing_type 可能是 "onetime" 或 "one-time" 取决于 API 版本
         const productType = checkoutData.product?.billing_type as string;
+        const referenceId = checkoutData.metadata?.referenceId as string | undefined;
+
+        if (checkoutData.subscription?.id) {
+          await syncCreemSubscription({
+            userId: referenceId,
+            productId: checkoutData.product?.id,
+            subscriptionId: checkoutData.subscription.id,
+            status: checkoutData.subscription.status,
+            currentPeriodEnd: checkoutData.subscription.current_period_end_date,
+          });
+        }
         if (productType !== "onetime" && productType !== "one-time") {
           console.log(`[Creem] Skipping checkout.completed for subscription product`);
           return;
@@ -236,7 +331,6 @@ if (env.CREEM_API_KEY) {
         if (credits <= 0) return;
 
         // 从 metadata 获取用户 ID
-        const referenceId = checkoutData.metadata?.referenceId as string | undefined;
         if (!referenceId) {
           console.error(`[Creem] No referenceId in checkout metadata`);
           return;

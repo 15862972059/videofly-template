@@ -129,3 +129,16 @@ export interface BillingResponse {
   nextCursor: string | null;
   hasMore: boolean;
 }
+
+export interface SubscriptionStatusResponse {
+  hasAccess: boolean;
+  status: string | null;
+  productId: string | null;
+  periodEnd: Date | string | null;
+  source: "database" | "creem_api" | "none";
+  canManage: boolean;
+}
+
+export interface SubscriptionPortalResponse {
+  url: string;
+}

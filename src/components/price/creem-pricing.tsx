@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Balancer from "react-wrap-balancer";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
@@ -24,6 +24,7 @@ import {
   type CreditsDictionary,
   type LocalizedPackage,
 } from "@/hooks/use-credit-packages";
+import { useSubscriptionStatus } from "@/hooks/use-subscription";
 
 interface CreemPricingProps {
   userId?: string;
@@ -44,12 +45,17 @@ export function CreemPricing({
   dictCredits,
 }: CreemPricingProps) {
   const [activeTab, setActiveTab] = useState<PricingTab>("onetime");
-  const [hasAccess, setHasAccess] = useState(false);
-  const [activeProductId, setActiveProductId] = useState<string | null>(null);
-  const [isCheckingAccess, setIsCheckingAccess] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [loadingProductId, setLoadingProductId] = useState<string | null>(null);
   const signInModal = useSigninModal();
+  const {
+    data: subscription,
+    isLoading: isCheckingAccess,
+    openPortal,
+  } = useSubscriptionStatus(!!userId);
+
+  const hasAccess = !!subscription?.hasAccess;
+  const activeProductId = subscription?.productId ?? null;
 
   const allSubscriptionProducts = useMemo(
     () =>
@@ -71,36 +77,6 @@ export function CreemPricing({
     () => allSubscriptionProducts.filter((product) => product.billingPeriod === "month"),
     [allSubscriptionProducts]
   );
-
-  useEffect(() => {
-    if (!userId) return;
-
-    let active = true;
-    setIsCheckingAccess(true);
-
-    creem
-      .hasAccessGranted()
-      .then(({ data, error }) => {
-        if (!active) return;
-        if (error) {
-          console.error("Creem access check failed:", error);
-          return;
-        }
-
-        const subscription =
-          data && "subscription" in data ? data.subscription : undefined;
-
-        setHasAccess(!!data?.hasAccessGranted);
-        setActiveProductId(subscription?.productId ?? null);
-      })
-      .finally(() => {
-        if (active) setIsCheckingAccess(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [userId]);
 
   const handleCheckout = (product: LocalizedPackage) => {
     if (!userId) {
@@ -143,22 +119,24 @@ export function CreemPricing({
   };
 
   const handlePortal = async () => {
-    const { data, error } = await creem.createPortal();
-    if (error) {
-      toast.error("Portal error", {
-        description: error.message ?? "Failed to open customer portal.",
-      });
-      return;
-    }
+    try {
+      const data = await openPortal();
+      if (!data?.url) {
+        toast.error("Portal error", {
+          description: "Missing portal URL from Creem.",
+        });
+        return;
+      }
 
-    if (!data || !("url" in data) || !data.url) {
+      window.location.href = data.url;
+    } catch (error) {
       toast.error("Portal error", {
-        description: "Missing portal URL from Creem.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to open customer portal.",
       });
-      return;
     }
-
-    window.location.href = data.url;
   };
 
   return (

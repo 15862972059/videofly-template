@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { CalendarClock, CreditCard, ExternalLink, ShieldCheck } from "lucide-react";
@@ -9,7 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/components/ui";
-import { creem } from "@/lib/auth/client";
+import { useSubscriptionStatus } from "@/hooks/use-subscription";
 
 interface SubscriptionManagementCardProps {
   className?: string;
@@ -18,59 +17,33 @@ interface SubscriptionManagementCardProps {
 export function SubscriptionManagementCard({ className }: SubscriptionManagementCardProps) {
   const t = useTranslations("dashboard.subscription");
   const locale = useLocale();
-  const [hasAccess, setHasAccess] = useState(false);
-  const [periodEnd, setPeriodEnd] = useState<Date | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isPending, startTransition] = useTransition();
+  const {
+    data,
+    isLoading,
+    openPortal,
+    isOpeningPortal,
+  } = useSubscriptionStatus();
 
-  useEffect(() => {
-    let active = true;
-    setIsLoading(true);
+  const hasAccess = !!data?.hasAccess;
+  const periodEnd = data?.periodEnd ? new Date(data.periodEnd) : null;
 
-    creem
-      .hasAccessGranted()
-      .then(({ data, error }) => {
-        if (!active) return;
-        if (error) {
-          console.error("Creem access check failed:", error);
+  const handlePortal = () => {
+    openPortal()
+      .then((portal) => {
+        if (!portal?.url) {
+          toast.error(t("portalErrorTitle"), {
+            description: t("missingPortalDescription"),
+          });
           return;
         }
 
-        const subscription =
-          data && "subscription" in data ? data.subscription : undefined;
-        setHasAccess(!!data?.hasAccessGranted);
-        setPeriodEnd(
-          subscription?.periodEnd ? new Date(subscription.periodEnd) : null
-        );
+        window.location.href = portal.url;
       })
-      .finally(() => {
-        if (active) setIsLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const handlePortal = () => {
-    startTransition(async () => {
-      const { data, error } = await creem.createPortal();
-      if (error) {
+      .catch((error: Error) => {
         toast.error(t("portalErrorTitle"), {
           description: error.message ?? t("portalErrorDescription"),
         });
-        return;
-      }
-
-      if (data && "url" in data && data.url) {
-        window.location.href = data.url;
-        return;
-      }
-
-      toast.error(t("portalErrorTitle"), {
-        description: t("missingPortalDescription"),
       });
-    });
   };
 
   const statusText = isLoading
@@ -124,7 +97,7 @@ export function SubscriptionManagementCard({ className }: SubscriptionManagement
           <Button
             type="button"
             onClick={handlePortal}
-            disabled={isLoading || isPending}
+            disabled={isLoading || isOpeningPortal}
             className="w-full cursor-pointer gap-2"
           >
             {t("manageCancelButton")}

@@ -20,6 +20,7 @@ import {
 } from "@/hooks/use-credit-packages";
 import { useCredits } from "@/stores/credits-store";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useSubscriptionStatus } from "@/hooks/use-subscription";
 
 interface DarkPricingProps {
   userId?: string;
@@ -58,13 +59,17 @@ export function DarkPricing({
 }: DarkPricingProps) {
   const t = useTranslations("PricingCards");
   const [activeTab, setActiveTab] = useState<PricingTab>("monthly");
-  const [hasAccess, setHasAccess] = useState(false);
-  const [activeProductId, setActiveProductId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const signInModal = useSigninModal();
   const { balance } = useCredits();
+  const {
+    data: subscription,
+    openPortal,
+  } = useSubscriptionStatus(!!userId);
   const userPlan = balance?.plan || "FREE";
   const isFreeUser = !userPlan || userPlan === "FREE";
+  const hasAccess = !!subscription?.hasAccess;
+  const activeProductId = subscription?.productId ?? null;
 
   // 组织产品数据
   const allSubscriptionProducts = useMemo(
@@ -134,22 +139,24 @@ export function DarkPricing({
   };
 
   const handlePortal = async () => {
-    const { data, error } = await creem.createPortal();
-    if (error) {
-      toast.error("Portal error", {
-        description: error.message ?? "Failed to open customer portal.",
-      });
-      return;
-    }
+    try {
+      const data = await openPortal();
+      if (!data?.url) {
+        toast.error("Portal error", {
+          description: "Missing portal URL from Creem.",
+        });
+        return;
+      }
 
-    if (!data || !("url" in data) || !data.url) {
+      window.location.href = data.url;
+    } catch (error) {
       toast.error("Portal error", {
-        description: "Missing portal URL from Creem.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to open customer portal.",
       });
-      return;
     }
-
-    window.location.href = data.url;
   };
 
   // 获取当前 tab 的产品

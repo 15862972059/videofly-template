@@ -11,6 +11,8 @@ import type {
   CreditBalance,
   CreditHistoryResponse,
   BillingResponse,
+  SubscriptionPortalResponse,
+  SubscriptionStatusResponse,
 } from "../types/dashboard";
 
 class ApiClient {
@@ -118,6 +120,16 @@ class ApiClient {
 
     const query = searchParams.toString();
     return this.request<BillingResponse>(`/user/billing${query ? `?${query}` : ""}`);
+  }
+
+  async getSubscriptionStatus(): Promise<SubscriptionStatusResponse> {
+    return this.request<SubscriptionStatusResponse>("/user/subscription");
+  }
+
+  async createSubscriptionPortal(): Promise<SubscriptionPortalResponse> {
+    return this.request<SubscriptionPortalResponse>("/user/subscription/portal", {
+      method: "POST",
+    });
   }
 }
 
