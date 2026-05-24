@@ -26,7 +26,17 @@ export type UserSubscriptionPlan = {
   isCanceled?: boolean;
 };
 
+function isConfiguredStripePriceId(planId: string): boolean {
+  return pricingData.some(
+    (plan) => plan.stripeIds.monthly === planId || plan.stripeIds.yearly === planId
+  );
+}
+
 export async function createStripeSession(userId: string, planId: string) {
+  if (!isConfiguredStripePriceId(planId)) {
+    return { success: false as const, url: null };
+  }
+
   const [customer] = await db
     .select({
       id: customers.id,

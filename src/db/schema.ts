@@ -260,6 +260,7 @@ export const creditPackages = pgTable(
       table.userId,
       table.expiredAt
     ),
+    orderNoIdx: index("credit_packages_order_no_idx").on(table.orderNo),
   })
 );
 

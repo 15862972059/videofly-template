@@ -13,7 +13,11 @@ import {
   getProductById,
   getProductExpiryDays,
 } from "@/config/credits";
-import { buildCreemSubscriptionOrderNo } from "./creem-webhook";
+import {
+  buildCreemOneTimeOrderNo,
+  buildCreemSubscriptionCreditOrderNo,
+  extractCreemId,
+} from "./creem-webhook";
 
 import { creditPackages, db, users } from "@/db";
 import * as schema from "@/db/schema";
@@ -118,21 +122,29 @@ const plugins: AuthPlugin[] = [
 ];
 
 if (env.CREEM_API_KEY) {
+  if (!env.CREEM_WEBHOOK_SECRET) {
+    throw new Error("CREEM_WEBHOOK_SECRET is required when CREEM_API_KEY is configured");
+  }
+
   plugins.push(
     creem({
       apiKey: env.CREEM_API_KEY,
       webhookSecret: env.CREEM_WEBHOOK_SECRET,
-      testMode: env.CREEM_API_KEY.startsWith("creem_test_") || process.env.NODE_ENV !== "production",
+      testMode: env.CREEM_API_KEY.startsWith("creem_test_"),
       persistSubscriptions: true,
       defaultSuccessUrl: "/dashboard",
 
-      onGrantAccess: async ({ id, product, customer, metadata }) => {
+      onGrantAccess: async ({ reason, product, metadata }) => {
         console.log(`[Creem] onGrantAccess called`, {
+          reason,
           productId: product?.id,
           productName: product?.name,
-          metadata,
+          referenceId: metadata?.referenceId,
         });
+      },
 
+      onSubscriptionPaid: async (subscriptionData) => {
+        const { product, metadata } = subscriptionData;
         const productConfig = getProductById(product.id);
         if (!productConfig) {
           console.error(`[Creem] Unknown product: ${product.id}`);
@@ -151,19 +163,26 @@ if (env.CREEM_API_KEY) {
           return;
         }
 
-        // 获取订阅 ID 用于防止重复处理
-        const metadataSubscriptionId =
-          typeof meta.subscriptionId === "string"
-            ? meta.subscriptionId
-            : undefined;
-
-        const orderNo = buildCreemSubscriptionOrderNo({
-          subscriptionId: typeof id === "string" ? id : undefined,
-          metadataSubscriptionId,
-          customerId: (customer as { id?: string })?.id,
+        // Use paid-event identifiers so monthly renewals grant once per billing event.
+        const orderNo = buildCreemSubscriptionCreditOrderNo({
+          reason: "subscription_paid",
+          subscriptionId: subscriptionData.id,
+          lastTransactionId:
+            subscriptionData.last_transaction_id ??
+            extractCreemId(subscriptionData.last_transaction),
+          webhookId: subscriptionData.webhookId,
+          currentPeriodStart: subscriptionData.current_period_start_date?.toISOString(),
+          currentPeriodEnd: subscriptionData.current_period_end_date?.toISOString(),
           userId,
-          productType: productConfig.type,
         });
+
+        if (!orderNo) {
+          console.error("[Creem] Missing stable subscription payment id; skipping credit grant", {
+            subscriptionId: subscriptionData.id,
+            userId,
+          });
+          return;
+        }
 
         const [existing] = await db
           .select({ id: creditPackages.id })
@@ -176,11 +195,6 @@ if (env.CREEM_API_KEY) {
           return;
         }
 
-        const transType =
-          productConfig.type === "subscription"
-            ? CreditTransType.SUBSCRIPTION
-            : CreditTransType.ORDER_PAY;
-
         const productName = product?.name ?? productConfig.id;
 
         console.log(`[Creem] Processing subscription: ${productName}, credits: ${credits}, userId: ${userId}`);
@@ -189,7 +203,7 @@ if (env.CREEM_API_KEY) {
           userId,
           credits,
           orderNo,
-          transType,
+          transType: CreditTransType.SUBSCRIPTION,
           expiryDays: getProductExpiryDays(productConfig),
           remark: `Creem payment: ${productName}`,
         });
@@ -232,9 +246,23 @@ if (env.CREEM_API_KEY) {
         const orderId = typeof checkoutData.order === "object"
           ? checkoutData.order?.id
           : checkoutData.order;
-        const orderNo = orderId
-          ? `creem_${orderId}`
-          : `creem_onetime_${referenceId}_${Date.now()}`;
+        const transactionId = typeof checkoutData.order === "object"
+          ? extractCreemId(checkoutData.order?.transaction)
+          : undefined;
+        const orderNo = buildCreemOneTimeOrderNo({
+          orderId,
+          checkoutId: checkoutData.id,
+          transactionId,
+          webhookId: checkoutData.webhookId,
+        });
+
+        if (!orderNo) {
+          console.error("[Creem] Missing stable checkout payment id; skipping credit grant", {
+            checkoutId: checkoutData.id,
+            userId: referenceId,
+          });
+          return;
+        }
 
         // 防止重复处理
         const [existing] = await db
