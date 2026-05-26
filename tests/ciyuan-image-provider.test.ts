@@ -101,4 +101,25 @@ describe("CiYuan remix provider", () => {
       "Failed to call CiYuan image edit API: fetch failed"
     );
   });
+
+  test("reports invalid JSON from text generation responses with context", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response("<!DOCTYPE html><html><body>upstream error</body></html>", {
+        status: 200,
+        headers: { "content-type": "text/html" },
+      })
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { generateWithCiyuan } = await import("@/ai/images/providers/ciyuan");
+
+    await expect(
+      generateWithCiyuan({
+        prompt: "A modern product photo",
+        aspectRatio: "16:9",
+      })
+    ).rejects.toThrow(
+      "CiYuan image generation returned invalid JSON"
+    );
+  });
 });

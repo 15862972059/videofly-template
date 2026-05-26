@@ -66,6 +66,21 @@ async function readApiError(response: Response): Promise<string> {
   }
 }
 
+async function readJsonPayload<T>(response: Response, context: string): Promise<T> {
+  const responseClone = response.clone();
+  try {
+    return (await response.json()) as T;
+  } catch {
+    const bodyPreview = await responseClone
+      .text()
+      .then((text) => text.trim().slice(0, 120))
+      .catch(() => "");
+
+    const suffix = bodyPreview ? ` Response preview: ${bodyPreview}` : "";
+    throw new Error(`${context} returned invalid JSON.${suffix}`);
+  }
+}
+
 /**
  * Text-to-image generation via CiYuan API (OpenAI-compatible).
  * POST /v1/images/generations
@@ -111,7 +126,10 @@ export async function generateWithCiyuan(
       throw new Error(await readApiError(response));
     }
 
-    const result = await response.json();
+    const result = await readJsonPayload<{ data?: Array<{ url?: string; b64_json?: string }> }>(
+      response,
+      "CiYuan image generation"
+    );
     const data = result?.data;
     if (!Array.isArray(data) || data.length === 0) {
       throw new Error("CiYuan image generation returned no data");
@@ -197,7 +215,10 @@ export async function remixWithCiyuan(request: {
       throw new Error(await readApiError(response));
     }
 
-    const result = await response.json();
+    const result = await readJsonPayload<{ data?: Array<{ url?: string; b64_json?: string }> }>(
+      response,
+      "CiYuan image edit"
+    );
     const data = result?.data;
     if (!Array.isArray(data) || data.length === 0) {
       throw new Error("CiYuan image edit returned no data");
