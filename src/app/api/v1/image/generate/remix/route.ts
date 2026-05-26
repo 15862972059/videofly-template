@@ -3,7 +3,7 @@ import { apiSuccess, apiError } from "@/lib/api/response";
 import { remixRequestSchema } from "@/lib/validators/image";
 import { generateRemixImage } from "@/services/image/image-generation";
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 function classifyError(error: unknown) {
   if (!(error instanceof Error)) return { message: "Internal server error", status: 500 };
