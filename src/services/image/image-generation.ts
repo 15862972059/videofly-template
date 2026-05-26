@@ -32,6 +32,27 @@ import {
 } from "./generation-jobs";
 import { checkRateLimit, incrementRateLimit } from "./rate-limit";
 
+async function assertCreemPromptSequenceAllowed(input: {
+  userPrompt?: string | null;
+  finalPrompt: string;
+  externalIdBase: string;
+}): Promise<void> {
+  const userPrompt = input.userPrompt?.trim();
+  const finalPrompt = input.finalPrompt.trim();
+
+  if (userPrompt) {
+    await assertCreemPromptAllowed(userPrompt, {
+      externalId: `${input.externalIdBase}:user_prompt`,
+    });
+  }
+
+  if (!userPrompt || finalPrompt !== userPrompt) {
+    await assertCreemPromptAllowed(finalPrompt, {
+      externalId: `${input.externalIdBase}:final_prompt`,
+    });
+  }
+}
+
 export async function generateTextImage(input: {
   userId: string;
   prompt: string;
@@ -52,8 +73,10 @@ export async function generateTextImage(input: {
   const effectiveQuality = normalizeImageQuality(effectiveModel, input.quality);
   const imageCreditCost = getImageCreditCost(effectiveModel, effectiveQuality);
   const finalPrompt = buildTextPrompt({ userPrompt: input.prompt });
-  await assertCreemPromptAllowed(finalPrompt, {
-    externalId: `user_${input.userId}:image_text`,
+  await assertCreemPromptSequenceAllowed({
+    userPrompt: input.prompt,
+    finalPrompt,
+    externalIdBase: `user_${input.userId}:image_text`,
   });
   assertPromptAllowed(finalPrompt);
 
@@ -197,8 +220,10 @@ export async function generateRemixImage(input: {
         userPrompt: input.prompt,
         promptTemplate: classicImage.prompt_template,
       });
-  await assertCreemPromptAllowed(finalPrompt, {
-    externalId: `user_${input.userId}:image_remix`,
+  await assertCreemPromptSequenceAllowed({
+    userPrompt: input.prompt,
+    finalPrompt,
+    externalIdBase: `user_${input.userId}:image_remix`,
   });
   assertPromptAllowed(finalPrompt);
 
