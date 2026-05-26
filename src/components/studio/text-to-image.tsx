@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { parseJsonApiResponse } from "@/lib/api/client-response";
 
 interface TextToImageProps {
   onGenerate: (data: { jobId: string; objectKey: string; publicUrl: string }) => void;
@@ -82,9 +83,16 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
         }),
       });
 
-      const data = await res.json();
+      const data = await parseJsonApiResponse<{
+        success: boolean;
+        data: { jobId: string; objectKey: string; publicUrl: string };
+        error?: { message?: string; details?: unknown };
+      }>(res);
       if (!data.success) {
-        throw new Error(data.error?.message || data.error?.details || "Generation failed");
+        throw new Error(
+          data.error?.message ||
+          (data.error?.details ? String(data.error.details) : "Generation failed")
+        );
       }
 
       onGenerate(data.data);

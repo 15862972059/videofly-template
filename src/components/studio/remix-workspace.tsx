@@ -9,6 +9,7 @@ import { RemixScenePanel } from "./remix-scene-panel";
 import { GenerationProgress } from "./generation-progress";
 import { IMAGE_MODELS, type ImageModel, type ImageQuality } from "@/ai/images/types";
 import { getSupportedAspectRatios, normalizeImageQuality } from "@/ai/images/types";
+import { parseJsonApiResponse } from "@/lib/api/client-response";
 
 interface RemixWorkspaceProps {
   initialScene?: ClassicImageData;
@@ -69,7 +70,11 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
         }),
       });
 
-      const data = await res.json();
+      const data = await parseJsonApiResponse<{
+        success: boolean;
+        data: { objectKey: string; publicUrl: string };
+        error?: { message?: string };
+      }>(res);
       if (!data.success) {
         throw new Error(data.error?.message || "Generation failed");
       }
