@@ -10,6 +10,10 @@ import { GenerationProgress } from "./generation-progress";
 import { IMAGE_MODELS, type ImageModel, type ImageQuality } from "@/ai/images/types";
 import { getSupportedAspectRatios, normalizeImageQuality } from "@/ai/images/types";
 import { parseJsonApiResponse } from "@/lib/api/client-response";
+import {
+  type ImageGenerationStartPayload,
+  waitForImageGenerationResult,
+} from "@/lib/image-generation-client";
 
 interface RemixWorkspaceProps {
   initialScene?: ClassicImageData;
@@ -72,14 +76,19 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
 
       const data = await parseJsonApiResponse<{
         success: boolean;
-        data: { objectKey: string; publicUrl: string };
+        data: ImageGenerationStartPayload;
         error?: { message?: string };
       }>(res);
       if (!data.success) {
         throw new Error(data.error?.message || "Generation failed");
       }
 
-      setResult(data.data);
+      const completed = await waitForImageGenerationResult(data.data.jobId, {
+        timeoutMs: IMAGE_MODELS[model]?.estimatedDurationMs
+          ? IMAGE_MODELS[model].estimatedDurationMs * 3
+          : 300_000,
+      });
+      setResult(completed);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Generation failed");
     } finally {

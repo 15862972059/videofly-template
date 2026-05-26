@@ -1,7 +1,11 @@
 import { requireAuth } from "@/lib/api/auth";
 import { apiSuccess, apiError } from "@/lib/api/response";
 import { remixRequestSchema } from "@/lib/validators/image";
-import { generateRemixImage } from "@/services/image/image-generation";
+import {
+  runStartedRemixImageGeneration,
+  startRemixImageGeneration,
+} from "@/services/image/image-generation";
+import { after } from "next/server";
 
 export const maxDuration = 300;
 
@@ -42,7 +46,7 @@ export async function POST(request: Request) {
       return apiError("Invalid request", 400, parsed.error.flatten());
     }
 
-    const result = await generateRemixImage({
+    const started = await startRemixImageGeneration({
       userId: user.id,
       classicImageId: parsed.data.classicImageId,
       classicImageSlug: parsed.data.classicImageSlug,
@@ -53,7 +57,15 @@ export async function POST(request: Request) {
       quality: parsed.data.quality,
     });
 
-    return apiSuccess(result);
+    after(async () => {
+      try {
+        await runStartedRemixImageGeneration(started.task);
+      } catch (error) {
+        console.error("[remix-generate] Background task failed:", error);
+      }
+    });
+
+    return apiSuccess(started.response, 202);
   } catch (error) {
     const { message, status } = classifyError(error);
     console.error("[remix-generate] Error:", error);

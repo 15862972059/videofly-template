@@ -1,7 +1,11 @@
 import { requireAuth } from "@/lib/api/auth";
 import { apiSuccess, apiError } from "@/lib/api/response";
 import { textGenerationRequestSchema } from "@/lib/validators/image";
-import { generateTextImage } from "@/services/image/image-generation";
+import {
+  runStartedTextImageGeneration,
+  startTextImageGeneration,
+} from "@/services/image/image-generation";
+import { after } from "next/server";
 
 export const maxDuration = 300;
 
@@ -42,7 +46,7 @@ export async function POST(request: Request) {
       return apiError("Invalid request", 400, parsed.error.flatten());
     }
 
-    const result = await generateTextImage({
+    const started = await startTextImageGeneration({
       userId: user.id,
       prompt: parsed.data.prompt,
       aspectRatio: parsed.data.aspectRatio,
@@ -50,7 +54,15 @@ export async function POST(request: Request) {
       quality: parsed.data.quality,
     });
 
-    return apiSuccess(result);
+    after(async () => {
+      try {
+        await runStartedTextImageGeneration(started.task);
+      } catch (error) {
+        console.error("[text-generate] Background task failed:", error);
+      }
+    });
+
+    return apiSuccess(started.response, 202);
   } catch (error) {
     const { message, status } = classifyError(error);
     console.error("[text-generate] Error:", error instanceof Error ? error.stack : error);

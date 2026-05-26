@@ -19,6 +19,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { parseJsonApiResponse } from "@/lib/api/client-response";
+import {
+  type ImageGenerationStartPayload,
+  waitForImageGenerationResult,
+} from "@/lib/image-generation-client";
 
 interface TextToImageProps {
   onGenerate: (data: { jobId: string; objectKey: string; publicUrl: string }) => void;
@@ -85,7 +89,7 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
 
       const data = await parseJsonApiResponse<{
         success: boolean;
-        data: { jobId: string; objectKey: string; publicUrl: string };
+        data: ImageGenerationStartPayload;
         error?: { message?: string; details?: unknown };
       }>(res);
       if (!data.success) {
@@ -95,7 +99,12 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
         );
       }
 
-      onGenerate(data.data);
+      const result = await waitForImageGenerationResult(data.data.jobId, {
+        timeoutMs: IMAGE_MODELS[model]?.estimatedDurationMs
+          ? IMAGE_MODELS[model].estimatedDurationMs * 3
+          : 300_000,
+      });
+      onGenerate(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Generation failed");
     } finally {

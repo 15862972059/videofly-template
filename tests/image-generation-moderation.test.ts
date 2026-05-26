@@ -104,4 +104,39 @@ describe("image generation Creem moderation", () => {
     expect(remixImageMock).not.toHaveBeenCalled();
     expect(freezeMock).not.toHaveBeenCalled();
   });
+
+  test("starts a remix job without calling the image model", async () => {
+    const fetchMock = vi.fn().mockImplementation(() =>
+      Promise.resolve(
+        new Response(JSON.stringify({ decision: "allow" }), { status: 200 })
+      )
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    createImageGenerationJobMock.mockResolvedValue({
+      id: "job_1",
+      status: "QUEUED",
+    });
+    freezeMock.mockResolvedValue({ success: true, holdId: 1 });
+
+    const { startRemixImageGeneration } = await import("@/services/image/image-generation");
+
+    const started = await startRemixImageGeneration({
+      userId: "user_1",
+      classicImageSlug: "lantern-street",
+      sourceImageKey: "images/user/source.png",
+      prompt: "make the lighting more dramatic",
+      aspectRatio: "9:16",
+    });
+
+    expect(started.response).toEqual({
+      jobId: "job_1",
+      status: "QUEUED",
+      creditsUsed: 5,
+    });
+    expect(remixImageMock).not.toHaveBeenCalled();
+    expect(updateImageGenerationJobStatusMock).not.toHaveBeenCalledWith(
+      "job_1",
+      "RUNNING"
+    );
+  });
 });

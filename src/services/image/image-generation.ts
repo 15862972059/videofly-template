@@ -32,6 +32,62 @@ import {
 } from "./generation-jobs";
 import { checkRateLimit, incrementRateLimit } from "./rate-limit";
 
+interface AsyncImageGenerationResponse {
+  jobId: string;
+  status: "QUEUED" | "RUNNING";
+  creditsUsed: number;
+}
+
+interface TextImageGenerationInput {
+  userId: string;
+  prompt: string;
+  aspectRatio?: string;
+  model?: ImageModel;
+  quality?: ImageQuality;
+}
+
+interface TextImageGenerationTask {
+  jobId: string;
+  userId: string;
+  prompt: string;
+  aspectRatio?: string;
+  model: ImageModel;
+  quality: ImageQuality;
+}
+
+interface RemixImageGenerationInput {
+  userId: string;
+  classicImageId?: string;
+  classicImageSlug?: string;
+  sourceImageKey: string;
+  prompt?: string;
+  aspectRatio?: string;
+  model?: ImageModel;
+  quality?: ImageQuality;
+}
+
+interface RemixImageGenerationTask {
+  jobId: string;
+  userId: string;
+  prompt: string;
+  sourceImageUrl: string;
+  sceneImageUrl: string;
+  aspectRatio: string;
+  model: ImageModel;
+  quality: ImageQuality;
+}
+
+interface StartedImageGeneration<TTask> {
+  response: AsyncImageGenerationResponse;
+  task: TTask;
+}
+
+interface CompletedImageGeneration {
+  jobId: string;
+  objectKey: string;
+  publicUrl: string;
+}
+
 async function assertCreemPromptSequenceAllowed(input: {
   userPrompt?: string | null;
   finalPrompt: string;
@@ -53,17 +109,9 @@ async function assertCreemPromptSequenceAllowed(input: {
   }
 }
 
-export async function generateTextImage(input: {
-  userId: string;
-  prompt: string;
-  aspectRatio?: string;
-  model?: ImageModel;
-  quality?: ImageQuality;
-}): Promise<{
-  jobId: string;
-  objectKey: string;
-  publicUrl: string;
-}> {
+export async function startTextImageGeneration(
+  input: TextImageGenerationInput
+): Promise<StartedImageGeneration<TextImageGenerationTask>> {
   const rateLimit = await checkRateLimit(input.userId, "image:text");
   if (!rateLimit.allowed) {
     throw new Error(`Rate limit exceeded. Resets at ${new Date(rateLimit.resetAt).toISOString()}`);
@@ -96,26 +144,55 @@ export async function generateTextImage(input: {
     throw new Error("Failed to create generation job");
   }
 
-  let creditFrozen = false;
-
   try {
-    await creditService.freeze({
+    const freezeResult = await creditService.freeze({
       userId: input.userId,
       credits: imageCreditCost,
       videoUuid: job.id,
     });
-    creditFrozen = true;
+    if (!freezeResult.success) {
+      throw new Error(`Insufficient credits. Required: ${imageCreditCost}`);
+    }
+  } catch (error) {
+    await updateImageGenerationJobStatus(job.id, "FAILED", {
+      errorMessage: error instanceof Error ? error.message : "Unknown error",
+    });
+    throw error;
+  }
 
-    await updateImageGenerationJobStatus(job.id, "RUNNING");
-
-    console.log(`[text-generate] Job ${job.id}: Calling AI model ${effectiveModel}...`);
-    const result = await generateImage({
+  return {
+    response: {
+      jobId: job.id,
+      status: job.status as "QUEUED" | "RUNNING",
+      creditsUsed: imageCreditCost,
+    },
+    task: {
+      jobId: job.id,
+      userId: input.userId,
       prompt: finalPrompt,
-      aspectRatio: (input.aspectRatio || "1:1") as "1:1" | "16:9" | "9:16" | "3:4",
+      aspectRatio: input.aspectRatio,
       model: effectiveModel,
       quality: effectiveQuality,
+    },
+  };
+}
+
+export async function runStartedTextImageGeneration(
+  task: TextImageGenerationTask
+): Promise<CompletedImageGeneration> {
+  let creditFrozen = true;
+
+  try {
+    await updateImageGenerationJobStatus(task.jobId, "RUNNING");
+
+    console.log(`[text-generate] Job ${task.jobId}: Calling AI model ${task.model}...`);
+    const result = await generateImage({
+      prompt: task.prompt,
+      aspectRatio: (task.aspectRatio || "1:1") as "1:1" | "16:9" | "9:16" | "3:4",
+      model: task.model,
+      quality: task.quality,
     });
-    console.log(`[text-generate] Job ${job.id}: AI model returned successfully.`);
+    console.log(`[text-generate] Job ${task.jobId}: AI model returned successfully.`);
 
     const imageUrl = result.imageUrls?.[0] ?? result.base64ImageList?.[0];
     if (!imageUrl) {
@@ -123,9 +200,9 @@ export async function generateTextImage(input: {
     }
 
     const key = buildImageObjectKey({
-      userId: input.userId,
+      userId: task.userId,
       kind: "result",
-      filename: `${job.id}.png`,
+      filename: `${task.jobId}.png`,
     });
 
     const uploaded = await persistGeneratedImage({
@@ -135,48 +212,45 @@ export async function generateTextImage(input: {
       storage: getStorage(),
       allowTemporaryUrlFallback: shouldAllowTemporaryImageUrlFallback(),
     });
-    console.log(`[text-generate] Job ${job.id}: Image saved to ${uploaded.key}`);
+    console.log(`[text-generate] Job ${task.jobId}: Image saved to ${uploaded.key}`);
 
-    await updateImageGenerationJobStatus(job.id, "SUCCEEDED", {
+    await creditService.settle(task.jobId);
+    creditFrozen = false;
+
+    await updateImageGenerationJobStatus(task.jobId, "SUCCEEDED", {
       resultImageKey: uploaded.key,
       resultImageUrl: uploaded.url,
     });
 
-    await creditService.settle(job.id);
-    creditFrozen = false;
-    await incrementRateLimit(input.userId, "image:text");
+    await incrementRateLimit(task.userId, "image:text");
 
     return {
-      jobId: job.id,
+      jobId: task.jobId,
       objectKey: uploaded.key,
       publicUrl: uploaded.url,
     };
   } catch (error) {
-    console.error(`[text-generate] Job ${job.id} failed:`, error);
-    await updateImageGenerationJobStatus(job.id, "FAILED", {
+    console.error(`[text-generate] Job ${task.jobId} failed:`, error);
+    await updateImageGenerationJobStatus(task.jobId, "FAILED", {
       errorMessage: error instanceof Error ? error.message : "Unknown error",
     });
     if (creditFrozen) {
-      try { await creditService.release(job.id); } catch {}
+      try { await creditService.release(task.jobId); } catch {}
     }
     throw error;
   }
 }
 
-export async function generateRemixImage(input: {
-  userId: string;
-  classicImageId?: string;
-  classicImageSlug?: string;
-  sourceImageKey: string;
-  prompt?: string;
-  aspectRatio?: string;
-  model?: ImageModel;
-  quality?: ImageQuality;
-}): Promise<{
-  jobId: string;
-  objectKey: string;
-  publicUrl: string;
-}> {
+export async function generateTextImage(
+  input: TextImageGenerationInput
+): Promise<CompletedImageGeneration> {
+  const started = await startTextImageGeneration(input);
+  return runStartedTextImageGeneration(started.task);
+}
+
+export async function startRemixImageGeneration(
+  input: RemixImageGenerationInput
+): Promise<StartedImageGeneration<RemixImageGenerationTask>> {
   const rateLimit = await checkRateLimit(input.userId, "image:remix");
   if (!rateLimit.allowed) {
     throw new Error(`Rate limit exceeded. Resets at ${new Date(rateLimit.resetAt).toISOString()}`);
@@ -250,25 +324,56 @@ export async function generateRemixImage(input: {
     throw new Error("Failed to create generation job");
   }
 
-  let creditFrozenRemix = false;
-
   try {
-    await creditService.freeze({
+    const freezeResult = await creditService.freeze({
       userId: input.userId,
       credits: imageCreditCost,
       videoUuid: job.id,
     });
-    creditFrozenRemix = true;
+    if (!freezeResult.success) {
+      throw new Error(`Insufficient credits. Required: ${imageCreditCost}`);
+    }
+  } catch (error) {
+    await updateImageGenerationJobStatus(job.id, "FAILED", {
+      errorMessage: error instanceof Error ? error.message : "Unknown error",
+    });
+    throw error;
+  }
 
-    await updateImageGenerationJobStatus(job.id, "RUNNING");
-
-    const result = await remixImage({
+  return {
+    response: {
+      jobId: job.id,
+      status: job.status as "QUEUED" | "RUNNING",
+      creditsUsed: imageCreditCost,
+    },
+    task: {
+      jobId: job.id,
+      userId: input.userId,
       prompt: finalPrompt,
-      sceneImageUrl,
       sourceImageUrl,
+      sceneImageUrl,
       aspectRatio: finalAspectRatio,
       model: effectiveModel,
       quality: effectiveQuality,
+    },
+  };
+}
+
+export async function runStartedRemixImageGeneration(
+  task: RemixImageGenerationTask
+): Promise<CompletedImageGeneration> {
+  let creditFrozen = true;
+
+  try {
+    await updateImageGenerationJobStatus(task.jobId, "RUNNING");
+
+    const result = await remixImage({
+      prompt: task.prompt,
+      sceneImageUrl: task.sceneImageUrl,
+      sourceImageUrl: task.sourceImageUrl,
+      aspectRatio: task.aspectRatio,
+      model: task.model,
+      quality: task.quality,
     });
 
     const imageUrl = result.imageUrls?.[0] ?? result.base64ImageList?.[0];
@@ -277,40 +382,48 @@ export async function generateRemixImage(input: {
     }
 
     const key = buildImageObjectKey({
-      userId: input.userId,
+      userId: task.userId,
       kind: "result",
-      filename: `${job.id}.png`,
+      filename: `${task.jobId}.png`,
     });
 
     const uploaded = await persistGeneratedImage({
       imageData: imageUrl,
       key,
       contentType: "image/png",
-      storage,
+      storage: getStorage(),
       allowTemporaryUrlFallback: shouldAllowTemporaryImageUrlFallback(),
     });
 
-    await updateImageGenerationJobStatus(job.id, "SUCCEEDED", {
+    await creditService.settle(task.jobId);
+    creditFrozen = false;
+
+    await updateImageGenerationJobStatus(task.jobId, "SUCCEEDED", {
       resultImageKey: uploaded.key,
       resultImageUrl: uploaded.url,
     });
 
-    await creditService.settle(job.id);
-    creditFrozenRemix = false;
-    await incrementRateLimit(input.userId, "image:remix");
+    await incrementRateLimit(task.userId, "image:remix");
 
     return {
-      jobId: job.id,
+      jobId: task.jobId,
       objectKey: uploaded.key,
       publicUrl: uploaded.url,
     };
   } catch (error) {
-    await updateImageGenerationJobStatus(job.id, "FAILED", {
+    await updateImageGenerationJobStatus(task.jobId, "FAILED", {
       errorMessage: error instanceof Error ? error.message : "Unknown error",
     });
-    if (creditFrozenRemix) {
-      try { await creditService.release(job.id); } catch {}
+    if (creditFrozen) {
+      try { await creditService.release(task.jobId); } catch {}
     }
     throw error;
   }
+}
+
+export async function generateRemixImage(
+  input: RemixImageGenerationInput
+): Promise<CompletedImageGeneration> {
+  const started = await startRemixImageGeneration(input);
+  return runStartedRemixImageGeneration(started.task);
 }
