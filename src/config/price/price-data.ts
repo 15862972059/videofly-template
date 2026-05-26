@@ -81,13 +81,13 @@ function generatePriceData() {
       benefits: {
         zh: [
           "每月 80 积分",
-          "GPT-Image-2 核心模型访问",
+          "AI image generation access",
           "AI 图片生成与重绘",
           "商业使用授权",
         ],
         en: [
           "80 credits/month",
-          "GPT-Image-2 Core Model Access",
+          "AI image generation access",
           "AI image generation and remix",
           "Commercial license",
         ],
@@ -106,14 +106,14 @@ function generatePriceData() {
       benefits: {
         zh: [
           "每月 220 积分",
-          "GPT-Image-2 核心模型访问",
+          "AI image generation access",
           "AI 图片生成与重绘",
           "商业使用授权",
           "优先支持",
         ],
         en: [
           "220 credits/month",
-          "GPT-Image-2 Core Model Access",
+          "AI image generation access",
           "AI image generation and remix",
           "Commercial license",
           "Priority customer support",
@@ -133,7 +133,7 @@ function generatePriceData() {
       benefits: {
         zh: [
           "每月 700 积分",
-          "GPT-Image-2 核心模型访问",
+          "AI image generation access",
           "AI 图片生成与重绘",
           "商业使用授权",
           "优先支持",
@@ -141,7 +141,7 @@ function generatePriceData() {
         ],
         en: [
           "700 credits/month",
-          "GPT-Image-2 Core Model Access",
+          "AI image generation access",
           "AI image generation and remix",
           "Commercial license",
           "Priority customer support",

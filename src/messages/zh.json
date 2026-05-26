@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "AI Art - AI 图片生成平台",
-    "description": "使用 MiniMax 创建惊人的 AI 生成的图片和重新混合您的照片"
+    "description": "使用 AI2ART 创建 AI 生成图片和照片重绘作品"
   },
   "Common": {
     "login": "登录",
@@ -32,7 +32,7 @@
     "settings": "设置"
   },
   "Hero": {
-    "badge": "由 MiniMax AI 驱动",
+    "badge": "Powered by GPT Image 2",
     "title": "将您的照片转化为惊艳的 AI 艺术作品",
     "subtitle": "用 AI",
     "description": "在几秒钟内创建专业的 AI 生成图片。浏览画廊模板，将照片重混到美丽场景中，或用文本生成图片。",
@@ -204,7 +204,7 @@
     "contact": "还有其他问题？请联系我们",
     "general": {
       "question": "什么是 AI2ART？",
-      "answer": "AI2ART 是一个领先的 AI 视频生成平台，让您能在几分钟内将文本和图片转化为高质量视频。由 Sora 2 和 Veo 3.1 等先进模型驱动，无需昂贵的设备即可让您的创意变为现实。"
+      "answer": "AI2ART 是一个 AI 图片生成和照片重绘平台，可将文本提示词和上传图片转化为精美视觉作品。服务由 GPT Image 2 提供支持，AI2ART 是独立产品。"
     },
     "commercial": {
       "question": "我可以将视频用于商业用途吗？",
@@ -212,7 +212,7 @@
     },
     "aiModels": {
       "question": "你们使用哪些 AI 模型？",
-      "answer": "我们会集成业界最顶尖的视频生成模型，包括 Sora 2、Veo 3.1 等。我们会持续更新平台，确保为您提供最新、最强大的模型能力。"
+      "answer": "AI2ART 当前使用 GPT Image 2 支持图片生成和重绘工作流。AI2ART 是独立产品，不隶属于模型提供方，也未获得其背书。"
     },
     "credits": {
       "question": "积分系统是如何工作的？",
@@ -279,7 +279,7 @@
       "priority_support": "优先支持",
       "api_access": "??????",
       "custom_models": "自定义 AI 模型",
-      "gpt_image_2_access": "GPT-Image-2 ????"
+      "gpt_image_2_access": "AI image generation access"
     }
   },
   "VideoGenerator": {
@@ -396,7 +396,7 @@
       "features": "使用 AI2ART，您可以：",
       "featuresList": {
         "generate": "在几分钟内生成精彩的 AI 视频",
-        "models": "使用 Sora 2、Veo 3.1 等多种 AI 模型",
+        "models": "使用 AI2ART 的图片生成工作流",
         "share": "随时随地下载和分享您的作品"
       },
       "cta": "开始创作视频",
@@ -435,7 +435,7 @@
       "features": "使用 AI2ART，您可以：",
       "featuresList": {
         "generate": "在几分钟内生成精彩的 AI 视频",
-        "models": "使用 Sora 2、Veo 3.1 等多种 AI 模型",
+        "models": "使用 AI2ART 的图片生成工作流",
         "share": "随时随地下载和分享您的作品"
       },
       "cta": "开始创作视频",

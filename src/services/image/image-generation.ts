@@ -88,7 +88,7 @@ interface CompletedImageGeneration {
   publicUrl: string;
 }
 
-async function assertCreemPromptSequenceAllowed(input: {
+async function assertPromptSequenceAllowed(input: {
   userPrompt?: string | null;
   finalPrompt: string;
   externalIdBase: string;
@@ -100,12 +100,14 @@ async function assertCreemPromptSequenceAllowed(input: {
     await assertCreemPromptAllowed(userPrompt, {
       externalId: `${input.externalIdBase}:user_prompt`,
     });
+    assertPromptAllowed(userPrompt);
   }
 
   if (!userPrompt || finalPrompt !== userPrompt) {
     await assertCreemPromptAllowed(finalPrompt, {
       externalId: `${input.externalIdBase}:final_prompt`,
     });
+    assertPromptAllowed(finalPrompt);
   }
 }
 
@@ -121,12 +123,11 @@ export async function startTextImageGeneration(
   const effectiveQuality = normalizeImageQuality(effectiveModel, input.quality);
   const imageCreditCost = getImageCreditCost(effectiveModel, effectiveQuality);
   const finalPrompt = buildTextPrompt({ userPrompt: input.prompt });
-  await assertCreemPromptSequenceAllowed({
+  await assertPromptSequenceAllowed({
     userPrompt: input.prompt,
     finalPrompt,
     externalIdBase: `user_${input.userId}:image_text`,
   });
-  assertPromptAllowed(finalPrompt);
 
   const job = await createImageGenerationJob({
     userId: input.userId,
@@ -294,12 +295,11 @@ export async function startRemixImageGeneration(
         userPrompt: input.prompt,
         promptTemplate: classicImage.prompt_template,
       });
-  await assertCreemPromptSequenceAllowed({
+  await assertPromptSequenceAllowed({
     userPrompt: input.prompt,
     finalPrompt,
     externalIdBase: `user_${input.userId}:image_remix`,
   });
-  assertPromptAllowed(finalPrompt);
 
   const finalAspectRatio = input.aspectRatio ?? inferRemixAspectRatio({
     classicTitle: classicImage.title,

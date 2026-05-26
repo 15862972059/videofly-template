@@ -55,18 +55,18 @@ export function ModelIntroSection() {
 
             <BlurFade delay={0.1} inView>
               <h2 className="font-bold text-4xl text-slate-800 leading-tight tracking-tight dark:text-white md:text-5xl lg:text-6xl">
-                Built With
+                Built For
                 <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent dark:from-emerald-400 dark:via-teal-300 dark:to-emerald-400">
-                  {" GPT-Image-2"}
+                  {" Guided Image Remixing"}
                 </span>
               </h2>
             </BlurFade>
 
             <BlurFade delay={0.15} inView>
               <p className="max-w-2xl text-lg text-slate-600 leading-relaxed dark:text-slate-300">
-                AI2ART provides a focused creative interface built on top of{" "}
-                <strong className="font-bold text-slate-800 dark:text-white">GPT-Image-2</strong>{" "}
-                for detailed, style-aware image generation. AI2ART is an independent product and is not affiliated with or endorsed by underlying AI model providers.
+                AI2ART provides a focused creative interface for detailed, style-aware image generation. The service is powered by{" "}
+                <strong className="font-bold text-slate-800 dark:text-white">GPT Image 2</strong>.{" "}
+                AI2ART is an independent product and is not affiliated with or endorsed by underlying AI model providers.
               </p>
             </BlurFade>
 

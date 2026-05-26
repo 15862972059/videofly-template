@@ -21,7 +21,7 @@ export function HeroSection() {
             <div className="space-y-6 w-full flex flex-col items-center lg:items-start">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
                 <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                Powered by GPT-Image-2
+                Powered by GPT Image 2
               </div>
 
               <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-slate-800 dark:text-white md:text-6xl lg:text-6xl xl:text-7xl">
@@ -29,7 +29,7 @@ export function HeroSection() {
               </h1>
 
               <p className="max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-300 md:text-lg">
-                Choose a destination, upload a photo you have rights to use, and let AI2ART remix it with <strong>GPT-Image-2</strong> into polished artwork.
+                Choose a destination, upload a photo you have rights to use, and let AI2ART turn it into polished artwork.
               </p>
 
               <div className="flex flex-wrap justify-center lg:justify-start gap-2">
@@ -85,7 +85,7 @@ export function HeroSection() {
                       AI Model
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                      Powered by <strong className="text-emerald-700 dark:text-emerald-300 font-bold">GPT-Image-2</strong> for detailed, style-aware image generation.
+                      Powered by <strong className="text-emerald-700 dark:text-emerald-300 font-bold">GPT Image 2</strong> for detailed, style-aware image generation.
                     </p>
                   </div>
                   <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/80 p-4 text-left dark:bg-emerald-500/10 flex flex-col justify-center">

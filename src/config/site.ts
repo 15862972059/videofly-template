@@ -24,7 +24,7 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   name: "AI2ART",
-  description: "AI photo remix and art generation platform powered by MiniMax",
+  description: "AI photo remix and art generation platform powered by GPT Image 2",
   url: process.env.NEXT_PUBLIC_APP_URL || "https://ai2art.net",
   ogImage: "/og.png",
   links: {},

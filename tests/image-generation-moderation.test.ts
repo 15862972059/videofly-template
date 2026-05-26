@@ -139,4 +139,25 @@ describe("image generation Creem moderation", () => {
       "RUNNING"
     );
   });
+
+  test("blocks locally prohibited text prompts after Creem allows them", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ decision: "allow" }), { status: 200 })
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { startTextImageGeneration } = await import("@/services/image/image-generation");
+
+    await expect(
+      startTextImageGeneration({
+        userId: "user_1",
+        prompt: "generate a nude explicit portrait",
+      })
+    ).rejects.toThrow("violates our content policy");
+
+    expect(fetchMock).toHaveBeenCalled();
+    expect(createImageGenerationJobMock).not.toHaveBeenCalled();
+    expect(freezeMock).not.toHaveBeenCalled();
+    expect(generateImageMock).not.toHaveBeenCalled();
+  });
 });

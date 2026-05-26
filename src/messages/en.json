@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "AI Art - AI Photo Generation Platform",
-    "description": "Create stunning AI-generated photos and remix your images with MiniMax"
+    "description": "Create AI-generated photos and guided image remixes with AI2ART"
   },
   "Common": {
     "login": "Login",
@@ -32,7 +32,7 @@
     "settings": "Settings"
   },
   "Hero": {
-    "badge": "Powered by MiniMax AI",
+    "badge": "Powered by GPT Image 2",
     "title": "Transform Your Photos Into Stunning AI Art",
     "subtitle": "with AI",
     "description": "Create professional AI-generated images in seconds. Browse gallery templates, remix your photos into beautiful scenes, or generate images from text.",
@@ -142,7 +142,7 @@
     },
     "ai": {
       "title": "Advanced AI",
-      "description": "Powered by the latest AI video generation models"
+      "description": "Guided AI image generation and remix workflow"
     }
   },
   "HowItWorks": {
@@ -204,23 +204,23 @@
     "contact": "Still have questions? Contact us at",
     "general": {
       "question": "What is AI2ART?",
-      "answer": "AI2ART is a cutting-edge AI video generation platform that allows you to transform text and images into high-quality videos in minutes. Powered by advanced models like Sora 2 and Veo 3.1, it enables creators to bring their visions to life without expensive equipment."
+      "answer": "AI2ART is an AI image generation and photo remix platform for turning text prompts and uploaded images into polished visuals. The service is powered by GPT Image 2 and is independent from the underlying model provider."
     },
     "commercial": {
-      "question": "Can I use the videos for commercial purposes?",
-      "answer": "Yes! Videos generated with our Pro and Team plans come with a full commercial license, allowing you to use them in your marketing, social media, and commercial projects."
+      "question": "Can I use the images for commercial purposes?",
+      "answer": "Yes. Images generated with eligible paid plans include a commercial license, allowing you to use them in marketing, social media, and commercial projects subject to our terms."
     },
     "aiModels": {
       "question": "Which AI models do you use?",
-      "answer": "We integrate the industry's best video generation models, including Sora 2, Veo 3.1, and others. We continuously update our platform to include the latest and most capable models available."
+      "answer": "AI2ART currently uses GPT Image 2 for image generation and remix workflows. AI2ART is an independent product and is not affiliated with or endorsed by the model provider."
     },
     "credits": {
       "question": "How does the credit system work?",
-      "answer": "You use credits to generate videos. Different models and video durations consume different amounts of credits. You can purchase credit packs or subscribe to a monthly plan to receive a steady supply of credits at a discount."
+      "answer": "You use credits to generate or remix images. You can purchase credit packs or subscribe to a monthly plan to receive a steady supply of credits at a discount."
     },
     "refund": {
       "question": "Do you offer refunds?",
-      "answer": "We offer a satisfaction guarantee. If a generated video fails due to a system error, we will refund the credits. For subscription payments, please contact our support team within 7 days if you're not satisfied."
+      "answer": "We offer a satisfaction guarantee. If an image generation fails due to a system error, we will refund the credits. For subscription payments, please contact our support team within 7 days if you're not satisfied."
     },
     "support": {
       "question": "How can I get support?",
@@ -279,7 +279,7 @@
       "priority_support": "Priority support",
       "api_access": "Team collaboration perks",
       "custom_models": "Custom AI art styles",
-      "gpt_image_2_access": "GPT-Image-2 access"
+      "gpt_image_2_access": "AI image generation access"
     }
   },
   "VideoGenerator": {
@@ -395,11 +395,11 @@
       "body": "Thank you for joining AI2ART! We're thrilled to have you on board.",
       "features": "With AI2ART, you can:",
       "featuresList": {
-        "generate": "Generate stunning AI videos in minutes",
-        "models": "Use multiple AI models like Sora 2, Veo 3.1, and more",
+        "generate": "Generate polished AI images and remixes",
+        "models": "Use AI2ART's guided image generation workflow",
         "share": "Download and share your creations anywhere"
       },
-      "cta": "Start Creating Videos",
+      "cta": "Start Creating Images",
       "footer": "If you have any questions, feel free to reach out to our support team."
     },
     "resetPassword": {
@@ -434,11 +434,11 @@
       "body": "Thank you for joining AI2ART! We're thrilled to have you on board.",
       "features": "With AI2ART, you can:",
       "featuresList": {
-        "generate": "Generate stunning AI videos in minutes",
-        "models": "Use multiple AI models like Sora 2, Veo 3.1, and more",
+        "generate": "Generate polished AI images and remixes",
+        "models": "Use AI2ART's guided image generation workflow",
         "share": "Download and share your creations anywhere"
       },
-      "cta": "Start Creating Videos",
+      "cta": "Start Creating Images",
       "footer": "If you have any questions, feel free to reach out to our support team.",
       "copyright": "© {year} AI2ART. All rights reserved."
     },

@@ -65,7 +65,7 @@ export const sidebarNavigation: NavGroup[] = [
 ];
 
 // 落地页顶部导航 - Models 下拉菜单
-// Hidden: image generation uses a single MiniMax model, no model selection dropdown
+// Hidden: image generation uses a single configured model, no model selection dropdown
 export const headerModels: typeof headerTools = [];
 
 // 落地页顶部导航 - Tools 下拉菜单

@@ -215,7 +215,7 @@ export function ToolLandingPage({
               transition={{ duration: 0.5, delay: 0.3 }}
               className="space-y-4"
             >
-              <h3 className="text-lg font-semibold text-center">Powered by Leading AI Models</h3>
+              <h3 className="text-lg font-semibold text-center">Supported Generation Options</h3>
               <div className="flex flex-wrap justify-center gap-3">
                 {landing.supportedModels.map((model, index: number) => (
                   <motion.div

@@ -10,7 +10,7 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-1",
       question: "积分是如何工作的？",
       answer:
-        "每次图片生成或重绘会消耗积分。新用户注册后可获得 1 个免费积分，用来体验 GPT-Image-2 基础生成能力。",
+        "每次图片生成或重绘会消耗积分。新用户注册后可获得 1 个免费积分，用来体验图片生成工作流。",
     },
     {
       id: "item-2",
@@ -48,7 +48,7 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-1",
       question: "How do credits work?",
       answer:
-        "Each image generation or remix uses credits. New users receive 1 free credit to try the GPT-Image-2 workflow.",
+        "Each image generation or remix uses credits. New users receive 1 free credit to try the image generation workflow.",
     },
     {
       id: "item-2",
@@ -86,7 +86,7 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-1",
       question: "クレジットはどのように使われますか？",
       answer:
-        "画像生成やリミックスごとにクレジットを消費します。新規ユーザーには GPT-Image-2 を試せる 1 クレジットが付与されます。",
+        "画像生成やリミックスごとにクレジットを消費します。新規ユーザーには画像生成ワークフローを試せる 1 クレジットが付与されます。",
     },
     {
       id: "item-2",
@@ -124,7 +124,7 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-1",
       question: "크레딧은 어떻게 사용되나요?",
       answer:
-        "이미지 생성이나 리믹스마다 크레딧이 차감됩니다. 신규 사용자는 GPT-Image-2를 체험할 수 있도록 무료 1크레딧을 받습니다.",
+        "이미지 생성이나 리믹스마다 크레딧이 차감됩니다. 신규 사용자는 이미지 생성 워크플로를 체험할 수 있도록 무료 1크레딧을 받습니다.",
     },
     {
       id: "item-2",
