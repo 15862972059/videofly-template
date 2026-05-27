@@ -64,8 +64,12 @@ async function scanPages(
           .replace(/^\//, '')                     // 移除开头的斜杠
           || '/';                                 // 根路径
 
-        // 跳过 dashboard、admin 等不需要 SEO 的页面
-        const skipRoutes = ['dashboard', 'admin', 'auth', 'login', 'register', 'settings'];
+        // 跳过 dashboard、admin 等不需要 SEO 的页面，以及已被弃用/重定向的视频模型和工具页面
+        const skipRoutes = [
+          'dashboard', 'admin', 'auth', 'login', 'register', 'settings',
+          'sora-2', 'veo-3-1', 'wan-2-6', 'seedance-1-5',
+          'image-to-video', 'reference-to-video', 'text-to-video', 'studio'
+        ];
         if (skipRoutes.some(route => routePath.includes(route))) {
           continue;
         }

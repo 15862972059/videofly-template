@@ -15,7 +15,7 @@ export default function robots(): MetadataRoute.Robots {
       // anthropic-ai (Anthropic)
       userAgent: "*",
       allow: "/",
-      disallow: ["/api/", "/dashboard/", "/admin/", "/auth/"],
+      disallow: ["/api/", "/dashboard/", "/admin/", "/auth/", "/studio/"],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };
