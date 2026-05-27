@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import {
   Accordion,
@@ -10,34 +11,23 @@ import {
 } from "@/components/ui/accordion";
 import { BlurFade } from "@/components/magicui/blur-fade";
 
-const faqData = [
-  {
-    question: "What is AI2ART?",
-    answer: "AI2ART is an AI photo generation and remix platform. You can choose a destination scene, upload a portrait, and generate realistic artwork in seconds.",
-  },
-  {
-    question: "Can I use AI2ART without writing prompts?",
-    answer: "Yes. The gallery templates and built-in scene idea helper let you start from a visual direction, then refine the prompt only if you want more control.",
-  },
-  {
-    question: "Will it preserve my identity and outfit?",
-    answer: "The photo remix workflow is designed to keep recognizable details from photos you own or have permission to use while adapting lighting, scenery, and style to the selected template.",
-  },
-  {
-    question: "Can I use generated images commercially?",
-    answer: "Paid plans include commercial usage rights for generated assets. Always make sure uploaded reference images are yours or licensed for your use.",
-  },
-  {
-    question: "How do credits work?",
-    answer: "Each generation uses credits based on output type and quality. New users receive free credits to try the workflow before upgrading.",
-  },
-  {
-    question: "Do you support text-to-image too?",
-    answer: "Yes. AI2ART supports both photo remix and text-to-image, so you can create from a portrait, a scene template, or a written prompt.",
-  },
-];
+const faqKeys = [
+  "general",
+  "commercial",
+  "aiModels",
+  "credits",
+  "refund",
+  "support",
+] as const;
 
 export function FAQSection() {
+  const t = useTranslations("FAQ");
+
+  const faqData = faqKeys.map((key) => ({
+    question: t(`${key}.question`),
+    answer: t(`${key}.answer`),
+  }));
+
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -64,7 +54,7 @@ export function FAQSection() {
                 viewport={{ once: true }}
                 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-white md:text-5xl"
               >
-                Frequently Asked Questions
+                {t("title")}
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -73,7 +63,7 @@ export function FAQSection() {
                 transition={{ delay: 0.1 }}
                 className="mt-4 text-base text-slate-600 dark:text-slate-300"
               >
-                Everything you need to know before creating with AI2ART.
+                {t("subtitle")}
               </motion.p>
             </div>
           </BlurFade>
@@ -106,7 +96,7 @@ export function FAQSection() {
 
           <BlurFade delay={0.35} inView>
             <div className="mt-10 rounded-2xl border border-emerald-900/10 bg-emerald-50 p-5 text-center text-sm text-slate-600 dark:bg-emerald-500/10 dark:text-slate-300">
-              Still have questions? Contact us at{" "}
+              {t("contact")}{" "}
               <a href="mailto:support@ai2art.net" className="font-semibold text-emerald-700 hover:underline dark:text-emerald-300">
                 support@ai2art.net
               </a>

@@ -32,12 +32,12 @@ export async function generateMetadata({ params }: PageMetadataProps) {
 
   const titles = {
     en: "AI2ART - AI Photo Remix & Art Generator",
-    zh: "AI2ART - AI Photo Remix & Art Generator",
+    zh: "AI2ART - AI照片重绘与艺术生成平台",
   };
 
   const descriptions = {
     en: "Turn authorized photos into polished AI art. Choose a destination scene, upload a portrait you have rights to use, and export polished images.",
-    zh: "Turn authorized photos into polished AI art. Choose a destination scene, upload a portrait you have rights to use, and export polished images.",
+    zh: "将照片转换为惊艳的 AI 艺术作品。选择目的地场景，上传肖像照片，轻松生成并导出精美的AI重绘图片。基于 GPT Image 2 提供支持。",
   };
 
   const canonicalUrl = `${siteConfig.url}${locale === i18n.defaultLocale ? "" : `/${locale}`}`;
