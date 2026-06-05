@@ -30,7 +30,7 @@ export const ModalProvider = ({
             signInModal.onClose();
           }
         }}>
-          <DialogContent className="p-0 gap-0 max-w-md">
+          <DialogContent className="w-[calc(100vw-2rem)] max-w-[28rem] gap-0 overflow-hidden rounded-[28px] border border-slate-200/90 bg-white p-0 shadow-[0_24px_80px_rgba(15,23,42,0.16)] md:rounded-[28px]">
             {/* Hidden title for accessibility */}
             <DialogTitle className="sr-only">
               Sign In
