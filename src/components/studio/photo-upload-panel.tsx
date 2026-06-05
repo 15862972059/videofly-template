@@ -71,61 +71,55 @@ export function PhotoUploadPanel({
   );
 
   return (
-    <div className="flex flex-1 flex-col min-w-0">
-      <div className="mb-3 flex items-start justify-between gap-3">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-600 dark:bg-slate-800 dark:text-slate-400">
-            <UserRound className="h-3.5 w-3.5" />
-            Step 2
+    <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3 dark:border-slate-800">
+        <div className="flex min-w-0 items-center gap-2">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-300">
+            <UserRound className="h-4 w-4" />
           </div>
-          <h3 className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">
-            Upload Your Photo
-          </h3>
+          <div className="min-w-0">
+            <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">Source photo</h3>
+            <p className="truncate text-xs text-slate-500 dark:text-slate-400">Portrait or subject image</p>
+          </div>
         </div>
         {preview && (
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700">
+          <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
             <CheckCircle2 className="h-3.5 w-3.5" />
-            Uploaded
+            Ready
           </div>
         )}
       </div>
 
-      <div className="overflow-hidden rounded-[1.5rem] border border-slate-200 dark:border-slate-700 bg-[linear-gradient(180deg,_#f8fafc_0%,_#ffffff_100%)] dark:bg-[linear-gradient(180deg,_#1e293b_0%,_#0f172a_100%)]">
+      <div className="bg-slate-50 p-3 dark:bg-slate-900/50">
         {preview ? (
-          <div className="relative">
+          <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
             <img
               src={preview}
               alt="Uploaded preview"
-              className="h-[320px] w-full object-contain"
+              className="h-[190px] w-full object-contain"
             />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent p-5 text-white">
-              <p className="text-sm font-semibold">Portrait ready</p>
-              <p className="mt-1 text-xs text-white/75">
-                We will preserve identity, outfit, and full-body framing.
-              </p>
-            </div>
             <Button
               variant="secondary"
               size="sm"
-              className="absolute right-4 top-4 rounded-full bg-white/90 text-slate-900 hover:bg-white"
+              className="absolute right-2 top-2 h-8 rounded-lg bg-white/95 px-2.5 text-xs text-slate-900 shadow-sm hover:bg-white"
               onClick={() => {
                 setPreview(null);
                 onUploadStateChange?.(false);
                 onClear?.();
               }}
             >
-              <X className="mr-1.5 h-3.5 w-3.5" />
-              Remove
+              <X className="mr-1 h-3.5 w-3.5" />
+              Replace
             </Button>
           </div>
         ) : (
-          <label className="flex h-[320px] cursor-pointer flex-col items-center justify-center px-6 py-10 text-center transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
-            <div className="mb-4 rounded-full bg-white dark:bg-slate-800 p-4 shadow-sm ring-1 ring-slate-100 dark:ring-slate-700">
-              <Upload className="h-7 w-7 text-slate-400" />
+          <label className="flex h-[190px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white px-5 py-8 text-center transition hover:border-slate-400 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:hover:border-slate-500 dark:hover:bg-slate-900">
+            <div className="mb-3 rounded-xl bg-slate-100 p-3 dark:bg-slate-900">
+              <Upload className="h-5 w-5 text-slate-500 dark:text-slate-400" />
             </div>
-            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Drop a portrait or click to upload</span>
-            <span className="mt-2 max-w-xs text-xs leading-5 text-slate-500 dark:text-slate-400">
-              JPEG, PNG, WebP, or GIF up to 10MB.
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Upload portrait</span>
+            <span className="mt-1 max-w-[220px] text-xs leading-5 text-slate-500 dark:text-slate-400">
+              JPG, PNG, WebP, or GIF under 10MB.
             </span>
             <input
               type="file"
@@ -138,8 +132,12 @@ export function PhotoUploadPanel({
         )}
       </div>
 
-      {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
-      {uploading && <p className="mt-3 text-sm text-slate-500">Uploading your portrait...</p>}
-    </div>
+      {(error || uploading) && (
+        <div className="border-t border-slate-100 px-4 py-3 text-sm dark:border-slate-800">
+          {error && <p className="text-destructive">{error}</p>}
+          {uploading && <p className="text-slate-500 dark:text-slate-400">Uploading portrait...</p>}
+        </div>
+      )}
+    </section>
   );
 }

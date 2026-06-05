@@ -55,6 +55,7 @@ export async function POST(request: Request) {
       aspectRatio: parsed.data.aspectRatio,
       model: parsed.data.model,
       quality: parsed.data.quality,
+      resolution: parsed.data.resolution,
     });
 
     after(async () => {

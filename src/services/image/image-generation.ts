@@ -1,8 +1,9 @@
 import { generateImage, remixImage } from "@/ai/images";
-import type { ImageModel, ImageQuality } from "@/ai/images/types";
+import type { ImageModel, ImageQuality, ImageResolution } from "@/ai/images/types";
 import {
   IMAGE_MODELS,
   getImageCreditCost,
+  normalizeImageResolution,
   normalizeImageQuality,
 } from "@/ai/images/types";
 import { creditService } from "@/services/credit";
@@ -44,6 +45,7 @@ interface TextImageGenerationInput {
   aspectRatio?: string;
   model?: ImageModel;
   quality?: ImageQuality;
+  resolution?: ImageResolution;
 }
 
 interface TextImageGenerationTask {
@@ -53,6 +55,7 @@ interface TextImageGenerationTask {
   aspectRatio?: string;
   model: ImageModel;
   quality: ImageQuality;
+  resolution: ImageResolution;
 }
 
 interface RemixImageGenerationInput {
@@ -64,6 +67,7 @@ interface RemixImageGenerationInput {
   aspectRatio?: string;
   model?: ImageModel;
   quality?: ImageQuality;
+  resolution?: ImageResolution;
 }
 
 interface RemixImageGenerationTask {
@@ -75,6 +79,7 @@ interface RemixImageGenerationTask {
   aspectRatio: string;
   model: ImageModel;
   quality: ImageQuality;
+  resolution: ImageResolution;
 }
 
 interface StartedImageGeneration<TTask> {
@@ -121,7 +126,12 @@ export async function startTextImageGeneration(
 
   const effectiveModel = "gpt-image-2";
   const effectiveQuality = normalizeImageQuality(effectiveModel, input.quality);
-  const imageCreditCost = getImageCreditCost(effectiveModel, effectiveQuality);
+  const effectiveResolution = normalizeImageResolution(effectiveModel, input.resolution);
+  const imageCreditCost = getImageCreditCost(
+    effectiveModel,
+    effectiveQuality,
+    effectiveResolution
+  );
   const finalPrompt = buildTextPrompt({ userPrompt: input.prompt });
   await assertPromptSequenceAllowed({
     userPrompt: input.prompt,
@@ -138,6 +148,7 @@ export async function startTextImageGeneration(
       aspectRatio: input.aspectRatio,
       model: effectiveModel,
       quality: effectiveQuality,
+      resolution: effectiveResolution,
     },
   });
 
@@ -174,6 +185,7 @@ export async function startTextImageGeneration(
       aspectRatio: input.aspectRatio,
       model: effectiveModel,
       quality: effectiveQuality,
+      resolution: effectiveResolution,
     },
   };
 }
@@ -192,6 +204,7 @@ export async function runStartedTextImageGeneration(
       aspectRatio: (task.aspectRatio || "1:1") as "1:1" | "16:9" | "9:16" | "3:4",
       model: task.model,
       quality: task.quality,
+      resolution: task.resolution,
     });
     console.log(`[text-generate] Job ${task.jobId}: AI model returned successfully.`);
 
@@ -259,7 +272,12 @@ export async function startRemixImageGeneration(
 
   const effectiveModel = "gpt-image-2";
   const effectiveQuality = normalizeImageQuality(effectiveModel, input.quality);
-  const imageCreditCost = getImageCreditCost(effectiveModel, effectiveQuality);
+  const effectiveResolution = normalizeImageResolution(effectiveModel, input.resolution);
+  const imageCreditCost = getImageCreditCost(
+    effectiveModel,
+    effectiveQuality,
+    effectiveResolution
+  );
 
   let classicImage = null;
   if (input.classicImageId) {
@@ -317,6 +335,7 @@ export async function startRemixImageGeneration(
       aspectRatio: finalAspectRatio,
       model: effectiveModel,
       quality: effectiveQuality,
+      resolution: effectiveResolution,
     },
   });
 
@@ -355,6 +374,7 @@ export async function startRemixImageGeneration(
       aspectRatio: finalAspectRatio,
       model: effectiveModel,
       quality: effectiveQuality,
+      resolution: effectiveResolution,
     },
   };
 }
@@ -374,6 +394,7 @@ export async function runStartedRemixImageGeneration(
       aspectRatio: task.aspectRatio,
       model: task.model,
       quality: task.quality,
+      resolution: task.resolution,
     });
 
     const imageUrl = result.imageUrls?.[0] ?? result.base64ImageList?.[0];

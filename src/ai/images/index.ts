@@ -3,7 +3,11 @@ export * from "./providers/ciyuan";
 
 import type { ImageGenerationRequest, ImageGenerationResult } from "./types";
 import { generateWithCiyuan, remixWithCiyuan } from "./providers/ciyuan";
-import { normalizeAspectRatio, normalizeImageQuality } from "./types";
+import {
+  normalizeAspectRatio,
+  normalizeImageQuality,
+  normalizeImageResolution,
+} from "./types";
 
 export async function generateImage(
   request: ImageGenerationRequest
@@ -19,6 +23,7 @@ export async function generateImage(
     aspectRatio,
     model: "gpt-image-2",
     quality: normalizeImageQuality("gpt-image-2", request.quality),
+    resolution: normalizeImageResolution("gpt-image-2", request.resolution),
   });
 }
 
@@ -29,6 +34,7 @@ export async function remixImage(request: {
   aspectRatio?: string;
   model?: string;
   quality?: string;
+  resolution?: string;
 }): Promise<ImageGenerationResult> {
   const aspectRatio = normalizeAspectRatio(request.aspectRatio, "gpt-image-2");
 
@@ -39,5 +45,6 @@ export async function remixImage(request: {
       request.sourceImageUrl,
     ],
     aspectRatio,
+    resolution: normalizeImageResolution("gpt-image-2", request.resolution),
   });
 }

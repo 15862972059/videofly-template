@@ -1,16 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { Send, Loader2, Sparkles, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { IMAGE_MODELS, type ImageModel, type ImageQuality } from "@/ai/images/types";
-import { GenerationProgress } from "./generation-progress";
 import {
+  ImageIcon,
+  Loader2,
+  Send,
+  SlidersHorizontal,
+  Sparkles,
+  WandSparkles,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  IMAGE_MODELS,
+  type ImageModel,
+  type ImageQuality,
+  type ImageResolution,
   getImageCreditCost,
-  getImageQualityOptions,
+  getImageResolutionOptions,
   getSupportedAspectRatios,
   normalizeImageQuality,
+  normalizeImageResolution,
 } from "@/ai/images/types";
+import { GenerationProgress } from "./generation-progress";
+import { GenerationResult } from "./generation-result";
 import {
   Select,
   SelectContent,
@@ -57,18 +69,44 @@ const aspectRatioMap: Record<"1:1" | "3:4" | "9:16" | "16:9", string> = {
   "16:9": "16 / 9",
 };
 
+const canvasWidthClass: Record<"1:1" | "3:4" | "9:16" | "16:9", string> = {
+  "1:1": "max-w-[560px]",
+  "3:4": "max-w-[460px]",
+  "9:16": "max-w-[360px]",
+  "16:9": "max-w-[780px]",
+};
+
+const promptStyles = [
+  { label: "Photorealistic", suffix: "photorealistic style, natural light, crisp details" },
+  { label: "Anime", suffix: "anime style, clean line art, expressive lighting" },
+  { label: "Oil Painting", suffix: "oil painting texture, layered brushwork, gallery lighting" },
+  { label: "Digital Art", suffix: "digital art style, polished composition, cinematic color" },
+  { label: "Watercolor", suffix: "watercolor wash, soft edges, delicate paper texture" },
+];
+
 export function TextToImage({ onGenerate, generating, result, onClearResult }: TextToImageProps) {
   const [prompt, setPrompt] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [model, setModel] = useState<ImageModel>("gpt-image-2");
   const [quality, setQuality] = useState<ImageQuality>("auto");
+  const [resolution, setResolution] = useState<ImageResolution>("1k");
   const [aspectRatio, setAspectRatio] = useState<"1:1" | "3:4" | "9:16" | "16:9">("16:9");
   const [loading, setLoading] = useState(false);
 
   const supportedRatios = getSupportedAspectRatios(model);
-  const qualityOptions = getImageQualityOptions(model);
-  const creditCost = getImageCreditCost(model, quality);
+  const resolutionOptions = getImageResolutionOptions(model);
+  const selectedResolution = resolutionOptions.find((option) => option.value === resolution);
+  const creditCost = getImageCreditCost(model, quality, resolution);
   const isWorking = loading || generating;
+
+  const handleModelChange = (value: ImageModel) => {
+    setModel(value);
+    setQuality(normalizeImageQuality(value, quality));
+    setResolution(normalizeImageResolution(value, resolution));
+    if (!getSupportedAspectRatios(value).includes(aspectRatio)) {
+      setAspectRatio(getSupportedAspectRatios(value)[0]);
+    }
+  };
 
   const handleGenerate = async () => {
     if (!prompt.trim() || isWorking) return;
@@ -83,6 +121,7 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
           prompt: prompt.trim(),
           model,
           quality,
+          resolution,
           aspectRatio,
         }),
       });
@@ -112,221 +151,272 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
     }
   };
 
-  const handleDownload = () => {
-    if (!result) return;
-    const link = document.createElement("a");
-    link.href = `/api/v1/image/download?url=${encodeURIComponent(result.publicUrl)}`;
-    link.download = "ai-art-generation.png";
-    link.click();
-  };
-
-  const handleShareX = () => {
-    if (!result) return;
-    const text = "Check out my AI-generated image!";
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(result.publicUrl)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
-
-  const handleShareReddit = () => {
-    if (!result) return;
-    const title = "My AI Art Creation";
-    const url = `https://www.reddit.com/submit?title=${encodeURIComponent(title)}&url=${encodeURIComponent(result.publicUrl)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+  const addPromptStyle = (suffix: string) => {
+    if (isWorking) return;
+    setPrompt((current) => {
+      const trimmed = current.trim();
+      return trimmed ? `${trimmed}, ${suffix}` : suffix;
+    });
   };
 
   return (
-    <div className="relative grid gap-8 xl:grid-cols-[minmax(0,600px)_minmax(360px,460px)]">
-      <div>
-        <section className="rounded-[1.5rem] border border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 p-4 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-          <div className="mb-4 flex items-start justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-400">
-                <Sparkles className="h-3.5 w-3.5" />
-                Text to Image
+    <div className="relative grid min-h-[calc(100vh-13rem)] gap-5 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_392px]">
+      <main className="flex min-h-[640px] min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-3 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-slate-950 dark:text-white">Text to Image Workspace</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Turn a written prompt into a finished image.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
+              {IMAGE_MODELS[model]?.name ?? model}
+            </span>
+            <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
+              {aspectRatio}
+            </span>
+            <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
+              {resolution.toUpperCase()}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex min-h-0 flex-1 flex-col gap-4 bg-slate-50/70 p-4 dark:bg-slate-900/40">
+          <GenerationProgress
+            isGenerating={isWorking}
+            estimatedDurationMs={IMAGE_MODELS[model]?.estimatedDurationMs ?? 30_000}
+            modelName={IMAGE_MODELS[model]?.name ?? model}
+          />
+
+          <section className="flex min-h-[420px] flex-1 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+            <div className="flex items-center justify-between gap-4 border-b border-slate-100 px-4 py-3 dark:border-slate-800">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <ImageIcon className="h-4 w-4 text-blue-500" />
+                  <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">
+                    {result ? "Generated result" : "Result preview"}
+                  </h3>
+                </div>
+                <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">
+                  {result
+                    ? "Save, share, or start another generation."
+                    : "Your generated image will appear in this canvas."}
+                </p>
               </div>
-              <h3 className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">Describe your vision</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Enter a detailed description to generate unique artwork
-              </p>
+
+              {result && (
+                <button
+                  type="button"
+                  onClick={onClearResult}
+                  className="min-h-8 cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-white"
+                >
+                  New image
+                </button>
+              )}
             </div>
-            <div className="flex gap-2">
-              <div className="w-[120px]">
-                <Select
-                  value={model}
-                  onValueChange={(value: ImageModel) => {
-                    setModel(value);
-                    setQuality(normalizeImageQuality(value, quality));
-                    if (!getSupportedAspectRatios(value).includes(aspectRatio)) {
-                      setAspectRatio(getSupportedAspectRatios(value)[0]);
-                    }
-                  }}
-                  disabled={isWorking}
+
+            <div className="flex min-h-0 flex-1 items-center justify-center bg-slate-50 p-5 dark:bg-slate-900/50">
+              {result ? (
+                <div className={`w-full ${canvasWidthClass[aspectRatio]}`}>
+                  <GenerationResult result={result} inline showActions aspectRatio={aspectRatio} />
+                </div>
+              ) : (
+                <div
+                  className={`flex w-full flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-slate-400 dark:border-slate-700 dark:bg-slate-950 ${canvasWidthClass[aspectRatio]}`}
+                  style={{ aspectRatio: aspectRatioMap[aspectRatio], minHeight: 340 }}
                 >
-                  <SelectTrigger className="h-8 text-xs">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {modelOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value} className="text-xs">
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <div className="mb-3 rounded-xl bg-slate-100 p-3 dark:bg-slate-900">
+                    <Send className="h-6 w-6 opacity-60" />
+                  </div>
+                  <p className="max-w-xs text-center text-sm font-medium text-slate-600 dark:text-slate-300">
+                    Enter a prompt to generate
+                  </p>
+                  <p className="mt-1 max-w-xs text-center text-xs leading-5 text-slate-500 dark:text-slate-400">
+                    The canvas keeps the selected ratio and resolution visible while you compose.
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
+
+        <section className="border-t border-slate-100 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+          <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <div className="min-w-0">
+              <div className="mb-2 flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                <Sparkles className="h-3.5 w-3.5 text-slate-400" />
+                Prompt
               </div>
-              <div className="w-[112px]">
-                <Select
-                  value={quality}
-                  onValueChange={(value: ImageQuality) => setQuality(value)}
-                  disabled={isWorking}
-                >
-                  <SelectTrigger className="h-8 text-xs">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {qualityOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value} className="text-xs">
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <textarea
+                value={prompt}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}
+                placeholder="A beautiful sunset over the Eiffel Tower, golden hour lighting, cinematic composition..."
+                disabled={isWorking}
+                className="min-h-[84px] w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm leading-6 text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white focus:ring-2 focus:ring-slate-200 disabled:opacity-70 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-slate-500 dark:focus:bg-slate-900 dark:focus:ring-slate-700"
+              />
+            </div>
+
+            <div className="flex min-w-0 flex-col gap-3 lg:w-[332px]">
+              <div className="grid grid-cols-3 gap-2 text-xs">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Resolution</p>
+                  <p className="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
+                    {selectedResolution?.label ?? resolution.toUpperCase()}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Ratio</p>
+                  <p className="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
+                    {aspectRatio}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Cost</p>
+                  <p className="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
+                    {creditCost}
+                  </p>
+                </div>
               </div>
-              <div className="w-[80px]">
-                <Select
-                  value={aspectRatio}
-                  onValueChange={(value: "1:1" | "3:4" | "9:16" | "16:9") => setAspectRatio(value)}
-                  disabled={isWorking}
-                >
-                  <SelectTrigger className="h-8 text-xs">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {aspectRatioOptions.map((option) => {
-                      const supported = supportedRatios.includes(option.value as "1:1" | "16:9" | "9:16" | "3:4");
-                      if (!supported) return null;
-                      return (
-                        <SelectItem key={option.value} value={option.value} className="text-xs">
-                          {option.label}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
-              </div>
+
+              <Button
+                onClick={handleGenerate}
+                disabled={!prompt.trim() || isWorking}
+                className="h-10 rounded-xl bg-blue-600 px-5 text-white shadow-sm hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400"
+              >
+                {isWorking ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Generate
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside className="grid min-w-0 gap-4 self-start lg:grid-cols-2 xl:sticky xl:top-6 xl:grid-cols-1">
+        <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex items-center gap-2 border-b border-slate-100 px-4 py-3 dark:border-slate-800">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-300">
+              <SlidersHorizontal className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">Output settings</h3>
+              <p className="truncate text-xs text-slate-500 dark:text-slate-400">
+                1K is the default baseline.
+              </p>
             </div>
           </div>
 
-          <textarea
-            value={prompt}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}
-            placeholder="A beautiful sunset over the Eiffel Tower, golden hour lighting, cinematic composition..."
-            disabled={isWorking}
-            className="min-h-[120px] rounded-2xl border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/60 px-4 py-3 text-sm shadow-inner w-full resize-none"
-          />
+          <div className="space-y-4 bg-slate-50 p-3 dark:bg-slate-900/50">
+            <div>
+              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">Model</p>
+              <Select value={model} onValueChange={handleModelChange} disabled={isWorking}>
+                <SelectTrigger className="h-10 rounded-xl bg-white text-xs dark:bg-slate-950">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {modelOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value} className="text-xs">
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="mt-3 flex gap-2 flex-wrap">
-            {["Photorealistic", "Anime", "Oil Painting", "Digital Art", "Watercolor"].map((style) => (
+            <div>
+              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">Resolution</p>
+              <div className="grid gap-2">
+                {resolutionOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => setResolution(option.value)}
+                    disabled={isWorking}
+                    className={`min-h-11 cursor-pointer rounded-xl border px-3 py-2 text-left transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                      resolution === option.value
+                        ? "border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-500/15 dark:text-blue-200"
+                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300 dark:hover:text-white"
+                    }`}
+                  >
+                    <span className="flex items-center justify-between gap-3 text-sm font-semibold">
+                      {option.label}
+                      <span>{option.creditCost} credits</span>
+                    </span>
+                    <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                      {option.description}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">Aspect ratio</p>
+              <div className="grid grid-cols-2 gap-2">
+                {aspectRatioOptions.map((option) => {
+                  const supported = supportedRatios.includes(option.value);
+                  if (!supported) return null;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => setAspectRatio(option.value)}
+                      disabled={isWorking}
+                      className={`min-h-10 cursor-pointer rounded-xl border px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                        aspectRatio === option.value
+                          ? "border-slate-950 bg-slate-950 text-white dark:border-white dark:bg-white dark:text-slate-950"
+                          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300 dark:hover:text-white"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex items-center gap-2 border-b border-slate-100 px-4 py-3 dark:border-slate-800">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-300">
+              <WandSparkles className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">Prompt starters</h3>
+              <p className="truncate text-xs text-slate-500 dark:text-slate-400">Append a visual style.</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2 bg-slate-50 p-3 dark:bg-slate-900/50">
+            {promptStyles.map((style) => (
               <button
-                key={style}
+                key={style.label}
                 type="button"
-                onClick={() => !isWorking && setPrompt((prev) => (prev ? `${prev}, ${style} style` : style))}
+                onClick={() => addPromptStyle(style.suffix)}
                 disabled={isWorking}
-                className="px-3 py-1 text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-colors disabled:opacity-50"
+                className="min-h-9 cursor-pointer rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300 dark:hover:text-white"
               >
-                {style}
+                {style.label}
               </button>
             ))}
           </div>
-
-          <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-950 dark:bg-white px-4 py-4 text-white dark:text-slate-950 lg:flex-row lg:items-center lg:justify-between">
-            <div className="space-y-1">
-              <p className="text-sm font-semibold">Ready to generate</p>
-              <p className="text-xs text-slate-300 dark:text-slate-600">
-                Uses {creditCost} credit{creditCost > 1 ? "s" : ""}. Your image will appear on the right. You can also view progress and results in your generation history.
-              </p>
-            </div>
-
-            <Button
-              onClick={handleGenerate}
-              disabled={!prompt.trim() || isWorking}
-              className="rounded-full bg-white px-6 text-slate-950 hover:bg-slate-100 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-800"
-            >
-              {isWorking ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  Generate Image
-                  <Send className="ml-2 h-4 w-4" />
-                </>
-              )}
-            </Button>
-          </div>
-
-          {error && (
-            <div className="mt-4 rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-destructive">
-              {error}
-            </div>
-          )}
         </section>
-      </div>
+      </aside>
 
-      <div className="xl:sticky xl:top-8 self-start space-y-5">
-        <GenerationProgress
-          isGenerating={isWorking}
-          estimatedDurationMs={IMAGE_MODELS[model]?.estimatedDurationMs ?? 30_000}
-          modelName={IMAGE_MODELS[model]?.name ?? model}
-        />
-
-        {result ? (
-          <section className="rounded-[1.5rem] overflow-hidden border border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-            <div
-              className="relative overflow-hidden bg-slate-50 dark:bg-slate-800"
-              style={{ aspectRatio: aspectRatioMap[aspectRatio] }}
-            >
-              <img
-                src={result.publicUrl}
-                alt="AI Generated"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-950/70 via-slate-950/15 to-transparent flex justify-between gap-2">
-                <Button size="sm" className="gap-1.5 flex-1 bg-white text-slate-950 hover:bg-slate-100" onClick={handleDownload}>
-                  <Download className="w-3.5 h-3.5" /> Save
-                </Button>
-                <Button size="sm" variant="secondary" className="gap-1.5 bg-slate-950/55 text-white hover:bg-slate-950/70 border border-white/15" onClick={handleShareX} aria-label="Share on X">
-                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                </Button>
-                <Button size="sm" variant="secondary" className="gap-1.5 bg-slate-950/55 text-white hover:bg-slate-950/70 border border-white/15" onClick={handleShareReddit} aria-label="Share on Reddit">
-                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547a8.303 8.303 0 0 0-2.636-.152c-.042.004-.084.012-.126.02v.001h-.009c-.035.006-.069.011-.104.02h-.003c-.074.017-.148.038-.22.063l-.002.001c-.067.023-.133.049-.198.078a2.463 2.463 0 0 0-.17.073l-.006.004-.163.069s-.003 0-.003.002c-.05.025-.1.05-.149.078l-.008.007-.152.078a5.308 5.308 0 0 0-.264.154l-.026.017c-.242.15-.472.32-.688.51l-.02.018c-.023.022-.048.044-.07.067l-3.187-1.015a1.25 1.25 0 0 1-.931-.119 1.249 1.249 0 1 1-.68 2.315c-.084-.021-.164-.052-.239-.091l2.855 1.621a8.347 8.347 0 0 0-.34 1.124L7.256 10.5c.016.011.03.023.046.034l-.046-.034A1.248 1.248 0 0 0 6.3 12.076c.305.371.715.604 1.138.662.074.01.148.015.222.011.066-.003.131-.014.195-.031l.001.001c.197-.05.38-.14.543-.264l1.91 1.34c-.108.127-.177.26-.23.38-.553.242-.982.556-1.13.8-.097.179-.1.349.036.515.084.072.2.115.299.145.218.18.686.181.934.085.735-.344.85-1.49.85-1.49h.001s.092-.71.46-1.159c.376-.458 1.009-.71 2.198-.905 2.51-.48 3.912-1.433 4.102-1.776.08-.06.163-.126.249-.198l-.08.022s2.136-1.096 2.522-1.156c.24-.05.484-.054.73-.05.295-.38.53-.772.718-1.158a8.395 8.395 0 0 0-.28-1.468c-.309-.747-.707-1.416-1.187-1.952l2.682.588zM8.58 16.891s.166.635.674.873c.44.058 1.114-.057 1.334-.68.2-.7-.026-1.362-.248-1.627 0 0-.645.263-1.76 1.434zM8.906 17a.5.5 0 0 1 .254.064l-.254-.064zm5.473-.164c.257.147.435.263.645.358.545.177 1.314.214 1.83-.028a.868.868 0 0 0 .421-.421c.146-.386-.096-.846-.8-1.295-.71-.38-1.524-.5-2.05-.572-.034.09-.058.211-.013.333.027.053.06.107.097.16.177.262.501.448.883.553.135.03.269.05.408.07.084.05.172.113.246.175-.257.06-.526.116-.79.083l-.008-.004c-.306-.09-.544-.299-.643-.568-.033-.046-.046-.097-.036-.143-.022.078-.02.164.01.247.037.095.104.19.208.282.223.208.545.364.99.36l.008.001c.143.004.253-.021.355-.06-.281.267-.563.436-.811.46z"/></svg>
-                </Button>
-              </div>
-            </div>
-            <div className="p-4 border-t border-slate-200 dark:border-slate-700">
-              <p className="text-sm font-medium text-slate-950 dark:text-white truncate">{prompt}</p>
-              <button
-                type="button"
-                onClick={onClearResult}
-                className="mt-2 text-xs text-slate-500 hover:text-slate-700 dark:hover:text-white"
-              >
-                Generate another image
-              </button>
-            </div>
-          </section>
-        ) : !isWorking ? (
-          <section className="rounded-[1.5rem] border border-dashed border-slate-300 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 shadow-[0_12px_32px_rgba(15,23,42,0.06)] flex items-center justify-center" style={{ aspectRatio: aspectRatioMap[aspectRatio], minHeight: 360 }}>
-            <div className="text-center p-8">
-              <div className="w-12 h-12 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
-                <Send className="w-5 h-5 text-slate-400" />
-              </div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Your image will appear here</p>
-              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Enter a prompt and generate to get started</p>
-            </div>
-          </section>
-        ) : null}
-      </div>
+      {error && (
+        <div className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full border border-red-200 bg-white px-4 py-2 text-sm text-destructive shadow-lg dark:border-red-800 dark:bg-slate-900">
+          {error}
+        </div>
+      )}
     </div>
   );
 }

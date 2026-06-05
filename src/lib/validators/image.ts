@@ -8,6 +8,12 @@ export const imageQualityEnum = z.enum([
   "auto",
 ]);
 
+export const imageResolutionEnum = z.enum([
+  "1k",
+  "2k",
+  "4k",
+]);
+
 export const remixRequestSchema = z.object({
   classicImageId: z.string().optional(),
   classicImageSlug: z.string().optional(),
@@ -16,6 +22,7 @@ export const remixRequestSchema = z.object({
   aspectRatio: z.enum(["1:1", "16:9", "9:16", "4:3", "3:4"]).optional(),
   model: imageModelEnum.optional().default("gpt-image-2"),
   quality: imageQualityEnum.optional().default("auto"),
+  resolution: imageResolutionEnum.optional().default("1k"),
 }).refine(
   (data) => data.classicImageId || data.classicImageSlug,
   { message: "Either classicImageId or classicImageSlug is required" }
@@ -26,6 +33,7 @@ export const textGenerationRequestSchema = z.object({
   aspectRatio: z.enum(["1:1", "16:9", "9:16", "4:3", "3:4"]).optional(),
   model: imageModelEnum.optional().default("gpt-image-2"),
   quality: imageQualityEnum.optional().default("auto"),
+  resolution: imageResolutionEnum.optional().default("1k"),
 }).refine(
   (data) => !data.prompt || data.prompt.length <= 1000,
   { message: "Prompt must be under 1000 characters" }
@@ -37,3 +45,4 @@ export type TextGenerationRequestInput = z.input<typeof textGenerationRequestSch
 export type TextGenerationRequestOutput = z.output<typeof textGenerationRequestSchema>;
 export type ImageModel = z.infer<typeof imageModelEnum>;
 export type ImageQuality = z.infer<typeof imageQualityEnum>;
+export type ImageResolution = z.infer<typeof imageResolutionEnum>;

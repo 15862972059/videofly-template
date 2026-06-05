@@ -4,14 +4,24 @@ export interface ImageGenerationRequest {
   model?: ImageModel;
   imageUrls?: string[];
   quality?: ImageQuality;
+  resolution?: ImageResolution;
 }
 
 export type ImageModel = "gpt-image-2";
 
 export type ImageQuality = "auto";
 
+export type ImageResolution = "1k" | "2k" | "4k";
+
 export interface ImageQualityOption {
   value: ImageQuality;
+  label: string;
+  description: string;
+  creditCost: number;
+}
+
+export interface ImageResolutionOption {
+  value: ImageResolution;
   label: string;
   description: string;
   creditCost: number;
@@ -31,8 +41,38 @@ export const IMAGE_QUALITY_OPTIONS: Record<
   ],
 };
 
+export const IMAGE_RESOLUTION_OPTIONS: Record<
+  ImageModel,
+  ImageResolutionOption[]
+> = {
+  "gpt-image-2": [
+    {
+      value: "1k",
+      label: "1K",
+      description: "Standard generation, fastest option",
+      creditCost: 1,
+    },
+    {
+      value: "2k",
+      label: "2K",
+      description: "Higher detail for sharing and light editing",
+      creditCost: 2,
+    },
+    {
+      value: "4k",
+      label: "4K",
+      description: "Largest output for presentation and print crops",
+      creditCost: 5,
+    },
+  ],
+};
+
 export function getImageQualityOptions(model: ImageModel): ImageQualityOption[] {
   return IMAGE_QUALITY_OPTIONS[model] || IMAGE_QUALITY_OPTIONS["gpt-image-2"];
+}
+
+export function getImageResolutionOptions(model: ImageModel): ImageResolutionOption[] {
+  return IMAGE_RESOLUTION_OPTIONS[model] || IMAGE_RESOLUTION_OPTIONS["gpt-image-2"];
 }
 
 export function normalizeImageQuality(
@@ -42,18 +82,36 @@ export function normalizeImageQuality(
   return "auto";
 }
 
+export function normalizeImageResolution(
+  model: ImageModel,
+  resolution?: ImageResolution | string
+): ImageResolution {
+  const options = getImageResolutionOptions(model);
+  const fallback = options[0]?.value ?? "1k";
+  if (options.some((option) => option.value === resolution)) {
+    return resolution as ImageResolution;
+  }
+  return fallback;
+}
+
 export function getImageCreditCost(
   model: ImageModel,
-  _quality?: ImageQuality | string
+  _quality?: ImageQuality | string,
+  resolution?: ImageResolution | string
 ): number {
-  return IMAGE_QUALITY_OPTIONS[model]?.[0]?.creditCost ?? 5;
+  const effectiveResolution = normalizeImageResolution(model, resolution);
+  return (
+    getImageResolutionOptions(model).find((option) => option.value === effectiveResolution)
+      ?.creditCost ?? IMAGE_QUALITY_OPTIONS[model]?.[0]?.creditCost ?? 5
+  );
 }
 
 export function resolveImageProviderSettings(
   _model: ImageModel,
-  _quality?: ImageQuality | string
-): { quality?: string; resolution?: string } {
-  return {};
+  _quality?: ImageQuality | string,
+  resolution?: ImageResolution | string
+): { quality?: string; resolution?: ImageResolution } {
+  return { resolution: normalizeImageResolution("gpt-image-2", resolution) };
 }
 
 export function resolveImageProviderModel(_model: ImageModel): string {

@@ -7,7 +7,12 @@ import { PhotoUploadPanel } from "./photo-upload-panel";
 import { RemixResultPanel } from "./remix-result-panel";
 import { RemixScenePanel } from "./remix-scene-panel";
 import { GenerationProgress } from "./generation-progress";
-import { IMAGE_MODELS, type ImageModel, type ImageQuality } from "@/ai/images/types";
+import {
+  IMAGE_MODELS,
+  type ImageModel,
+  type ImageQuality,
+  type ImageResolution,
+} from "@/ai/images/types";
 import { getSupportedAspectRatios, normalizeImageQuality } from "@/ai/images/types";
 import { parseJsonApiResponse } from "@/lib/api/client-response";
 import {
@@ -29,6 +34,7 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
   const [error, setError] = useState<string | null>(null);
   const [model, setModel] = useState<ImageModel>("gpt-image-2");
   const [quality, setQuality] = useState<ImageQuality>("auto");
+  const [resolution, setResolution] = useState<ImageResolution>("1k");
 
   useEffect(() => {
     if (initialScene) {
@@ -71,6 +77,7 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
           aspectRatio,
           model,
           quality,
+          resolution,
         }),
       });
 
@@ -97,19 +104,42 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
   };
 
   return (
-    <div className="relative grid gap-8 xl:grid-cols-[minmax(0,1.35fr)_minmax(360px,460px)]">
-      <div className="space-y-6">
-        <div className="grid gap-6 lg:grid-cols-2">
-          <RemixScenePanel
-            selectedScene={selectedScene}
-            onSelect={setSelectedScene}
-            onClear={() => setSelectedScene(null)}
+    <div className="relative grid min-h-[calc(100vh-13rem)] gap-5 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_392px]">
+      <main className="flex min-h-[640px] min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-3 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-slate-950 dark:text-white">Image Remix Workspace</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Compose a new image from your portrait and a selected scene.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
+              {IMAGE_MODELS[model]?.name ?? model}
+            </span>
+            <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
+              {aspectRatio}
+            </span>
+            <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
+              {resolution.toUpperCase()}
+            </span>
+            <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
+              {selectedScene ? "Scene ready" : "Choose scene"}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex min-h-0 flex-1 flex-col gap-4 bg-slate-50/70 p-4 dark:bg-slate-900/40">
+          <GenerationProgress
+            isGenerating={generating}
+            estimatedDurationMs={IMAGE_MODELS[model]?.estimatedDurationMs ?? 60_000}
+            modelName={IMAGE_MODELS[model]?.name ?? model}
           />
-          <PhotoUploadPanel
-            onUpload={handleUpload}
-            onUploadStateChange={setUploadingSource}
-            onClear={() => setSourceImageKey(null)}
-            disabled={generating}
+          <RemixResultPanel
+            result={result}
+            sourceImageKey={sourceImageKey}
+            selectedScene={selectedScene}
+            aspectRatio={aspectRatio}
           />
         </div>
 
@@ -136,26 +166,28 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
           loading={generating}
           quality={quality}
           onQualityChange={setQuality}
+          resolution={resolution}
+          onResolutionChange={setResolution}
           imageInputOnly
         />
-      </div>
+      </main>
 
-      <div className="space-y-5 xl:sticky xl:top-8 self-start">
-        <GenerationProgress
-          isGenerating={generating}
-          estimatedDurationMs={IMAGE_MODELS[model]?.estimatedDurationMs ?? 60_000}
-          modelName={IMAGE_MODELS[model]?.name ?? model}
-        />
-        <RemixResultPanel
-          result={result}
-          sourceImageKey={sourceImageKey}
+      <aside className="grid min-w-0 gap-4 self-start lg:grid-cols-2 xl:sticky xl:top-6 xl:grid-cols-1">
+        <RemixScenePanel
           selectedScene={selectedScene}
-          aspectRatio={aspectRatio}
+          onSelect={setSelectedScene}
+          onClear={() => setSelectedScene(null)}
         />
-      </div>
+        <PhotoUploadPanel
+          onUpload={handleUpload}
+          onUploadStateChange={setUploadingSource}
+          onClear={() => setSourceImageKey(null)}
+          disabled={generating}
+        />
+      </aside>
 
       {error && (
-        <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 rounded-full border border-red-200 dark:border-red-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm text-destructive shadow-lg">
+        <div className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full border border-red-200 bg-white px-4 py-2 text-sm text-destructive shadow-lg dark:border-red-800 dark:bg-slate-900">
           {error}
         </div>
       )}

@@ -1,15 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   IMAGE_MODELS,
   type ImageModel,
   type ImageQuality,
+  type ImageResolution,
   getImageCreditCost,
-  getImageQualityOptions,
+  getImageResolutionOptions,
   normalizeImageQuality,
+  normalizeImageResolution,
 } from "@/ai/images/types";
 import { buildRemixSystemPrompt } from "@/services/image/prompts";
 import {
@@ -36,6 +38,8 @@ interface PromptPanelProps {
   loading?: boolean;
   quality: ImageQuality;
   onQualityChange: (value: ImageQuality) => void;
+  resolution: ImageResolution;
+  onResolutionChange: (value: ImageResolution) => void;
   /** Filter to only models supporting image input (for remix mode) */
   imageInputOnly?: boolean;
 }
@@ -51,6 +55,8 @@ export function PromptPanel({
   loading,
   quality,
   onQualityChange,
+  resolution,
+  onResolutionChange,
   imageInputOnly,
 }: PromptPanelProps) {
   const [customPrompt, setCustomPrompt] = useState("");
@@ -78,8 +84,8 @@ export function PromptPanel({
     { value: "16:9", label: "16:9" },
   ] as const;
 
-  const qualityOptions = getImageQualityOptions(model);
-  const creditCost = getImageCreditCost(model, quality);
+  const resolutionOptions = getImageResolutionOptions(model);
+  const creditCost = getImageCreditCost(model, quality, resolution);
 
   const handleGenerate = () => {
     if (classicScene) {
@@ -90,85 +96,97 @@ export function PromptPanel({
   const handleModelChange = (value: ImageModel) => {
     onModelChange(value);
     onQualityChange(normalizeImageQuality(value, quality));
+    onResolutionChange(normalizeImageResolution(value, resolution));
   };
 
   return (
-    <section className="rounded-[1.5rem] border border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 p-4 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-      <div className="mb-4 flex items-start justify-between gap-4">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-400">
-            <Sparkles className="h-3.5 w-3.5" />
-            Step 3
+    <section className="border-t border-slate-100 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+        <div className="min-w-0">
+          <div className="mb-2 flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+            <Sparkles className="h-3.5 w-3.5 text-slate-400" />
+            Prompt
           </div>
-          <h3 className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">Refine and Generate</h3>
-        </div>
-        <div className="flex gap-2">
-          <Select value={model} onValueChange={handleModelChange}>
-            <SelectTrigger className="h-8 w-[120px] text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {modelOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value} className="text-xs">
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={quality} onValueChange={(v) => onQualityChange(v as ImageQuality)}>
-            <SelectTrigger className="h-8 w-[112px] text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {qualityOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value} className="text-xs">
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={aspectRatio} onValueChange={(v: "1:1" | "3:4" | "9:16" | "16:9") => onAspectRatioChange(v)}>
-            <SelectTrigger className="h-8 w-[80px] text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {aspectRatioOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value} className="text-xs">
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <textarea
-        value={customPrompt}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCustomPrompt(e.target.value)}
-        placeholder={
-          classicScene
-            ? "Edit the prompt above to refine your result..."
-            : "Describe the image you want to generate..."
-        }
-        className="min-h-[200px] rounded-2xl border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/60 px-4 py-3 text-sm shadow-inner w-full resize-none"
-      />
-
-      <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-950 dark:bg-white px-4 py-4 text-white dark:text-slate-950 lg:flex-row lg:items-center lg:justify-between">
-        <div className="space-y-1">
-          <p className="text-sm font-semibold">Ready to generate</p>
-          <p className="text-xs text-slate-300 dark:text-slate-600">
-            Uses {creditCost} credit{creditCost > 1 ? "s" : ""}. Edit the prompt above or generate as-is. You can also view progress and results in your generation history.
-          </p>
+          <textarea
+            value={customPrompt}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCustomPrompt(e.target.value)}
+            placeholder={
+              classicScene
+                ? "Refine the selected scene..."
+                : "Choose a scene, upload a portrait, then refine the prompt..."
+            }
+            className="min-h-[84px] w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm leading-6 text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-slate-500 dark:focus:bg-slate-900 dark:focus:ring-slate-700"
+          />
         </div>
 
-        <Button
-          onClick={handleGenerate}
-          disabled={disabled || loading}
-          className="rounded-full bg-white px-6 text-slate-950 hover:bg-slate-100 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-800"
-        >
-          {loading ? "Generating..." : "Generate Image"}
-          {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
-        </Button>
+        <div className="flex min-w-0 flex-col gap-3 lg:w-[332px]">
+          <div className="grid grid-cols-3 gap-2">
+            <Select value={model} onValueChange={handleModelChange}>
+              <SelectTrigger className="h-9 w-full text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {modelOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value} className="text-xs">
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select
+              value={resolution}
+              onValueChange={(v) => onResolutionChange(v as ImageResolution)}
+            >
+              <SelectTrigger className="h-9 w-full text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {resolutionOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value} className="text-xs">
+                    {option.label} - {option.creditCost} credits
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={aspectRatio} onValueChange={(v: "1:1" | "3:4" | "9:16" | "16:9") => onAspectRatioChange(v)}>
+              <SelectTrigger className="h-9 w-full text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {aspectRatioOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value} className="text-xs">
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
+              <p className="truncate text-xs font-medium text-slate-600 dark:text-slate-300">
+                {creditCost} credit{creditCost > 1 ? "s" : ""}
+              </p>
+            </div>
+            <Button
+              onClick={handleGenerate}
+              disabled={disabled || loading}
+              className="h-10 min-w-[132px] rounded-xl bg-blue-600 px-5 text-white shadow-sm hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Generate
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
       </div>
     </section>
   );
