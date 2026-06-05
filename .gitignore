@@ -52,3 +52,9 @@ package-lock.json
 
 .env
 .contentlayer/
+
+# Local tooling artifacts
+.codegraph/
+drizzle-studio-screenshot.png
+scripts/query-prod-users.mjs
+参考图.png
