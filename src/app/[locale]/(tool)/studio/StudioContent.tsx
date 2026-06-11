@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { ImagePlus, Type } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { RemixWorkspace } from "@/components/studio/remix-workspace";
 import { TextToImage } from "@/components/studio/text-to-image";
 import type { ClassicImageData } from "@/types/ai-photo";
@@ -26,6 +27,7 @@ function CenteredSpinner({ text, subtext }: { text: string; subtext?: string }) 
 }
 
 function StudioContentInner() {
+  const t = useTranslations("Studio");
   const searchParams = useSearchParams();
   const [initialScene, setInitialScene] = useState<ClassicImageData | null>(null);
   const [sceneLoading, setSceneLoading] = useState(false);
@@ -54,8 +56,8 @@ function StudioContentInner() {
   }, [searchParams]);
 
   const tabs = [
-    { id: "remix", label: "Image Remix", icon: ImagePlus },
-    { id: "text2img", label: "Text to Image", icon: Type },
+    { id: "remix", label: t("tabs.remix"), icon: ImagePlus },
+    { id: "text2img", label: t("tabs.textToImage"), icon: Type },
   ] as const;
 
   const handleTextResult = (data: { jobId: string; objectKey: string; publicUrl: string }) => {
@@ -64,7 +66,7 @@ function StudioContentInner() {
   };
 
   if (sceneLoading) {
-    return <CenteredSpinner text="Loading Scene" subtext="Preparing your selected scene..." />;
+    return <CenteredSpinner text={t("loadingScene")} subtext={t("loadingSceneHint")} />;
   }
 
   return (
@@ -105,8 +107,10 @@ function StudioContentInner() {
 }
 
 export default function StudioContent() {
+  const t = useTranslations("Studio");
+
   return (
-    <Suspense fallback={<CenteredSpinner text="Loading Studio" subtext="Preparing your creative workspace..." />}>
+    <Suspense fallback={<CenteredSpinner text={t("loadingStudio")} subtext={t("loadingStudioHint")} />}>
       <StudioContentInner />
     </Suspense>
   );

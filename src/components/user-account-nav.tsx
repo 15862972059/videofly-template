@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 
 import { authClient, type User } from "@/lib/auth/client";
 import {
@@ -13,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { UserAvatar } from "@/components/user-avatar";
-import { LocaleLink } from "@/i18n/navigation";
+import { LocaleLink, useLocaleRouter } from "@/i18n/navigation";
 
 export function UserAccountNav({
   user,
@@ -21,8 +20,7 @@ export function UserAccountNav({
   user: Pick<User, "name" | "image" | "email">;
 }) {
   const t = useTranslations('UserAccountNav');
-  const locale = useLocale();
-  const router = useRouter();
+  const router = useLocaleRouter();
 
   return (
     <DropdownMenu>
@@ -58,7 +56,7 @@ export function UserAccountNav({
           className="cursor-pointer"
           onSelect={async () => {
             await authClient.signOut();
-            router.push(`/${locale}`);
+            router.push("/");
             router.refresh();
           }}
         >

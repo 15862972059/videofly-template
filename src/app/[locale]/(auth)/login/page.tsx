@@ -11,10 +11,18 @@ import * as Icons from "@/components/ui/icons";
 import { UserAuthForm } from "@/components/user-auth-form";
 import type { Locale } from "@/config/i18n-config";
 
-export const metadata: Metadata = {
-  title: "Login",
-  description: "Login to your account",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+
+  return {
+    title: locale === "zh" ? "登录" : "Login",
+    description: locale === "zh" ? "登录您的 AI2ART 账户" : "Login to your AI2ART account",
+  };
+}
 
 export default async function LoginPage({
   params,

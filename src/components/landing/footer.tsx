@@ -1,36 +1,39 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { LocaleLink } from "@/i18n/navigation";
 
-const footerSections = [
-  {
-    title: "Product",
-    links: [
-      { title: "Studio", href: "/studio" },
-      { title: "Gallery", href: "/gallery" },
-      { title: "Pricing", href: "/pricing" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { title: "Privacy Policy", href: "/privacy" },
-      { title: "Terms of Service", href: "/terms" },
-      { title: "Acceptable Use", href: "/acceptable-use" },
-    ],
-  },
-  {
-    title: "Support",
-    links: [
-      { title: "FAQ", href: "/#faq" },
-      { title: "Contact", href: "mailto:support@ai2art.net" },
-    ],
-  },
-];
-
 export function LandingFooter() {
+  const t = useTranslations();
+  const tFooter = useTranslations("LandingFooter");
   const currentYear = new Date().getFullYear();
+
+  const footerSections = [
+    {
+      title: t("Footer.product"),
+      links: [
+        { title: t("Header.studio"), href: "/studio" },
+        { title: t("Header.gallery"), href: "/gallery" },
+        { title: t("Header.pricing"), href: "/pricing" },
+      ],
+    },
+    {
+      title: t("Footer.legal"),
+      links: [
+        { title: t("Footer.privacy"), href: "/privacy-policy" },
+        { title: t("Footer.terms"), href: "/terms-of-service" },
+        { title: tFooter("acceptableUse"), href: "/acceptable-use" },
+      ],
+    },
+    {
+      title: tFooter("support"),
+      links: [
+        { title: t("FAQ.title"), href: "/#faq" },
+        { title: tFooter("contact"), href: "mailto:support@ai2art.net" },
+      ],
+    },
+  ];
 
   return (
     <footer className="border-t border-emerald-900/10 bg-slate-50 dark:bg-slate-950">
@@ -42,7 +45,7 @@ export function LandingFooter() {
               AI2ART
             </LocaleLink>
             <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
-              Transform portraits into polished AI artwork with curated destination scenes.
+              {tFooter("tagline")}
             </p>
           </div>
 
@@ -69,8 +72,8 @@ export function LandingFooter() {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-emerald-900/10 pt-8 text-sm text-slate-500 dark:text-slate-400 sm:flex-row">
-          <p>© {currentYear} AI2ART. All rights reserved.</p>
-          <p>Independent product. Not affiliated with or endorsed by underlying AI model providers.</p>
+          <p>{tFooter("copyright", { year: currentYear })}</p>
+          <p>{tFooter("disclaimer")}</p>
         </div>
       </div>
     </footer>

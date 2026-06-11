@@ -4,73 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import { ArrowRight, ImagePlus, Lightbulb, MapPin, Sparkles, Upload } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { cn } from "@/components/ui";
 import { LocaleLink } from "@/i18n/navigation";
-
-const remixCases = [
-  {
-    id: "fuji",
-    tabName: "Mt. Fuji",
-    sceneLabel: "Destination Photo",
-    sceneTitle: "Japan Fuji Scene",
-    sceneImage: "/images/homepage/gallery-japan-fuji-c.png",
-    portraitLabel: "Upload Portrait",
-    portraitTitle: "User Portrait",
-    portraitImage: "/images/homepage/gallery-japan-fuji-p.jpeg",
-    resultLabel: "Generated Result",
-    resultTitle: "Remixed in Fuji",
-    resultImage: "/images/homepage/gallery-japan-fuji-mix.png",
-    promptSeed: "Cinematic portrait with blooming cherry blossoms, Mt. Fuji backdrop, soft natural daylight, premium travel photography style."
-  },
-  {
-    id: "barcelona",
-    tabName: "Barcelona",
-    sceneLabel: "Destination Photo",
-    sceneTitle: "Barcelona Street",
-    sceneImage: "/images/homepage/spain-barcelona-c.png",
-    portraitLabel: "Upload Portrait",
-    portraitTitle: "User Portrait",
-    portraitImage: "/images/homepage/spain-barcelona-p.jpeg",
-    resultLabel: "Generated Result",
-    resultTitle: "Remixed in Barcelona",
-    resultImage: "/images/homepage/spain-barcelona-mix.png",
-    promptSeed: "Editorial travel shot in Barcelona, beautiful architectural elements, warm golden hour sunbeams, cinematic depth of field."
-  },
-  {
-    id: "neon",
-    tabName: "Cyberpunk Street",
-    sceneLabel: "Destination Photo",
-    sceneTitle: "Neon Cyberpunk Alley",
-    sceneImage: "/images/homepage/j-c.png",
-    portraitLabel: "Upload Portrait",
-    portraitTitle: "User Portrait",
-    portraitImage: "/images/homepage/j-p.png",
-    resultLabel: "Generated Result",
-    resultTitle: "Remixed in Cyberpunk",
-    resultImage: "/images/homepage/j-mix.png",
-    promptSeed: "Cyberpunk editorial fashion portrait, neon-lit rainy street style, glowing reflections, ultra-realistic night photography."
-  }
-];
-
-const destinations = [
-  { title: "Eiffel Tower", place: "Paris", image: "/images/gallery-france-paris-a.jpeg", tag: "Popular" },
-  { title: "Lavender Fields", place: "Provence", image: "/images/gallery-france-provence-a.jpeg", tag: "Romance" },
-  { title: "Santorini Cliffs", place: "Greece", image: "/images/gallery-greece-santorini-a.jpeg", tag: "Coastal" },
-  { title: "Cherry Blossom", place: "Tokyo", image: "/images/gallery-japan-tokyo-a.jpeg", tag: "Spring" },
-  { title: "Mt. Fuji", place: "Japan", image: "/images/gallery-japan-fuji-a.jpeg", tag: "Iconic" },
-  { title: "Rome Streets", place: "Italy", image: "/images/gallery-italy-rome-a.jpeg", tag: "Classic" },
-  { title: "Swiss Alps", place: "Zermatt", image: "/images/gallery-switzerland-zermatt-a.jpeg", tag: "Alpine" },
-  { title: "Aurora Fjord", place: "Norway", image: "/images/gallery-norway-aurora.jpeg", tag: "Dream" },
-];
-
-const ideas = [
-  "Golden hour fashion portrait in Paris",
-  "Quiet Kyoto lantern street with soft depth",
-  "Santorini editorial photo with clean white architecture",
-];
 
 function StepCard({
   icon: Icon,
@@ -105,7 +44,29 @@ function StepCard({
 }
 
 export function PhotoRemixSection() {
+  const t = useTranslations("PhotoRemixSection");
   const [activeCaseIndex, setActiveCaseIndex] = useState(0);
+  const remixCases = t.raw("cases") as Array<{
+    id: string;
+    tabName: string;
+    sceneLabel: string;
+    sceneTitle: string;
+    sceneImage: string;
+    portraitLabel: string;
+    portraitTitle: string;
+    portraitImage: string;
+    resultLabel: string;
+    resultTitle: string;
+    resultImage: string;
+    promptSeed: string;
+  }>;
+  const destinations = t.raw("destinations") as Array<{
+    title: string;
+    place: string;
+    image: string;
+    tag: string;
+  }>;
+  const ideas = t.raw("ideas") as string[];
   const currentCase = remixCases[activeCaseIndex];
 
   return (
@@ -116,26 +77,26 @@ export function PhotoRemixSection() {
           <div className="mx-auto mb-14 max-w-3xl text-center">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
               <Sparkles className="h-4 w-4" />
-              Photo Remix Studio
+              {t("badge")}
             </div>
             <h2 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-white md:text-5xl">
-              Your portrait, placed anywhere in the world
+              {t("title")}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
-              Keep the strongest function from the original site: choose a scene, upload a portrait, then generate a believable AI artwork with matching light, composition, and style.
+              {t("description")}
             </p>
           </div>
         </BlurFade>
 
         <div className="mb-16 grid gap-4 md:grid-cols-3">
           <BlurFade inView delay={0.05}>
-            <StepCard icon={MapPin} step="01" title="Choose Scene" text="Browse curated destination templates from Paris to Santorini." />
+            <StepCard icon={MapPin} step="01" title={t("steps.chooseScene.title")} text={t("steps.chooseScene.text")} />
           </BlurFade>
           <BlurFade inView delay={0.12}>
-            <StepCard icon={Upload} step="02" title="Upload Your Photo" text="Use a portrait or full-body shot you own or have permission to use." />
+            <StepCard icon={Upload} step="02" title={t("steps.uploadPhoto.title")} text={t("steps.uploadPhoto.text")} />
           </BlurFade>
           <BlurFade inView delay={0.19}>
-            <StepCard icon={ImagePlus} step="03" title="AI Remix" text="Generate a final portrait that feels shot in the selected place." />
+            <StepCard icon={ImagePlus} step="03" title={t("steps.remix.title")} text={t("steps.remix.text")} />
           </BlurFade>
         </div>
 
@@ -188,7 +149,7 @@ export function PhotoRemixSection() {
               </AnimatePresence>
               <div className="mt-4 grid gap-4 md:grid-cols-[0.85fr_1.15fr]">
                 <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/70 p-5 dark:bg-emerald-500/10">
-                  <div className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-300">Prompt seed</div>
+                  <div className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-300">{t("promptSeedLabel")}</div>
                   <AnimatePresence mode="wait">
                     <motion.p
                       key={activeCaseIndex}
@@ -205,7 +166,7 @@ export function PhotoRemixSection() {
                 <div className="rounded-2xl border border-emerald-900/10 bg-white/80 p-5 dark:bg-white/5">
                   <div className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-300">
                     <Lightbulb className="h-4 w-4" />
-                    Ask AI for scene ideas
+                    {t("ideasLabel")}
                   </div>
                   <div className="space-y-2">
                     {ideas.map((idea) => (
@@ -227,14 +188,14 @@ export function PhotoRemixSection() {
             <div className="rounded-[2rem] border border-emerald-900/10 bg-white/80 p-5 shadow-xl shadow-emerald-950/5 backdrop-blur dark:bg-white/5">
               <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                 <div>
-                <h3 className="text-2xl font-bold text-slate-800 dark:text-white">Explore Iconic Destinations</h3>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Pick a backdrop and start from a proven visual direction.</p>
+                  <h3 className="text-2xl font-bold text-slate-800 dark:text-white">{t("destinationsTitle")}</h3>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{t("destinationsDescription")}</p>
                 </div>
                 <LocaleLink
                   href="/gallery"
                   className="inline-flex w-fit items-center rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300"
                 >
-                  View all scenes
+                  {t("viewAllScenes")}
                 </LocaleLink>
               </div>
               <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

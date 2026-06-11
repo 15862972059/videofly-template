@@ -247,28 +247,28 @@
     "history": "交易历史",
     "packages": {
       "starter": {
-        "name": "30 Credits",
-        "description": "???????"
+        "name": "30 积分",
+        "description": "轻量一次性补充"
       },
       "basic": {
-        "name": "Starter Plan",
-        "description": "??????"
+        "name": "入门方案",
+        "description": "适合初次开始"
       },
       "pro": {
-        "name": "Creator Plan",
-        "description": "???????"
+        "name": "创作者方案",
+        "description": "适合高频创作"
       },
       "team": {
-        "name": "Studio Plan",
-        "description": "????????"
+        "name": "工作室方案",
+        "description": "适合团队与工作室"
       },
       "standard": {
-        "name": "120 Credits",
-        "description": "?????????"
+        "name": "120 积分",
+        "description": "均衡型一次性积分包"
       },
       "propack": {
-        "name": "360 Credits",
-        "description": "??????????"
+        "name": "360 积分",
+        "description": "高性价比一次性补充"
       }
     },
     "features": {
@@ -277,9 +277,9 @@
       "no_watermark": "无水印",
       "commercial_use": "商业使用授权",
       "priority_support": "优先支持",
-      "api_access": "??????",
+      "api_access": "团队协作权益",
       "custom_models": "自定义 AI 模型",
-      "gpt_image_2_access": "AI image generation access"
+      "gpt_image_2_access": "AI 图片生成权限"
     }
   },
   "VideoGenerator": {
@@ -330,7 +330,16 @@
   "Sidebar": {
     "title": "导航菜单",
     "upgradeTitle": "升级专业版",
-    "upgradeSubtitle": "解锁更快生成与更多额度"
+    "upgradeSubtitle": "解锁更快生成与更多额度",
+    "groups": {
+      "image": "图片"
+    },
+    "items": {
+      "studio": "工作室",
+      "generations": "我的生成",
+      "credits": "积分",
+      "settings": "账户"
+    }
   },
   "UpgradeModal": {
     "default_title": "升级您的方案",
@@ -564,5 +573,364 @@
     "copyLink": "复制链接",
     "removeFromHistory": "从历史中移除",
     "generationFailed": "生成失败"
+  },
+  "Theme": {
+    "label": "主题：",
+    "toggle": "切换主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
+  },
+  "LocaleSwitcher": {
+    "label": "语言",
+    "english": "English",
+    "chinese": "中文"
+  },
+  "LandingHeader": {
+    "faq": "常见问题",
+    "menu": "打开菜单"
+  },
+  "LandingFooter": {
+    "support": "支持",
+    "contact": "联系我们",
+    "acceptableUse": "可接受使用政策",
+    "tagline": "用精选目的地场景，把你的人像照片变成更精致的 AI 艺术作品。",
+    "copyright": "© {year} AI2ART. 保留所有权利。",
+    "disclaimer": "独立产品，与底层 AI 模型提供方不存在隶属或背书关系。"
+  },
+  "AuthForm": {
+    "email": "邮箱",
+    "emailPlaceholder": "name@example.com",
+    "continueGoogle": "使用 Google 继续",
+    "checkEmailTitle": "请查收邮箱",
+    "checkEmailDescription": "我们已向你发送登录链接，也请留意垃圾邮件文件夹。",
+    "errorTitle": "出现了一点问题。",
+    "errorDescription": "登录请求失败，请稍后再试。"
+  },
+  "GalleryPage": {
+    "title": "艺术画廊",
+    "description": "浏览经典场景，把你的照片重绘成更有氛围的作品。",
+    "showing": "已显示 {current} / {total} 个场景",
+    "loadMore": "加载更多",
+    "loadingMore": "加载中...",
+    "apiError": "接口请求失败",
+    "loadError": "加载画廊失败",
+    "empty": "没有找到符合当前条件的作品。"
+  },
+  "GalleryFilters": {
+    "search": "搜索",
+    "searchPlaceholder": "搜索场景...",
+    "clearSearch": "清空搜索",
+    "searchButton": "搜索",
+    "categories": "分类",
+    "clear": "清除",
+    "allScenes": "全部场景"
+  },
+  "GalleryDetail": {
+    "category": "分类",
+    "loading": "加载中...",
+    "useScene": "使用这个场景",
+    "close": "关闭"
+  },
+  "Studio": {
+    "tabs": {
+      "remix": "图片重绘",
+      "textToImage": "文生图"
+    },
+    "loadingScene": "正在加载场景",
+    "loadingSceneHint": "正在准备你选择的场景...",
+    "loadingStudio": "正在加载工作室",
+    "loadingStudioHint": "正在准备你的创作空间..."
+  },
+  "ShowcaseGallery": {
+    "badge": "文生图作品集",
+    "title": "AI 生成的高完成度作品",
+    "subtitle": "由 AI2ART 创作",
+    "description": "浏览由简单提示词生成的精美作品。点击即可复制提示词，并在工作室中继续尝试。",
+    "promptSeed": "提示词种子",
+    "copyPrompt": "复制提示词",
+    "copied": "已复制",
+    "ctaText": "准备开始你的创作之旅了吗？",
+    "ctaButton": "开始创作",
+    "items": [
+      {
+        "id": 1,
+        "title": "月夜汉服幻想人像",
+        "prompt": "A graceful woman in flowing white hanfu by a moonlit garden pond, soft cinematic shadows, elegant fantasy atmosphere, detailed fabric motion.",
+        "image": "/images/homepage/5.21.png",
+        "tag": "幻想"
+      },
+      {
+        "id": 2,
+        "title": "东京购物地图插画",
+        "prompt": "Cute illustrated Tokyo shopping district map with pastel storefronts, station markers, food icons, handwritten notes, cheerful travel guide style.",
+        "image": "/images/homepage/case369.jpg",
+        "tag": "地图"
+      },
+      {
+        "id": 3,
+        "title": "塔可食材解构海报",
+        "prompt": "Exploded-view taco poster with crispy shell, seasoned meat, shredded cheese, salsa, and clean ingredient callouts on a bright studio background.",
+        "image": "/images/homepage/case443.jpg",
+        "tag": "美食"
+      },
+      {
+        "id": 4,
+        "title": "健身社媒海报人像",
+        "prompt": "Realistic social media fitness post of a woman sitting in a gym, soft studio lighting, pink athletic outfit, app-style frame, polished lifestyle photography.",
+        "image": "/images/homepage/case323.jpg",
+        "tag": "电影感"
+      },
+      {
+        "id": 5,
+        "title": "富士山旅行写真",
+        "prompt": "Cinematic travel portrait with blooming cherry blossoms, Mt. Fuji backdrop, soft natural daylight, premium editorial photography style.",
+        "image": "/images/homepage/gallery-japan-fuji-mix.png",
+        "tag": "旅行"
+      },
+      {
+        "id": 6,
+        "title": "便利店时尚编辑人像",
+        "prompt": "Modern editorial portrait of a young woman in a pink sweater inside a convenience store at night, glossy shelves, soft flash lighting, casual fashion mood.",
+        "image": "/images/homepage/case429.jpg",
+        "tag": "编辑风"
+      }
+    ]
+  },
+  "PhotoRemixSection": {
+    "badge": "照片重绘工作室",
+    "title": "把你的人像放进任何一处世界场景",
+    "description": "选择场景、上传照片，然后生成在光线、构图和风格上都更自然可信的 AI 作品。",
+    "promptSeedLabel": "提示词种子",
+    "ideasLabel": "让 AI 帮你找场景灵感",
+    "destinationsTitle": "探索经典目的地",
+    "destinationsDescription": "先选一个成熟的视觉方向，再开始创作。",
+    "viewAllScenes": "查看全部场景",
+    "steps": {
+      "chooseScene": {
+        "title": "选择场景",
+        "text": "浏览从巴黎到圣托里尼的精选目的地模板。"
+      },
+      "uploadPhoto": {
+        "title": "上传照片",
+        "text": "使用你拥有版权或已获得许可的人像或全身照。"
+      },
+      "remix": {
+        "title": "AI 重绘",
+        "text": "生成一张仿佛真的在该地点拍摄的人像作品。"
+      }
+    },
+    "ideas": [
+      "巴黎金色日落时分的时尚人像",
+      "京都灯笼小巷的安静氛围写真",
+      "圣托里尼白色建筑下的编辑风照片"
+    ],
+    "cases": [
+      {
+        "id": "fuji",
+        "tabName": "富士山",
+        "sceneLabel": "目的地场景",
+        "sceneTitle": "日本富士山场景",
+        "sceneImage": "/images/homepage/gallery-japan-fuji-c.png",
+        "portraitLabel": "上传人像",
+        "portraitTitle": "用户人像",
+        "portraitImage": "/images/homepage/gallery-japan-fuji-p.jpeg",
+        "resultLabel": "生成结果",
+        "resultTitle": "富士山重绘成片",
+        "resultImage": "/images/homepage/gallery-japan-fuji-mix.png",
+        "promptSeed": "Cinematic portrait with blooming cherry blossoms, Mt. Fuji backdrop, soft natural daylight, premium travel photography style."
+      },
+      {
+        "id": "barcelona",
+        "tabName": "巴塞罗那",
+        "sceneLabel": "目的地场景",
+        "sceneTitle": "巴塞罗那街景",
+        "sceneImage": "/images/homepage/spain-barcelona-c.png",
+        "portraitLabel": "上传人像",
+        "portraitTitle": "用户人像",
+        "portraitImage": "/images/homepage/spain-barcelona-p.jpeg",
+        "resultLabel": "生成结果",
+        "resultTitle": "巴塞罗那重绘成片",
+        "resultImage": "/images/homepage/spain-barcelona-mix.png",
+        "promptSeed": "Editorial travel shot in Barcelona, beautiful architectural elements, warm golden hour sunbeams, cinematic depth of field."
+      },
+      {
+        "id": "neon",
+        "tabName": "赛博街区",
+        "sceneLabel": "目的地场景",
+        "sceneTitle": "霓虹赛博小巷",
+        "sceneImage": "/images/homepage/j-c.png",
+        "portraitLabel": "上传人像",
+        "portraitTitle": "用户人像",
+        "portraitImage": "/images/homepage/j-p.png",
+        "resultLabel": "生成结果",
+        "resultTitle": "赛博风重绘成片",
+        "resultImage": "/images/homepage/j-mix.png",
+        "promptSeed": "Cyberpunk editorial fashion portrait, neon-lit rainy street style, glowing reflections, ultra-realistic night photography."
+      }
+    ],
+    "destinations": [
+      { "title": "埃菲尔铁塔", "place": "巴黎", "image": "/images/gallery-france-paris-a.jpeg", "tag": "热门" },
+      { "title": "薰衣草花田", "place": "普罗旺斯", "image": "/images/gallery-france-provence-a.jpeg", "tag": "浪漫" },
+      { "title": "圣托里尼悬崖", "place": "希腊", "image": "/images/gallery-greece-santorini-a.jpeg", "tag": "海岸" },
+      { "title": "樱花街景", "place": "东京", "image": "/images/gallery-japan-tokyo-a.jpeg", "tag": "春日" },
+      { "title": "富士山", "place": "日本", "image": "/images/gallery-japan-fuji-a.jpeg", "tag": "经典" },
+      { "title": "罗马街道", "place": "意大利", "image": "/images/gallery-italy-rome-a.jpeg", "tag": "复古" },
+      { "title": "瑞士雪山", "place": "采尔马特", "image": "/images/gallery-switzerland-zermatt-a.jpeg", "tag": "阿尔卑斯" },
+      { "title": "极光峡湾", "place": "挪威", "image": "/images/gallery-norway-aurora.jpeg", "tag": "梦境" }
+    ]
+  },
+  "HomeFeatures": {
+    "badge": "你需要的核心能力",
+    "title": "更实用的 AI 艺术创作功能",
+    "description": "把场景、人像、提示词辅助和可直接导出的结果集中到一个更克制、更高效的工作流里。",
+    "popular": "热门",
+    "cta": "立即开始创作",
+    "primary": [
+      {
+        "title": "照片重绘",
+        "description": "把你有权使用的人像放入精选场景，同时尽量保持结果自然、协调。",
+        "stat": { "value": 4, "suffix": "K", "label": "最高输出" }
+      },
+      {
+        "title": "文生图",
+        "description": "直接用提示词生成作品，也可以让 AI2ART 帮你补充场景方向。",
+        "stat": { "value": 30, "suffix": "s", "label": "从灵感到初稿" }
+      },
+      {
+        "title": "参考控制",
+        "description": "把场景、人像和提示词种子组合使用，获得更稳定的 AI 艺术方向。",
+        "stat": { "value": 9, "suffix": "+", "label": "可组合输入" }
+      }
+    ],
+    "support": [
+      {
+        "title": "生成更快",
+        "description": "从成熟模板出发，更快得到可直接用于社媒的图像。",
+        "stat": { "value": 2, "suffix": "分钟" }
+      },
+      {
+        "title": "安全私密",
+        "description": "你的上传内容和生成文件会安全保存在账户中。",
+        "stat": { "value": 100, "suffix": "%" }
+      },
+      {
+        "title": "实时更新",
+        "description": "随时查看生成进度，也可以稍后回到历史记录继续查看。",
+        "stat": { "value": 24, "suffix": "/7" }
+      }
+    ]
+  },
+  "HeroLanding": {
+    "badge": "由 GPT Image 2 驱动",
+    "title": "把你的照片变成更精致的 AI 艺术作品",
+    "description": "选择目的地场景，上传你有权使用的照片，然后让 AI2ART 帮你完成高质量重绘。",
+    "primaryCta": "免费开始创作",
+    "secondaryCta": "浏览场景",
+    "trust": {
+      "noCard": "无需信用卡",
+      "freeCredits": "{credits} 个免费积分",
+      "hdOutput": "高清输出"
+    },
+    "cards": {
+      "sceneIdeas": {
+        "title": "AI 场景灵感",
+        "description": "你可以直接询问像“巴黎日落编辑感人像”或“京都灯笼街道”这样的场景提示词。"
+      },
+      "model": {
+        "title": "AI 模型",
+        "prefix": "由",
+        "suffix": "提供更细节、更懂风格的图像生成能力。"
+      },
+      "fast": {
+        "title": "高效",
+        "description": "适合从模板快速开始的重绘工作流"
+      }
+    },
+    "gallery": {
+      "case323": "重绘 #323",
+      "case369": "重绘 #369",
+      "case443": "海报重绘",
+      "case521": "重绘 #5.21"
+    }
+  },
+  "ModelIntroLanding": {
+    "badge": "AI 图像核心能力",
+    "titlePrefix": "为",
+    "titleHighlight": "引导式图像重绘而设计",
+    "descriptionPrefix": "AI2ART 提供一个更聚焦的创作界面，用来完成更细节、更懂风格的图像生成。服务底层由",
+    "descriptionSuffix": "提供支持。AI2ART 是独立产品，与底层模型提供方不存在隶属或背书关系。",
+    "cta": "开始创作",
+    "stats": {
+      "guided": { "value": "引导式", "label": "人像重绘" },
+      "hd": { "value": "高清", "label": "可直接导出" },
+      "safe": { "value": "安全", "label": "提示词审核" }
+    },
+    "features": [
+      {
+        "title": "更关注人物一致性",
+        "description": "尽量保留可识别的人像细节，同时调整光线、场景语境和整体视觉风格。"
+      },
+      {
+        "title": "更细致的纹理表现",
+        "description": "让皮肤、头发、布料和光影细节更完整，更适合社媒发布。"
+      },
+      {
+        "title": "更统一的风格融合",
+        "description": "让人物与目的地场景在颜色、构图和氛围上更协调。"
+      },
+      {
+        "title": "更顺手的创作流程",
+        "description": "从模板开始，微调提示词，然后直接得到成片，不需要复杂编辑器。"
+      }
+    ]
+  },
+  "HowItWorksLanding": {
+    "badge": "简单流程",
+    "title": "4 步完成你的 AI 艺术图像",
+    "description": "整个流程保持实用和轻量：选择、上传、细化，然后导出成片。",
+    "cta": "立即开始创作",
+    "steps": [
+      {
+        "step": "01",
+        "title": "挑选场景",
+        "text": "从目的地模板或画廊中的视觉参考开始。",
+        "meta": "20+ 场景"
+      },
+      {
+        "step": "02",
+        "title": "上传人像",
+        "text": "上传你拥有使用权的清晰人像或全身照。",
+        "meta": "PNG、JPG、WebP"
+      },
+      {
+        "step": "03",
+        "title": "细化提示词",
+        "text": "使用提示词种子，或让内置问答助手给你补充场景灵感。",
+        "meta": "引导式提示"
+      },
+      {
+        "step": "04",
+        "title": "导出作品",
+        "text": "下载最终图像，并在历史记录里随时回看每一次生成。",
+        "meta": "高清输出"
+      }
+    ]
+  },
+  "LandingCTA": {
+    "badge": "限时优惠",
+    "title": "准备好创作更精致的 AI 艺术图像了吗？",
+    "description": "加入正在使用 AI2ART 的创作者，把普通人像变成更适合旅行、品牌内容和个人表达的成片。",
+    "cta": "免费开始",
+    "benefits": {
+      "free": "{credits} 个免费积分起步",
+      "noCard": "无需信用卡",
+      "cancel": "随时取消",
+      "commercial": "付费方案支持商业使用"
+    },
+    "progress": {
+      "title": "正在生成最终作品",
+      "hint": "生成时长可能会有所波动"
+    }
   }
 }

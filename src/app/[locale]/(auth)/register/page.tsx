@@ -8,10 +8,21 @@ import { buttonVariants } from "@/components/ui/button";
 import { UserAuthForm } from "@/components/user-auth-form";
 import type { Locale } from "@/config/i18n-config";
 
-export const metadata = {
-  title: "Create an account",
-  description: "Create an account to get started.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+
+  return {
+    title: locale === "zh" ? "创建账户" : "Create an account",
+    description:
+      locale === "zh"
+        ? "创建您的 AI2ART 账户并开始使用"
+        : "Create your AI2ART account to get started.",
+  };
+}
 
 export default async function RegisterPage({
   params,
@@ -49,14 +60,14 @@ export default async function RegisterPage({
         <p className="px-8 text-center text-sm text-muted-foreground">
             {t("agree_prefix")}{" "}
             <Link
-              href={`/${locale}/terms`}
+              href={`/${locale}/terms-of-service`}
               className="hover:text-brand underline underline-offset-4"
             >
               {t("terms_of_service")}
             </Link>{" "}
             {t("and")}{" "}
             <Link
-              href={`/${locale}/privacy`}
+              href={`/${locale}/privacy-policy`}
               className="hover:text-brand underline underline-offset-4"
             >
               {t("privacy_policy")}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Search, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface GalleryFiltersProps {
   categories: string[];
@@ -21,6 +22,7 @@ export function GalleryFilters({
   onSubcategoryChange,
   onQueryChange,
 }: GalleryFiltersProps) {
+  const t = useTranslations("GalleryFilters");
   const [query, setQuery] = useState(activeQuery);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export function GalleryFilters({
     <aside className="rounded-3xl border border-slate-200 bg-white/95 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/95 lg:sticky lg:top-24">
       <div className="mb-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-          Search
+          {t("search")}
         </p>
         <form onSubmit={handleSearch} className="mt-3 space-y-3">
           <div className="relative">
@@ -50,7 +52,7 @@ export function GalleryFilters({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search scenes..."
+              placeholder={t("searchPlaceholder")}
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-9 text-sm text-slate-900 shadow-sm transition-all placeholder-slate-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
             />
             {query && (
@@ -61,7 +63,7 @@ export function GalleryFilters({
                   onQueryChange("");
                 }}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-600 dark:hover:bg-slate-800"
-                aria-label="Clear search"
+                aria-label={t("clearSearch")}
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -72,7 +74,7 @@ export function GalleryFilters({
             className="inline-flex min-h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
           >
             <Search className="h-4 w-4" />
-            Search
+            {t("searchButton")}
           </button>
         </form>
       </div>
@@ -80,7 +82,7 @@ export function GalleryFilters({
       <div className="border-t border-slate-100 pt-4 dark:border-slate-800">
         <div className="mb-3 flex items-center justify-between gap-3">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-            Categories
+            {t("categories")}
           </p>
           {activeCategory && (
             <button
@@ -88,7 +90,7 @@ export function GalleryFilters({
               onClick={() => handleCategoryClick(undefined)}
               className="cursor-pointer text-xs font-medium text-slate-500 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
             >
-              Clear
+              {t("clear")}
             </button>
           )}
         </div>
@@ -103,7 +105,7 @@ export function GalleryFilters({
                 : "border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700/60 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
             }`}
           >
-            All Scenes
+            {t("allScenes")}
           </button>
           {categories.map((category) => (
             <button

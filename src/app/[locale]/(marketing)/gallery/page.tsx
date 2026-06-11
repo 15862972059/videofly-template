@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { ClassicImageData } from "@/types/ai-photo";
 import type { ClassicImage } from "@/db";
 import { GalleryFilters } from "@/components/gallery/gallery-filters";
 import { ClassicImageGrid } from "@/components/gallery/classic-image-grid";
 import { ClassicImageDetailDialog } from "@/components/gallery/classic-image-detail-dialog";
+import { useLocaleRouter } from "@/i18n/navigation";
 
 const PAGE_SIZE = 15;
 
@@ -21,7 +22,8 @@ interface GalleryState {
 }
 
 export default function GalleryPage() {
-  const router = useRouter();
+  const router = useLocaleRouter();
+  const t = useTranslations("GalleryPage");
   const requestIdRef = useRef(0);
   const [state, setState] = useState<GalleryState>({
     images: [],
@@ -90,7 +92,7 @@ export default function GalleryPage() {
           return;
         }
       }
-      throw new Error("API error");
+      throw new Error(t("apiError"));
     } catch (err) {
       if (requestId !== requestIdRef.current) return;
 
@@ -98,7 +100,7 @@ export default function GalleryPage() {
         ...s,
         loading: false,
         loadingMore: false,
-        error: err instanceof Error ? err.message : "Failed to load gallery",
+        error: err instanceof Error ? err.message : t("loadError"),
       }));
     }
   };
@@ -118,9 +120,9 @@ export default function GalleryPage() {
   return (
     <div className="container mx-auto max-w-7xl py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Art Gallery</h1>
+        <h1 className="text-4xl font-bold mb-2">{t("title")}</h1>
         <p className="text-muted-foreground text-lg">
-          Browse iconic art scenes and remix your photos into masterpieces.
+          {t("description")}
         </p>
       </div>
 
@@ -155,7 +157,7 @@ export default function GalleryPage() {
 
               <div className="flex flex-col items-center gap-3">
                 <p className="text-sm text-muted-foreground">
-                  Showing {state.images.length} of {state.total} scenes
+                  {t("showing", { current: state.images.length, total: state.total })}
                 </p>
 
                 {state.hasMore && (
@@ -165,7 +167,7 @@ export default function GalleryPage() {
                     disabled={state.loadingMore}
                     className="cursor-pointer rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {state.loadingMore ? "Loading..." : "Load more"}
+                    {state.loadingMore ? t("loadingMore") : t("loadMore")}
                   </button>
                 )}
               </div>

@@ -3,8 +3,7 @@
  */
 async function getMessagesForLocale(locale: string) {
   try {
-    // Always force loading English messages to ensure the site is pure English
-    const messages = (await import(`@/messages/en.json`)).default;
+    const messages = (await import(`@/messages/${locale}.json`)).default;
     return messages;
   } catch (error) {
     // Fallback to default locale (en) if translation not found

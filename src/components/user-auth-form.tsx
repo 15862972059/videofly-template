@@ -33,6 +33,7 @@ export function UserAuthForm({
   ...props
 }: UserAuthFormProps) {
   const t = useTranslations("Login");
+  const tAuth = useTranslations("AuthForm");
   const {
     register,
     handleSubmit,
@@ -53,13 +54,13 @@ export function UserAuthForm({
         callbackURL: searchParams?.get("from") ?? `/${lang}/my-creations`,
       });
 
-      toast.success("Check your email", {
-        description: "We sent you a login link. Be sure to check your spam too.",
+      toast.success(tAuth("checkEmailTitle"), {
+        description: tAuth("checkEmailDescription"),
       });
     } catch (error) {
       console.error("Error during sign in:", error);
-      toast.error("Something went wrong.", {
-        description: "Your sign in request failed. Please try again.",
+      toast.error(tAuth("errorTitle"), {
+        description: tAuth("errorDescription"),
       });
     } finally {
       setIsLoading(false);
@@ -70,16 +71,16 @@ export function UserAuthForm({
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-            <Input
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
+        <div className="grid gap-1">
+          <Label className="sr-only" htmlFor="email">
+            {tAuth("email")}
+          </Label>
+          <Input
+            id="email"
+            placeholder={tAuth("emailPlaceholder")}
+            type="email"
+            autoCapitalize="none"
+            autoComplete="email"
               autoCorrect="off"
               disabled={isLoading || isGoogleLoading || disabled}
               {...register("email")}
@@ -134,7 +135,7 @@ export function UserAuthForm({
         ) : (
           <Icons.Google className="mr-2 h-4 w-4" />
         )}{" "}
-        Continue with Google
+        {tAuth("continueGoogle")}
       </button>
     </div>
   );

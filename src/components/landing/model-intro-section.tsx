@@ -1,40 +1,22 @@
 "use client";
 
 import { ArrowRight, Cpu, Image, Shield, Sparkles, Zap } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { LocaleLink } from "@/i18n/navigation";
 
-const features = [
-  {
-    icon: Shield,
-    title: "Identity-Aware Remixing",
-    description:
-      "Designed to keep recognizable portrait details while adapting light, scene context, and visual style.",
-  },
-  {
-    icon: Sparkles,
-    title: "Detailed Textures",
-    description:
-      "Creates polished skin, hair, fabric, and lighting details for social-ready artwork.",
-  },
-  {
-    icon: Image,
-    title: "Cohesive Style Blending",
-    description:
-      "Blends portraits and destination scenes with consistent color, composition, and atmosphere.",
-  },
-  {
-    icon: Zap,
-    title: "Fast Creative Workflow",
-    description:
-      "Start from a template, refine the prompt, and generate polished artwork without a complex editor.",
-  },
-];
+const featureIcons = [Shield, Sparkles, Image, Zap];
 
 export function ModelIntroSection() {
+  const t = useTranslations("ModelIntroLanding");
+  const features = t.raw("features") as Array<{
+    title: string;
+    description: string;
+  }>;
+
   return (
     <section className="relative overflow-hidden bg-background py-24 text-slate-800 dark:text-white md:py-32">
       <div className="pointer-events-none absolute inset-0">
@@ -49,40 +31,40 @@ export function ModelIntroSection() {
             <BlurFade inView>
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 font-semibold text-emerald-700 text-xs uppercase tracking-wider dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
                 <Cpu className="h-3.5 w-3.5" />
-                AI Image Core
+                {t("badge")}
               </div>
             </BlurFade>
 
             <BlurFade delay={0.1} inView>
               <h2 className="font-bold text-4xl text-slate-800 leading-tight tracking-tight dark:text-white md:text-5xl lg:text-6xl">
-                Built For
+                {t("titlePrefix")}
                 <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent dark:from-emerald-400 dark:via-teal-300 dark:to-emerald-400">
-                  {" Guided Image Remixing"}
+                  {` ${t("titleHighlight")}`}
                 </span>
               </h2>
             </BlurFade>
 
             <BlurFade delay={0.15} inView>
               <p className="max-w-2xl text-lg text-slate-600 leading-relaxed dark:text-slate-300">
-                AI2ART provides a focused creative interface for detailed, style-aware image generation. The service is powered by{" "}
-                <strong className="font-bold text-slate-800 dark:text-white">GPT Image 2</strong>.{" "}
-                AI2ART is an independent product and is not affiliated with or endorsed by underlying AI model providers.
+                {t("descriptionPrefix")}{" "}
+                <strong className="font-bold text-slate-800 dark:text-white">GPT Image 2</strong>{" "}
+                {t("descriptionSuffix")}
               </p>
             </BlurFade>
 
             <BlurFade delay={0.2} inView>
               <div className="grid grid-cols-3 gap-6 border-slate-200 border-t pt-4 dark:border-slate-800">
                 <div>
-                  <div className="font-extrabold text-3xl text-emerald-600 dark:text-emerald-400 md:text-4xl">Guided</div>
-                  <div className="mt-1 font-semibold text-slate-500 text-xs uppercase tracking-wider dark:text-slate-450">Portrait Remix</div>
+                  <div className="font-extrabold text-3xl text-emerald-600 dark:text-emerald-400 md:text-4xl">{t("stats.guided.value")}</div>
+                  <div className="mt-1 font-semibold text-slate-500 text-xs uppercase tracking-wider dark:text-slate-450">{t("stats.guided.label")}</div>
                 </div>
                 <div>
-                  <div className="font-extrabold text-3xl text-teal-600 dark:text-teal-400 md:text-4xl">HD</div>
-                  <div className="mt-1 font-semibold text-slate-500 text-xs uppercase tracking-wider dark:text-slate-450">Export Ready</div>
+                  <div className="font-extrabold text-3xl text-teal-600 dark:text-teal-400 md:text-4xl">{t("stats.hd.value")}</div>
+                  <div className="mt-1 font-semibold text-slate-500 text-xs uppercase tracking-wider dark:text-slate-450">{t("stats.hd.label")}</div>
                 </div>
                 <div>
-                  <div className="font-extrabold text-3xl text-emerald-600 dark:text-emerald-400 md:text-4xl">Safe</div>
-                  <div className="mt-1 font-semibold text-slate-500 text-xs uppercase tracking-wider dark:text-slate-450">Prompt Screening</div>
+                  <div className="font-extrabold text-3xl text-emerald-600 dark:text-emerald-400 md:text-4xl">{t("stats.safe.value")}</div>
+                  <div className="mt-1 font-semibold text-slate-500 text-xs uppercase tracking-wider dark:text-slate-450">{t("stats.safe.label")}</div>
                 </div>
               </div>
             </BlurFade>
@@ -96,7 +78,7 @@ export function ModelIntroSection() {
                     background="#10b981"
                     className="h-12 px-7 font-semibold text-sm shadow-emerald-700/20 shadow-lg"
                   >
-                    Start Creating
+                    {t("cta")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </ShimmerButton>
                 </LocaleLink>
@@ -106,7 +88,7 @@ export function ModelIntroSection() {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {features.map((item, idx) => {
-              const Icon = item.icon;
+              const Icon = featureIcons[idx] ?? Shield;
               return (
                 <BlurFade key={item.title} delay={0.1 + idx * 0.08} inView>
                   <MagicCard

@@ -2,6 +2,7 @@
 
 import { Clock, Image, Layers, Lock, MessageSquareText, Zap } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { MagicCard } from "@/components/magicui/magic-card";
@@ -9,34 +10,22 @@ import { NumberTicker } from "@/components/magicui/number-ticker";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { LocaleLink } from "@/i18n/navigation";
 
-const primaryFeatures = [
-  {
-    icon: Image,
-    title: "Photo Remix",
-    description: "Place authorized portraits into curated scenes while keeping the result natural and coherent.",
-    stat: { value: 4, suffix: "K", label: "Max output" },
-  },
-  {
-    icon: MessageSquareText,
-    title: "Text to Image",
-    description: "Generate polished artwork from prompts, or ask AI2ART to suggest scene directions for you.",
-    stat: { value: 30, suffix: "s", label: "Idea to draft" },
-  },
-  {
-    icon: Layers,
-    title: "Reference Control",
-    description: "Use scenes, portraits, and prompt seeds together for more predictable AI art direction.",
-    stat: { value: 9, suffix: "+", label: "Inputs" },
-  },
-];
-
-const supportFeatures = [
-  { icon: Zap, title: "Lightning Fast", description: "Start from a template and generate social-ready images quickly.", stat: { value: 2, suffix: "min" } },
-  { icon: Lock, title: "Secure & Private", description: "Your uploads and generated files are stored safely in your account.", stat: { value: 100, suffix: "%" } },
-  { icon: Clock, title: "Real-time Updates", description: "Track generation progress and return to your history anytime.", stat: { value: 24, suffix: "/7" } },
-];
+const primaryIconMap = [Image, MessageSquareText, Layers];
+const supportIconMap = [Zap, Lock, Clock];
 
 export function FeaturesSection() {
+  const t = useTranslations("HomeFeatures");
+  const primaryFeatures = t.raw("primary") as Array<{
+    title: string;
+    description: string;
+    stat: { value: number; suffix: string; label: string };
+  }>;
+  const supportFeatures = t.raw("support") as Array<{
+    title: string;
+    description: string;
+    stat: { value: number; suffix: string };
+  }>;
+
   return (
     <section className="relative overflow-hidden bg-background py-24 md:py-32">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_10%,rgba(16,185,129,0.10),transparent_30%)]" />
@@ -44,20 +33,20 @@ export function FeaturesSection() {
         <BlurFade inView>
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <div className="mb-5 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
-              Everything You Need
+              {t("badge")}
             </div>
             <h2 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-white md:text-5xl">
-              Practical features to create polished AI art
+              {t("title")}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
-              A quieter, more focused AI art workflow: scenes, portraits, prompt help, and export-ready results in one place.
+              {t("description")}
             </p>
           </div>
         </BlurFade>
 
         <div className="mb-5 grid gap-4 lg:grid-cols-3">
           {primaryFeatures.map((feature, index) => {
-            const Icon = feature.icon;
+            const Icon = primaryIconMap[index] ?? Image;
             return (
               <BlurFade key={feature.title} delay={index * 0.08} inView>
                 <motion.div
@@ -82,7 +71,7 @@ export function FeaturesSection() {
                         </div>
                         {index === 0 && (
                           <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20">
-                            Popular
+                            {t("popular")}
                           </span>
                         )}
                       </div>
@@ -105,7 +94,7 @@ export function FeaturesSection() {
 
         <div className="grid gap-4 md:grid-cols-3">
           {supportFeatures.map((feature, index) => {
-            const Icon = feature.icon;
+            const Icon = supportIconMap[index] ?? Zap;
             return (
               <BlurFade key={feature.title} delay={0.24 + index * 0.08} inView>
                 <MagicCard
@@ -139,7 +128,7 @@ export function FeaturesSection() {
           <div className="mt-14 flex justify-center">
             <LocaleLink href="/studio">
               <ShimmerButton borderRadius="999px" background="#059669" className="px-8 py-3 text-sm font-semibold shadow-lg shadow-emerald-700/20">
-                Start Creating Now
+                {t("cta")}
               </ShimmerButton>
             </LocaleLink>
           </div>

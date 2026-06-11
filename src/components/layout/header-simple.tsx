@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useLocalePathname, useLocaleRouter } from "@/i18n/navigation";
+import { useLocaleRouter } from "@/i18n/navigation";
 import { Gem, Menu, Sun, Moon, Monitor } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { LocaleChange } from "@/components/locale-change";
 import { userMenuItems } from "@/config/navigation";
 
 interface HeaderSimpleProps {
@@ -39,6 +40,8 @@ export function HeaderSimple({
   const { setTheme } = useTheme();
   const router = useLocaleRouter();
   const tHeader = useTranslations("Header");
+  const tCommon = useTranslations("Common");
+  const tTheme = useTranslations("Theme");
   const currentLocale = lang || "en";
 
   const menuLabelMap: Record<string, string> = {
@@ -66,6 +69,7 @@ export function HeaderSimple({
 
         {/* Right: Credits + User Menu */}
         <div className="flex items-center gap-4">
+          <LocaleChange compact />
 
           {/* Theme Toggle */}
           <DropdownMenu>
@@ -74,7 +78,7 @@ export function HeaderSimple({
                 variant="ghost"
                 size="sm"
                 className="h-8 w-8 px-0 text-muted-foreground hover:text-foreground"
-                aria-label="Toggle theme"
+                aria-label={tTheme("toggle")}
               >
                 <Sun className="h-4 w-4 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
                 <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
@@ -83,15 +87,15 @@ export function HeaderSimple({
             <DropdownMenuContent align="end" className="min-w-[120px]">
               <DropdownMenuItem onClick={() => setTheme("light")} className="cursor-pointer">
                 <Sun className="mr-2 h-4 w-4" />
-                Light
+                {tTheme("light")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("dark")} className="cursor-pointer">
                 <Moon className="mr-2 h-4 w-4" />
-                Dark
+                {tTheme("dark")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("system")} className="cursor-pointer">
                 <Monitor className="mr-2 h-4 w-4" />
-                System
+                {tTheme("system")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -134,17 +138,17 @@ export function HeaderSimple({
                   className="cursor-pointer text-destructive"
                   onSelect={async () => {
                     await authClient.signOut();
-                    router.push(`/${lang}`);
+                    router.push("/");
                     router.refresh();
                   }}
                 >
-                  Logout
+                  {tCommon("logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <Button variant="default" size="sm" onClick={() => signInModal.onOpen()}>
-              Login
+              {tCommon("login")}
             </Button>
           )}
         </div>

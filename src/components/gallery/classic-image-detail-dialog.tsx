@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import {
@@ -63,6 +64,8 @@ export function ClassicImageDetailDialog({
   onUseScene,
   loading = false,
 }: ClassicImageDetailDialogProps) {
+  const t = useTranslations("GalleryDetail");
+
   if (!image) return null;
 
   const heroUrl = getHeroUrl(image);
@@ -95,7 +98,7 @@ export function ClassicImageDetailDialog({
 
           <div>
             <p className="text-sm text-muted-foreground capitalize">
-              Category: {category}
+              {t("category")}: {category}
             </p>
             {description && (
               <p className="mt-2 text-muted-foreground">{description}</p>
@@ -111,14 +114,14 @@ export function ClassicImageDetailDialog({
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Loading...
+                  {t("loading")}
                 </>
               ) : (
-                "Use This Scene"
+                t("useScene")
               )}
             </Button>
             <Button variant="outline" onClick={onClose} disabled={loading}>
-              Close
+              {t("close")}
             </Button>
           </div>
         </div>

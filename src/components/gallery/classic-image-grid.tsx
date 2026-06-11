@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { ClassicImageData } from "@/types/ai-photo";
 import type { ClassicImage } from "@/db";
 import { ClassicImageCard } from "./classic-image-card";
@@ -10,10 +11,12 @@ interface ClassicImageGridProps {
 }
 
 export function ClassicImageGrid({ images, onSelect }: ClassicImageGridProps) {
+  const t = useTranslations("GalleryPage");
+
   if (images.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground">
-        <p>No artworks found matching your criteria.</p>
+        <p>{t("empty")}</p>
       </div>
     );
   }

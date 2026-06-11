@@ -2,37 +2,44 @@
 
 import Image from "next/image";
 import { ArrowRight, Check, Images, Sparkles, Type, WandSparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { cn } from "@/components/ui";
 import { NEW_USER_GIFT } from "@/config/pricing-user";
 import { LocaleLink } from "@/i18n/navigation";
 
-const trustItems = ["No credit card", `${NEW_USER_GIFT.credits || 1} free credit`, "HD output"];
-
 export function HeroSection() {
+  const t = useTranslations("HeroLanding");
+  const trustItems = [
+    t("trust.noCard"),
+    t("trust.freeCredits", { credits: NEW_USER_GIFT.credits || 1 }),
+    t("trust.hdOutput"),
+  ];
+
   return (
-    <section id="generator" className="relative overflow-hidden bg-[radial-gradient(circle_at_50%_8%,rgba(34,197,94,0.18),transparent_34%),linear-gradient(180deg,rgba(240,253,244,0.9)_0%,rgba(248,250,252,0.95)_74%,var(--background)_100%)] pb-20 pt-14 dark:bg-[radial-gradient(circle_at_50%_8%,rgba(34,197,94,0.14),transparent_34%),linear-gradient(180deg,rgba(6,20,18,0.92)_0%,rgba(2,6,23,0.98)_74%,var(--background)_100%)]">
+    <section
+      id="generator"
+      className="relative overflow-hidden bg-[radial-gradient(circle_at_50%_8%,rgba(34,197,94,0.18),transparent_34%),linear-gradient(180deg,rgba(240,253,244,0.9)_0%,rgba(248,250,252,0.95)_74%,var(--background)_100%)] pb-20 pt-14 dark:bg-[radial-gradient(circle_at_50%_8%,rgba(34,197,94,0.14),transparent_34%),linear-gradient(180deg,rgba(6,20,18,0.92)_0%,rgba(2,6,23,0.98)_74%,var(--background)_100%)]"
+    >
       <div className="container mx-auto px-4">
-        <div className="mx-auto flex min-h-[760px] max-w-5xl lg:max-w-7xl flex-col lg:grid lg:grid-cols-[1.15fr_0.85fr] items-center justify-center gap-9 lg:gap-12 text-center lg:text-left py-10">
-          
-          {/* Left Column: Text Copy & CTAs */}
-          <div className="flex flex-col items-center lg:items-start justify-center gap-9 w-full">
-            <div className="space-y-6 w-full flex flex-col items-center lg:items-start">
+        <div className="mx-auto flex min-h-[760px] max-w-5xl flex-col items-center justify-center gap-9 py-10 text-center lg:grid lg:max-w-7xl lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:text-left">
+          <div className="flex w-full flex-col items-center justify-center gap-9 lg:items-start">
+            <div className="flex w-full flex-col items-center space-y-6 lg:items-start">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
                 <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                Powered by GPT Image 2
+                {t("badge")}
               </div>
 
               <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-slate-800 dark:text-white md:text-6xl lg:text-6xl xl:text-7xl">
-                Turn Your Photos Into Polished AI Art
+                {t("title")}
               </h1>
 
               <p className="max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-300 md:text-lg">
-                Choose a destination, upload a photo you have rights to use, and let AI2ART turn it into polished artwork.
+                {t("description")}
               </p>
 
-              <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+              <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
                 {trustItems.map((item) => (
                   <span key={item} className="inline-flex items-center gap-1.5 rounded-full bg-white/75 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm ring-1 ring-emerald-900/10 dark:bg-white/10 dark:text-slate-300">
                     <Check className="h-3.5 w-3.5 text-emerald-600" />
@@ -54,7 +61,7 @@ export function HeroSection() {
                       className="h-12 w-full px-7 text-sm font-semibold shadow-lg shadow-emerald-700/20 sm:w-auto"
                     >
                       <WandSparkles className="mr-2 h-4 w-4" />
-                      Start Creating Free
+                      {t("primaryCta")}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </ShimmerButton>
                   </LocaleLink>
@@ -65,7 +72,7 @@ export function HeroSection() {
                     )}
                   >
                     <Images className="h-4 w-4" />
-                    Browse Scenes
+                    {t("secondaryCta")}
                   </LocaleLink>
                 </div>
 
@@ -73,47 +80,46 @@ export function HeroSection() {
                   <div className="rounded-2xl border border-emerald-900/10 bg-white/80 p-4 text-left dark:bg-white/5">
                     <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
                       <Type className="h-4 w-4" />
-                      AI Scene Ideas
+                      {t("cards.sceneIdeas.title")}
                     </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                      Ask for scene prompts like “Paris sunset editorial portrait” or “Kyoto lantern street.”
+                    <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+                      {t("cards.sceneIdeas.description")}
                     </p>
                   </div>
                   <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/60 p-4 text-left dark:bg-emerald-500/5">
                     <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
-                      <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
-                      AI Model
+                      <Sparkles className="h-4 w-4 animate-pulse text-emerald-600 dark:text-emerald-400" />
+                      {t("cards.model.title")}
                     </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                      Powered by <strong className="text-emerald-700 dark:text-emerald-300 font-bold">GPT Image 2</strong> for detailed, style-aware image generation.
+                    <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+                      {t("cards.model.prefix")} <strong className="font-bold text-emerald-700 dark:text-emerald-300">GPT Image 2</strong> {t("cards.model.suffix")}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/80 p-4 text-left dark:bg-emerald-500/10 flex flex-col justify-center">
-                    <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">Fast</div>
-                    <p className="mt-1 text-[10px] text-slate-600 dark:text-slate-300 leading-tight">template-based remix workflow</p>
+                  <div className="flex flex-col justify-center rounded-2xl border border-emerald-900/10 bg-emerald-50/80 p-4 text-left dark:bg-emerald-500/10">
+                    <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{t("cards.fast.title")}</div>
+                    <p className="mt-1 text-[10px] leading-tight text-slate-600 dark:text-slate-300">{t("cards.fast.description")}</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Floating Cards Deck */}
           <div className="hero-deck w-full">
             <div className="hero-card hero-card-1">
               <Image src="/images/homepage/case323.jpg" alt="AI Photo Remix Case 323" fill sizes="(min-width: 1024px) 270px, 48vw" />
-              <span>Remix #323</span>
+              <span>{t("gallery.case323")}</span>
             </div>
             <div className="hero-card hero-card-2">
               <Image src="/images/homepage/case369.jpg" alt="AI Photo Remix Case 369" fill sizes="(min-width: 1024px) 230px, 44vw" />
-              <span>Remix #369</span>
+              <span>{t("gallery.case369")}</span>
             </div>
             <div className="hero-card hero-card-3">
               <Image src="/images/homepage/case443.jpg" alt="AI food poster generation example" fill sizes="(min-width: 1024px) 210px, 38vw" />
-              <span>Poster Remix</span>
+              <span>{t("gallery.case443")}</span>
             </div>
             <div className="hero-card hero-card-4">
               <Image src="/images/homepage/5.21.png" alt="AI Art Case 5.21" fill sizes="(min-width: 1024px) 285px, 52vw" />
-              <span>Remix #5.21</span>
+              <span>{t("gallery.case521")}</span>
             </div>
           </div>
         </div>

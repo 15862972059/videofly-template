@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
 import { Gem, Menu, Moon, Monitor, Sun } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
@@ -22,26 +21,27 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/components/ui";
+import { LocaleChange } from "@/components/locale-change";
 import { useSigninModal } from "@/hooks/use-signin-modal";
-import { LocaleLink } from "@/i18n/navigation";
+import { LocaleLink, useLocaleRouter } from "@/i18n/navigation";
 import { authClient, type User } from "@/lib/auth/client";
 import { useCredits } from "@/stores/credits-store";
 
-const navItems = [
-  { label: "Gallery", href: "/gallery" },
-  { label: "Studio", href: "/studio" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "FAQ", href: "/#faq" },
-];
-
 export function LandingHeader({ user }: { user?: User | null }) {
   const t = useTranslations();
+  const tHeader = useTranslations("LandingHeader");
+  const tTheme = useTranslations("Theme");
   const signInModal = useSigninModal();
-  const locale = useLocale();
-  const pathname = usePathname();
-  const router = useRouter();
+  const router = useLocaleRouter();
   const { theme, setTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
+
+  const navItems = [
+    { label: t("Header.gallery"), href: "/gallery" },
+    { label: t("Header.studio"), href: "/studio" },
+    { label: t("Header.pricing"), href: "/pricing" },
+    { label: tHeader("faq"), href: "/#faq" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 16);
@@ -51,7 +51,7 @@ export function LandingHeader({ user }: { user?: User | null }) {
 
   const handleSignOut = async () => {
     await authClient.signOut();
-    router.push(`/${locale}`);
+    router.push("/");
     router.refresh();
   };
 
@@ -84,13 +84,14 @@ export function LandingHeader({ user }: { user?: User | null }) {
           </div>
 
           <div className="flex items-center gap-3">
+            <LocaleChange />
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
                   className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                  aria-label="Toggle theme"
+                  aria-label={tTheme("toggle")}
                 >
                   <Sun className="h-4 w-4 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
                   <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
@@ -99,15 +100,15 @@ export function LandingHeader({ user }: { user?: User | null }) {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setTheme("light")} className="cursor-pointer">
                   <Sun className="mr-2 h-4 w-4" />
-                  Light
+                  {tTheme("light")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("dark")} className="cursor-pointer">
                   <Moon className="mr-2 h-4 w-4" />
-                  Dark
+                  {tTheme("dark")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("system")} className="cursor-pointer">
                   <Monitor className="mr-2 h-4 w-4" />
-                  System
+                  {tTheme("system")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -164,9 +165,10 @@ export function LandingHeader({ user }: { user?: User | null }) {
                 <CreditsDisplay />
               </div>
             )}
+            <LocaleChange compact />
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Open menu">
+                <Button variant="ghost" size="icon" aria-label={tHeader("menu")}>
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
@@ -199,7 +201,7 @@ export function LandingHeader({ user }: { user?: User | null }) {
                     </div>
                   )}
                   <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-                    Theme:
+                    {tTheme("label")}
                     {(["light", "dark", "system"] as const).map((mode) => (
                       <button
                         key={mode}
@@ -207,7 +209,7 @@ export function LandingHeader({ user }: { user?: User | null }) {
                         onClick={() => setTheme(mode)}
                         className={cn("rounded-md px-2 py-1", theme === mode ? "bg-muted text-foreground" : "hover:text-foreground")}
                       >
-                        {mode}
+                        {tTheme(mode)}
                       </button>
                     ))}
                   </div>
