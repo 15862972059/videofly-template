@@ -31,7 +31,9 @@ function StudioContentInner() {
   const searchParams = useSearchParams();
   const [initialScene, setInitialScene] = useState<ClassicImageData | null>(null);
   const [sceneLoading, setSceneLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"remix" | "text2img">("remix");
+  const [activeTab, setActiveTab] = useState<"remix" | "text2img">(
+    searchParams.get("scene") ? "remix" : "text2img"
+  );
   const [textResult, setTextResult] = useState<{
     jobId: string;
     objectKey: string;
@@ -42,6 +44,7 @@ function StudioContentInner() {
   useEffect(() => {
     const sceneSlug = searchParams.get("scene");
     if (sceneSlug) {
+      setActiveTab("remix");
       setSceneLoading(true);
       fetch(`/api/v1/gallery?slug=${encodeURIComponent(sceneSlug)}`)
         .then(res => res.json())

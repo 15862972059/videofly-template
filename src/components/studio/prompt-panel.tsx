@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -59,6 +60,7 @@ export function PromptPanel({
   onResolutionChange,
   imageInputOnly,
 }: PromptPanelProps) {
+  const t = useTranslations("Studio.promptPanel");
   const [customPrompt, setCustomPrompt] = useState("");
   const lastSceneRef = useRef<string | null>(null);
 
@@ -105,15 +107,15 @@ export function PromptPanel({
         <div className="min-w-0">
           <div className="mb-2 flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
             <Sparkles className="h-3.5 w-3.5 text-slate-400" />
-            Prompt
+            {t("prompt")}
           </div>
           <textarea
             value={customPrompt}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCustomPrompt(e.target.value)}
             placeholder={
               classicScene
-                ? "Refine the selected scene..."
-                : "Choose a scene, upload a portrait, then refine the prompt..."
+                ? t("refinePlaceholder")
+                : t("choosePlaceholder")
             }
             className="min-h-[84px] w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm leading-6 text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-slate-500 dark:focus:bg-slate-900 dark:focus:ring-slate-700"
           />
@@ -143,7 +145,7 @@ export function PromptPanel({
               <SelectContent>
                 {resolutionOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value} className="text-xs">
-                    {option.label} - {option.creditCost} credits
+                    {option.label} - {option.creditCost} {t("credits")}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -165,7 +167,7 @@ export function PromptPanel({
           <div className="flex items-center gap-2">
             <div className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
               <p className="truncate text-xs font-medium text-slate-600 dark:text-slate-300">
-                {creditCost} credit{creditCost > 1 ? "s" : ""}
+                {creditCost} {creditCost > 1 ? t("credits") : t("credit")}
               </p>
             </div>
             <Button
@@ -176,12 +178,12 @@ export function PromptPanel({
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating
+                  {t("generating")}
                 </>
               ) : (
                 <>
                   <Sparkles className="mr-2 h-4 w-4" />
-                  Generate
+                  {t("generate")}
                 </>
               )}
             </Button>

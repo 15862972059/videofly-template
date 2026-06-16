@@ -8,6 +8,7 @@ import * as z from "zod";
 import { useTranslations } from "next-intl";
 
 import { authClient } from "@/lib/auth/client";
+import { getAuthCallbackURL } from "@/lib/auth/callback-url";
 import { cn } from "@/components/ui";
 import { buttonVariants } from "@/components/ui/button";
 import * as Icons from "@/components/ui/icons";
@@ -44,6 +45,7 @@ export function UserAuthForm({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false);
   const searchParams = useSearchParams();
+  const callbackURL = getAuthCallbackURL(searchParams, lang);
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
@@ -51,7 +53,7 @@ export function UserAuthForm({
     try {
       await authClient.signIn.magicLink({
         email: data.email.toLowerCase(),
-        callbackURL: searchParams?.get("from") ?? `/${lang}/my-creations`,
+        callbackURL,
       });
 
       toast.success(tAuth("checkEmailTitle"), {
@@ -121,7 +123,7 @@ export function UserAuthForm({
           authClient.signIn
             .social({
               provider: "google",
-              callbackURL: searchParams?.get("from") ?? `/${lang}/my-creations`,
+              callbackURL,
             })
             .catch((error) => {
               console.error("Google signIn error:", error);

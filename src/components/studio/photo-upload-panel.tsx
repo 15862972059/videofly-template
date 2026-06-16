@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { CheckCircle2, Upload, UserRound, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -17,6 +18,7 @@ export function PhotoUploadPanel({
   onClear,
   disabled,
 }: PhotoUploadPanelProps) {
+  const t = useTranslations("Studio.uploadPanel");
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -32,11 +34,11 @@ export function PhotoUploadPanel({
 
       try {
         if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) {
-          throw new Error("Invalid file type. Please upload JPEG, PNG, WebP, or GIF.");
+          throw new Error(t("invalidType"));
         }
 
         if (file.size > 10 * 1024 * 1024) {
-          throw new Error("File too large. Maximum size is 10MB.");
+          throw new Error(t("fileTooLarge"));
         }
 
         const previewUrl = URL.createObjectURL(file);
@@ -53,21 +55,21 @@ export function PhotoUploadPanel({
 
         if (!res.ok) {
           const data = await res.json();
-          throw new Error(data.error?.message || "Upload failed");
+          throw new Error(data.error?.message || t("uploadFailed"));
         }
 
         const json = await res.json();
-        if (!json.success) throw new Error(json.error?.message || "Upload failed");
+        if (!json.success) throw new Error(json.error?.message || t("uploadFailed"));
         onUpload(json.data.objectKey, previewUrl);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Upload failed");
+        setError(err instanceof Error ? err.message : t("uploadFailed"));
         setPreview(null);
       } finally {
         setUploading(false);
         onUploadStateChange?.(false);
       }
     },
-    [onUpload, onUploadStateChange]
+    [onUpload, onUploadStateChange, t]
   );
 
   return (
@@ -78,14 +80,14 @@ export function PhotoUploadPanel({
             <UserRound className="h-4 w-4" />
           </div>
           <div className="min-w-0">
-            <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">Source photo</h3>
-            <p className="truncate text-xs text-slate-500 dark:text-slate-400">Portrait or subject image</p>
+            <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">{t("title")}</h3>
+            <p className="truncate text-xs text-slate-500 dark:text-slate-400">{t("subtitle")}</p>
           </div>
         </div>
         {preview && (
           <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
             <CheckCircle2 className="h-3.5 w-3.5" />
-            Ready
+            {t("ready")}
           </div>
         )}
       </div>
@@ -95,7 +97,7 @@ export function PhotoUploadPanel({
           <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
             <img
               src={preview}
-              alt="Uploaded preview"
+              alt={t("uploadedAlt")}
               className="h-[190px] w-full object-contain"
             />
             <Button
@@ -109,7 +111,7 @@ export function PhotoUploadPanel({
               }}
             >
               <X className="mr-1 h-3.5 w-3.5" />
-              Replace
+              {t("replace")}
             </Button>
           </div>
         ) : (
@@ -117,9 +119,9 @@ export function PhotoUploadPanel({
             <div className="mb-3 rounded-xl bg-slate-100 p-3 dark:bg-slate-900">
               <Upload className="h-5 w-5 text-slate-500 dark:text-slate-400" />
             </div>
-            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Upload portrait</span>
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t("uploadPortrait")}</span>
             <span className="mt-1 max-w-[220px] text-xs leading-5 text-slate-500 dark:text-slate-400">
-              JPG, PNG, WebP, or GIF under 10MB.
+              {t("uploadHint")}
             </span>
             <input
               type="file"
@@ -135,7 +137,7 @@ export function PhotoUploadPanel({
       {(error || uploading) && (
         <div className="border-t border-slate-100 px-4 py-3 text-sm dark:border-slate-800">
           {error && <p className="text-destructive">{error}</p>}
-          {uploading && <p className="text-slate-500 dark:text-slate-400">Uploading portrait...</p>}
+          {uploading && <p className="text-slate-500 dark:text-slate-400">{t("uploading")}</p>}
         </div>
       )}
     </section>

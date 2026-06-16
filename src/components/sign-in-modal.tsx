@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 
 import { authClient } from "@/lib/auth/client";
+import { getAuthCallbackURL } from "@/lib/auth/callback-url";
 import { Button } from "@/components/ui/button";
 import * as Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
@@ -27,7 +28,7 @@ export const SignInModalContent = ({ lang }: SignInModalContentProps) => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
 
-  const callbackURL = searchParams?.get("from") ?? `/${lang}${siteConfig.routes.defaultLoginRedirect}`;
+  const callbackURL = getAuthCallbackURL(searchParams, lang);
 
   const handleSocialLogin = async (provider: "google") => {
     setSignInClicked(provider);

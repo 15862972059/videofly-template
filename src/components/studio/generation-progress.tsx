@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { Loader2, Clock } from "lucide-react";
 
 interface GenerationProgressProps {
@@ -42,6 +43,7 @@ export function GenerationProgress({
   estimatedDurationMs,
   modelName,
 }: GenerationProgressProps) {
+  const t = useTranslations("Studio.generationProgress");
   const [elapsed, setElapsed] = useState(0);
   const [progress, setProgress] = useState(0);
   const startTimeRef = useRef<number>(0);
@@ -120,7 +122,7 @@ export function GenerationProgress({
 
           <div className="min-w-0">
             <p className="text-sm font-semibold text-slate-950 dark:text-white truncate">
-              {isGenerating ? "Generating with " : "Generated with "}
+              {isGenerating ? t("generatingWith") : t("generatedWith")}
               <span className="text-indigo-600 dark:text-indigo-400">{modelName}</span>
             </p>
             <div className="flex items-center gap-2 mt-0.5">
@@ -151,7 +153,7 @@ export function GenerationProgress({
       {isGenerating && (
         <div className="px-4 pb-3 -mt-1">
           <p className="text-[11px] text-slate-400 dark:text-slate-500">
-            Please don&apos;t close this page. You can also check results in your generation history.
+            {t("keepOpen")}
           </p>
         </div>
       )}

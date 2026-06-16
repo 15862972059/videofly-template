@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ImageIcon, Sparkles } from "lucide-react";
 import { GenerationResult } from "./generation-result";
 import type { ClassicImageData } from "@/types/ai-photo";
@@ -22,6 +23,7 @@ export function RemixResultPanel({
   selectedScene,
   aspectRatio,
 }: RemixResultPanelProps) {
+  const t = useTranslations("Studio.remixResult");
   const [previewMode, setPreviewMode] = useState<"result" | "scene">("result");
   const hasSelectedScene = Boolean(selectedScene);
   const sceneDisplayUrl = selectedScene ? getSceneDisplayUrl(selectedScene) : "";
@@ -50,13 +52,13 @@ export function RemixResultPanel({
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-blue-500" />
             <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">
-              {result ? "Generated result" : selectedScene ? "Scene preview" : "Result preview"}
+              {result ? t("generatedResult") : selectedScene ? t("scenePreview") : t("resultPreview")}
             </h3>
           </div>
           <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">
             {result
-              ? "Save, share, or compare with the original scene."
-              : "Your generated image will appear in this canvas."}
+              ? t("generatedHint")
+              : t("emptyHint")}
           </p>
         </div>
 
@@ -71,7 +73,7 @@ export function RemixResultPanel({
                   : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
-              Scene
+              {t("scene")}
             </button>
             <button
               type="button"
@@ -82,7 +84,7 @@ export function RemixResultPanel({
                   : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
-              Result
+              {t("result")}
             </button>
           </div>
         )}
@@ -113,11 +115,11 @@ export function RemixResultPanel({
             </div>
             <p className="max-w-xs text-center text-sm font-medium text-slate-600 dark:text-slate-300">
               {sourceImageKey && hasSelectedScene
-                ? "Ready to generate"
-                : "Upload a portrait and select a scene"}
+                ? t("ready")
+                : t("needsInputs")}
             </p>
             <p className="mt-1 max-w-xs text-center text-xs leading-5 text-slate-500 dark:text-slate-400">
-              The result canvas stays focused here while controls live in the side rail and prompt bar.
+              {t("canvasHint")}
             </p>
           </div>
         )}

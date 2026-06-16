@@ -640,7 +640,118 @@
     "loadingScene": "Loading Scene",
     "loadingSceneHint": "Preparing your selected scene...",
     "loadingStudio": "Loading Studio",
-    "loadingStudioHint": "Preparing your creative workspace..."
+    "loadingStudioHint": "Preparing your creative workspace...",
+    "textToImage": {
+      "title": "Text to Image Workspace",
+      "subtitle": "Turn a written prompt into a finished image.",
+      "resultTitle": "Result preview",
+      "generatedResultTitle": "Generated result",
+      "resultHint": "Your generated image will appear in this canvas.",
+      "generatedResultHint": "Save, share, or start another generation.",
+      "emptyTitle": "Enter a prompt to generate",
+      "emptyHint": "The canvas keeps the selected ratio and resolution visible while you compose.",
+      "newImage": "New image",
+      "prompt": "Prompt",
+      "welcomeCredit": "New users get {credits} free credit. The default 1K image costs {cost} credit.",
+      "trySamplePrompt": "Try sample prompt",
+      "promptPlaceholder": "A beautiful sunset over the Eiffel Tower, golden hour lighting, cinematic composition...",
+      "resolution": "Resolution",
+      "ratio": "Ratio",
+      "cost": "Cost",
+      "generate": "Generate",
+      "generating": "Generating",
+      "outputSettings": "Output settings",
+      "outputSettingsHint": "1K is the default baseline.",
+      "model": "Model",
+      "aspectRatio": "Aspect ratio",
+      "credits": "credits",
+      "promptStarters": "Prompt starters",
+      "promptStartersHint": "Append a visual style.",
+      "styles": {
+        "photorealistic": "Photorealistic",
+        "anime": "Anime",
+        "oilPainting": "Oil Painting",
+        "digitalArt": "Digital Art",
+        "watercolor": "Watercolor"
+      },
+      "resolutionDescriptions": {
+        "1k": "Standard generation, fastest option",
+        "2k": "Higher detail for sharing and light editing",
+        "4k": "Largest output for presentation and print crops"
+      }
+    },
+    "generationResult": {
+      "alt": "AI Generated",
+      "save": "Save",
+      "share": "Share",
+      "shareTitle": "My AI Art Creation",
+      "shareText": "Check out my AI-generated image!"
+    },
+    "generationProgress": {
+      "generatingWith": "Generating with ",
+      "generatedWith": "Generated with ",
+      "keepOpen": "Please don't close this page. You can also check results in your generation history."
+    },
+    "remix": {
+      "title": "Image Remix Workspace",
+      "subtitle": "Compose a new image from your portrait and a selected scene.",
+      "sceneReady": "Scene ready",
+      "chooseScene": "Choose scene",
+      "missingInputs": "Please upload a photo and select a scene"
+    },
+    "remixResult": {
+      "generatedResult": "Generated result",
+      "scenePreview": "Scene preview",
+      "resultPreview": "Result preview",
+      "generatedHint": "Save, share, or compare with the original scene.",
+      "emptyHint": "Your generated image will appear in this canvas.",
+      "scene": "Scene",
+      "result": "Result",
+      "ready": "Ready to generate",
+      "needsInputs": "Upload a portrait and select a scene",
+      "canvasHint": "The result canvas stays focused here while controls live in the side rail and prompt bar."
+    },
+    "promptPanel": {
+      "prompt": "Prompt",
+      "refinePlaceholder": "Refine the selected scene...",
+      "choosePlaceholder": "Choose a scene, upload a portrait, then refine the prompt...",
+      "credit": "credit",
+      "credits": "credits",
+      "generate": "Generate",
+      "generating": "Generating"
+    },
+    "scenePanel": {
+      "title": "Scene base",
+      "subtitle": "Style and destination",
+      "change": "Change",
+      "selected": "Selected",
+      "clearSelectedScene": "Clear selected scene",
+      "chooseScene": "Choose scene",
+      "browseGallery": "Browse Gallery",
+      "dialogTitle": "Select Scene",
+      "dialogDescription": "Choose a classic artwork scene to merge with your photo.",
+      "searchPlaceholder": "Search scenes by title...",
+      "categories": "Categories",
+      "clear": "Clear",
+      "allScenes": "All Scenes",
+      "noScenes": "No scenes found matching the criteria.",
+      "showing": "Showing {count} of {total} scenes",
+      "loading": "Loading...",
+      "loadMore": "Load more"
+    },
+    "uploadPanel": {
+      "title": "Source photo",
+      "subtitle": "Portrait or subject image",
+      "ready": "Ready",
+      "uploadedAlt": "Uploaded preview",
+      "replace": "Replace",
+      "uploadPortrait": "Upload portrait",
+      "uploadHint": "JPG, PNG, WebP, or GIF under 10MB.",
+      "invalidType": "Invalid file type. Please upload JPEG, PNG, WebP, or GIF.",
+      "fileTooLarge": "File too large. Maximum size is 10MB.",
+      "uploadFailed": "Upload failed",
+      "uploading": "Uploading portrait..."
+    }
   },
   "ShowcaseGallery": {
     "badge": "Text to Image Gallery",

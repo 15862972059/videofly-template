@@ -640,7 +640,118 @@
     "loadingScene": "正在加载场景",
     "loadingSceneHint": "正在准备你选择的场景...",
     "loadingStudio": "正在加载工作室",
-    "loadingStudioHint": "正在准备你的创作空间..."
+    "loadingStudioHint": "正在准备你的创作空间...",
+    "textToImage": {
+      "title": "文生图工作台",
+      "subtitle": "输入提示词，生成一张完整图片。",
+      "resultTitle": "结果预览",
+      "generatedResultTitle": "生成结果",
+      "resultHint": "生成后的图片会显示在这里。",
+      "generatedResultHint": "保存、分享，或继续生成新的图片。",
+      "emptyTitle": "输入提示词开始生成",
+      "emptyHint": "画布会按照你选择的比例和分辨率展示预览。",
+      "newImage": "新建图片",
+      "prompt": "提示词",
+      "welcomeCredit": "新用户可获得 {credits} 个免费积分。默认 1K 图片消耗 {cost} 个积分。",
+      "trySamplePrompt": "试用示例提示词",
+      "promptPlaceholder": "埃菲尔铁塔上空的绝美日落，黄金时刻光线，电影感构图...",
+      "resolution": "分辨率",
+      "ratio": "比例",
+      "cost": "消耗",
+      "generate": "生成",
+      "generating": "生成中",
+      "outputSettings": "输出设置",
+      "outputSettingsHint": "1K 是默认基础规格。",
+      "model": "模型",
+      "aspectRatio": "图片比例",
+      "credits": "积分",
+      "promptStarters": "提示词风格",
+      "promptStartersHint": "快速追加一种视觉风格。",
+      "styles": {
+        "photorealistic": "写实摄影",
+        "anime": "动漫风",
+        "oilPainting": "油画",
+        "digitalArt": "数字艺术",
+        "watercolor": "水彩"
+      },
+      "resolutionDescriptions": {
+        "1k": "标准生成，速度最快",
+        "2k": "细节更丰富，适合分享和轻度编辑",
+        "4k": "最大输出，适合展示和打印裁剪"
+      }
+    },
+    "generationResult": {
+      "alt": "AI 生成图片",
+      "save": "保存",
+      "share": "分享",
+      "shareTitle": "我的 AI 艺术作品",
+      "shareText": "看看我用 AI 生成的图片！"
+    },
+    "generationProgress": {
+      "generatingWith": "正在使用 ",
+      "generatedWith": "已使用 ",
+      "keepOpen": "请不要关闭此页面。你也可以稍后在生成历史中查看结果。"
+    },
+    "remix": {
+      "title": "图片重绘工作台",
+      "subtitle": "将你的人像与选定场景组合成一张新图片。",
+      "sceneReady": "场景已就绪",
+      "chooseScene": "选择场景",
+      "missingInputs": "请上传照片并选择场景"
+    },
+    "remixResult": {
+      "generatedResult": "生成结果",
+      "scenePreview": "场景预览",
+      "resultPreview": "结果预览",
+      "generatedHint": "保存、分享，或与原始场景对比。",
+      "emptyHint": "生成后的图片会显示在这里。",
+      "scene": "场景",
+      "result": "结果",
+      "ready": "可以开始生成",
+      "needsInputs": "上传人像并选择一个场景",
+      "canvasHint": "结果画布会固定显示在这里，侧栏和底部用于调整参数。"
+    },
+    "promptPanel": {
+      "prompt": "提示词",
+      "refinePlaceholder": "继续细化选定场景...",
+      "choosePlaceholder": "选择场景、上传人像后，再细化提示词...",
+      "credit": "积分",
+      "credits": "积分",
+      "generate": "生成",
+      "generating": "生成中"
+    },
+    "scenePanel": {
+      "title": "场景基础图",
+      "subtitle": "风格与目的地",
+      "change": "更换",
+      "selected": "已选择",
+      "clearSelectedScene": "清除已选场景",
+      "chooseScene": "选择场景",
+      "browseGallery": "浏览图库",
+      "dialogTitle": "选择场景",
+      "dialogDescription": "选择一个经典艺术场景，与照片进行融合。",
+      "searchPlaceholder": "按标题搜索场景...",
+      "categories": "分类",
+      "clear": "清除",
+      "allScenes": "全部场景",
+      "noScenes": "没有找到符合条件的场景。",
+      "showing": "已显示 {count} / {total} 个场景",
+      "loading": "加载中...",
+      "loadMore": "加载更多"
+    },
+    "uploadPanel": {
+      "title": "源照片",
+      "subtitle": "人像或主体图片",
+      "ready": "已就绪",
+      "uploadedAlt": "上传预览",
+      "replace": "替换",
+      "uploadPortrait": "上传人像",
+      "uploadHint": "支持 JPG、PNG、WebP 或 GIF，大小不超过 10MB。",
+      "invalidType": "文件类型无效。请上传 JPEG、PNG、WebP 或 GIF。",
+      "fileTooLarge": "文件过大。最大支持 10MB。",
+      "uploadFailed": "上传失败",
+      "uploading": "正在上传人像..."
+    }
   },
   "ShowcaseGallery": {
     "badge": "文生图作品集",

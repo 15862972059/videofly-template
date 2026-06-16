@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   ImageIcon,
   Loader2,
@@ -10,6 +11,7 @@ import {
   WandSparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { NEW_USER_GIFT } from "@/config/pricing-user";
 import {
   IMAGE_MODELS,
   type ImageModel,
@@ -77,14 +79,18 @@ const canvasWidthClass: Record<"1:1" | "3:4" | "9:16" | "16:9", string> = {
 };
 
 const promptStyles = [
-  { label: "Photorealistic", suffix: "photorealistic style, natural light, crisp details" },
-  { label: "Anime", suffix: "anime style, clean line art, expressive lighting" },
-  { label: "Oil Painting", suffix: "oil painting texture, layered brushwork, gallery lighting" },
-  { label: "Digital Art", suffix: "digital art style, polished composition, cinematic color" },
-  { label: "Watercolor", suffix: "watercolor wash, soft edges, delicate paper texture" },
-];
+  { labelKey: "photorealistic", suffix: "photorealistic style, natural light, crisp details" },
+  { labelKey: "anime", suffix: "anime style, clean line art, expressive lighting" },
+  { labelKey: "oilPainting", suffix: "oil painting texture, layered brushwork, gallery lighting" },
+  { labelKey: "digitalArt", suffix: "digital art style, polished composition, cinematic color" },
+  { labelKey: "watercolor", suffix: "watercolor wash, soft edges, delicate paper texture" },
+] as const;
+
+const samplePrompt =
+  "A cozy robot artist painting a glowing city skyline at sunset, cinematic lighting, vibrant colors, highly detailed digital art";
 
 export function TextToImage({ onGenerate, generating, result, onClearResult }: TextToImageProps) {
+  const t = useTranslations("Studio.textToImage");
   const [prompt, setPrompt] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [model, setModel] = useState<ImageModel>("gpt-image-2");
@@ -159,14 +165,19 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
     });
   };
 
+  const useSamplePrompt = () => {
+    if (isWorking) return;
+    setPrompt(samplePrompt);
+  };
+
   return (
     <div className="relative grid min-h-[calc(100vh-13rem)] gap-5 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_392px]">
       <main className="flex min-h-[640px] min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
         <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-3 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-semibold text-slate-950 dark:text-white">Text to Image Workspace</p>
+            <p className="text-sm font-semibold text-slate-950 dark:text-white">{t("title")}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Turn a written prompt into a finished image.
+              {t("subtitle")}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs">
@@ -195,13 +206,13 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
                 <div className="flex items-center gap-2">
                   <ImageIcon className="h-4 w-4 text-blue-500" />
                   <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">
-                    {result ? "Generated result" : "Result preview"}
+                    {result ? t("generatedResultTitle") : t("resultTitle")}
                   </h3>
                 </div>
                 <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">
                   {result
-                    ? "Save, share, or start another generation."
-                    : "Your generated image will appear in this canvas."}
+                    ? t("generatedResultHint")
+                    : t("resultHint")}
                 </p>
               </div>
 
@@ -211,7 +222,7 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
                   onClick={onClearResult}
                   className="min-h-8 cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-white"
                 >
-                  New image
+                  {t("newImage")}
                 </button>
               )}
             </div>
@@ -230,10 +241,10 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
                     <Send className="h-6 w-6 opacity-60" />
                   </div>
                   <p className="max-w-xs text-center text-sm font-medium text-slate-600 dark:text-slate-300">
-                    Enter a prompt to generate
+                    {t("emptyTitle")}
                   </p>
                   <p className="mt-1 max-w-xs text-center text-xs leading-5 text-slate-500 dark:text-slate-400">
-                    The canvas keeps the selected ratio and resolution visible while you compose.
+                    {t("emptyHint")}
                   </p>
                 </div>
               )}
@@ -246,12 +257,29 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
             <div className="min-w-0">
               <div className="mb-2 flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
                 <Sparkles className="h-3.5 w-3.5 text-slate-400" />
-                Prompt
+                {t("prompt")}
               </div>
+              {NEW_USER_GIFT.enabled && (
+                <div className="mb-3 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2 text-xs text-blue-800 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-100">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <p>
+                      {t("welcomeCredit", { credits: NEW_USER_GIFT.credits, cost: creditCost })}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={useSamplePrompt}
+                      disabled={isWorking}
+                      className="w-fit rounded-lg bg-blue-600 px-3 py-1.5 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-500 dark:hover:bg-blue-400"
+                    >
+                      {t("trySamplePrompt")}
+                    </button>
+                  </div>
+                </div>
+              )}
               <textarea
                 value={prompt}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}
-                placeholder="A beautiful sunset over the Eiffel Tower, golden hour lighting, cinematic composition..."
+                placeholder={t("promptPlaceholder")}
                 disabled={isWorking}
                 className="min-h-[84px] w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm leading-6 text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white focus:ring-2 focus:ring-slate-200 disabled:opacity-70 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-slate-500 dark:focus:bg-slate-900 dark:focus:ring-slate-700"
               />
@@ -260,19 +288,19 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
             <div className="flex min-w-0 flex-col gap-3 lg:w-[332px]">
               <div className="grid grid-cols-3 gap-2 text-xs">
                 <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Resolution</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{t("resolution")}</p>
                   <p className="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
                     {selectedResolution?.label ?? resolution.toUpperCase()}
                   </p>
                 </div>
                 <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Ratio</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{t("ratio")}</p>
                   <p className="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
                     {aspectRatio}
                   </p>
                 </div>
                 <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Cost</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{t("cost")}</p>
                   <p className="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
                     {creditCost}
                   </p>
@@ -287,12 +315,12 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
                 {isWorking ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating
+                    {t("generating")}
                   </>
                 ) : (
                   <>
                     <Sparkles className="mr-2 h-4 w-4" />
-                    Generate
+                    {t("generate")}
                   </>
                 )}
               </Button>
@@ -308,16 +336,16 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
               <SlidersHorizontal className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">Output settings</h3>
+              <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">{t("outputSettings")}</h3>
               <p className="truncate text-xs text-slate-500 dark:text-slate-400">
-                1K is the default baseline.
+                {t("outputSettingsHint")}
               </p>
             </div>
           </div>
 
           <div className="space-y-4 bg-slate-50 p-3 dark:bg-slate-900/50">
             <div>
-              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">Model</p>
+              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">{t("model")}</p>
               <Select value={model} onValueChange={handleModelChange} disabled={isWorking}>
                 <SelectTrigger className="h-10 rounded-xl bg-white text-xs dark:bg-slate-950">
                   <SelectValue />
@@ -333,7 +361,7 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">Resolution</p>
+              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">{t("resolution")}</p>
               <div className="grid gap-2">
                 {resolutionOptions.map((option) => (
                   <button
@@ -349,10 +377,10 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
                   >
                     <span className="flex items-center justify-between gap-3 text-sm font-semibold">
                       {option.label}
-                      <span>{option.creditCost} credits</span>
+                      <span>{option.creditCost} {t("credits")}</span>
                     </span>
                     <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                      {option.description}
+                      {t(`resolutionDescriptions.${option.value}`)}
                     </span>
                   </button>
                 ))}
@@ -360,7 +388,7 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">Aspect ratio</p>
+              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">{t("aspectRatio")}</p>
               <div className="grid grid-cols-2 gap-2">
                 {aspectRatioOptions.map((option) => {
                   const supported = supportedRatios.includes(option.value);
@@ -392,20 +420,20 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
               <WandSparkles className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">Prompt starters</h3>
-              <p className="truncate text-xs text-slate-500 dark:text-slate-400">Append a visual style.</p>
+              <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">{t("promptStarters")}</h3>
+              <p className="truncate text-xs text-slate-500 dark:text-slate-400">{t("promptStartersHint")}</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2 bg-slate-50 p-3 dark:bg-slate-900/50">
             {promptStyles.map((style) => (
               <button
-                key={style.label}
+                key={style.labelKey}
                 type="button"
                 onClick={() => addPromptStyle(style.suffix)}
                 disabled={isWorking}
                 className="min-h-9 cursor-pointer rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300 dark:hover:text-white"
               >
-                {style.label}
+                {t(`styles.${style.labelKey}`)}
               </button>
             ))}
           </div>

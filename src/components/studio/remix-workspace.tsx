@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { ClassicImageData } from "@/types/ai-photo";
 import { PromptPanel } from "./prompt-panel";
 import { PhotoUploadPanel } from "./photo-upload-panel";
@@ -25,6 +26,7 @@ interface RemixWorkspaceProps {
 }
 
 export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
+  const t = useTranslations("Studio.remix");
   const [sourceImageKey, setSourceImageKey] = useState<string | null>(null);
   const [uploadingSource, setUploadingSource] = useState(false);
   const [aspectRatio, setAspectRatio] = useState<"1:1" | "3:4" | "9:16" | "16:9">("9:16");
@@ -57,7 +59,7 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
 
   const handleGenerate = async (prompt: string) => {
     if (!sourceImageKey || !selectedScene) {
-      setError("Please upload a photo and select a scene");
+      setError(t("missingInputs"));
       return;
     }
 
@@ -108,9 +110,9 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
       <main className="flex min-h-[640px] min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
         <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-3 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-semibold text-slate-950 dark:text-white">Image Remix Workspace</p>
+            <p className="text-sm font-semibold text-slate-950 dark:text-white">{t("title")}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Compose a new image from your portrait and a selected scene.
+              {t("subtitle")}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs">
@@ -124,7 +126,7 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
               {resolution.toUpperCase()}
             </span>
             <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
-              {selectedScene ? "Scene ready" : "Choose scene"}
+              {selectedScene ? t("sceneReady") : t("chooseScene")}
             </span>
           </div>
         </div>

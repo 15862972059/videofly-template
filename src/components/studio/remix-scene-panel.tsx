@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { ExternalLink, ImageIcon, MapPin, RefreshCcw, Search, X } from "lucide-react";
 import type { ClassicImageData } from "@/types/ai-photo";
 import {
@@ -54,6 +55,7 @@ function ImageWithFallback({ src, alt, className, loading = "lazy" }: { src: str
 }
 
 export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScenePanelProps) {
+  const t = useTranslations("Studio.scenePanel");
   const [showPicker, setShowPicker] = useState(false);
   const [category, setCategory] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -136,8 +138,8 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
             <ImageIcon className="h-4 w-4" />
           </div>
           <div className="min-w-0">
-            <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">Scene base</h3>
-            <p className="truncate text-xs text-slate-500 dark:text-slate-400">Style and destination</p>
+            <h3 className="truncate text-sm font-semibold text-slate-950 dark:text-white">{t("title")}</h3>
+            <p className="truncate text-xs text-slate-500 dark:text-slate-400">{t("subtitle")}</p>
           </div>
         </div>
 
@@ -148,7 +150,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
             className="inline-flex min-h-8 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-white"
           >
             <RefreshCcw className="h-3.5 w-3.5" />
-            Change
+            {t("change")}
           </button>
         )}
       </div>
@@ -165,7 +167,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent p-3">
               <div className="mb-2 inline-flex items-center gap-1.5 rounded-lg bg-white/15 px-2 py-1 text-[10px] font-medium text-white backdrop-blur">
                 <MapPin className="h-3.5 w-3.5" />
-                Selected
+                {t("selected")}
               </div>
               <p className="truncate text-sm font-semibold text-white capitalize">{selectedScene.title}</p>
               <p className="mt-0.5 truncate text-xs text-white/75 capitalize">
@@ -177,7 +179,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
               type="button"
               onClick={onClear}
               className="absolute right-2 top-2 inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-white/20 bg-slate-950/45 text-white transition hover:bg-slate-950/70"
-              aria-label="Clear selected scene"
+              aria-label={t("clearSelectedScene")}
             >
               <X className="h-4 w-4" />
             </button>
@@ -187,13 +189,13 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
             <div className="mb-3 rounded-xl bg-slate-100 p-3 dark:bg-slate-900">
               <ImageIcon className="h-5 w-5 text-slate-500 dark:text-slate-400" />
             </div>
-            <p className="text-center text-sm font-semibold text-slate-600 dark:text-slate-300">Choose scene</p>
+            <p className="text-center text-sm font-semibold text-slate-600 dark:text-slate-300">{t("chooseScene")}</p>
             <button
               type="button"
               onClick={() => setShowPicker(true)}
               className="mt-3 inline-flex min-h-9 cursor-pointer items-center gap-2 rounded-lg bg-slate-950 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
             >
-              Browse Gallery
+              {t("browseGallery")}
               <ExternalLink className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -210,10 +212,10 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
             <div>
               <DialogTitle className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <ImageIcon className="h-5 w-5 text-indigo-500" />
-                Select Scene
+                {t("dialogTitle")}
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Choose a classic artwork scene to merge with your photo.
+                {t("dialogDescription")}
               </DialogDescription>
             </div>
 
@@ -223,7 +225,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search scenes by title..."
+                placeholder={t("searchPlaceholder")}
                 className="w-full pl-9 pr-8 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all"
               />
               {search && (
@@ -243,7 +245,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
             <aside className="border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/50 p-4 lg:w-60 lg:border-b-0 lg:border-r">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-                  Categories
+                  {t("categories")}
                 </p>
                 {category && (
                   <button
@@ -251,7 +253,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
                     onClick={() => setCategory(null)}
                     className="cursor-pointer text-xs font-medium text-slate-500 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                   >
-                    Clear
+                    {t("clear")}
                   </button>
                 )}
               </div>
@@ -265,7 +267,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
                       : "bg-white dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
-                  All Scenes
+                  {t("allScenes")}
                 </button>
                 {categories.map((cat) => (
                   <button
@@ -298,7 +300,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
               ) : images.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 text-slate-400">
                   <ImageIcon className="h-10 w-10 opacity-30 mb-2" />
-                  <p className="text-sm font-medium">No scenes found matching the criteria.</p>
+                  <p className="text-sm font-medium">{t("noScenes")}</p>
                 </div>
               ) : (
                 <div className="space-y-5">
@@ -341,7 +343,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
 
                   <div className="flex flex-col items-center gap-3">
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Showing {images.length} of {total} scenes
+                      {t("showing", { count: images.length, total })}
                     </p>
                     {images.length < total && (
                       <button
@@ -350,7 +352,7 @@ export function RemixScenePanel({ selectedScene, onSelect, onClear }: RemixScene
                         disabled={loadingMore}
                         className="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-white"
                       >
-                        {loadingMore ? "Loading..." : "Load more"}
+                        {loadingMore ? t("loading") : t("loadMore")}
                       </button>
                     )}
                   </div>
