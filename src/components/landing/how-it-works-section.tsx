@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { LocaleLink } from "@/i18n/navigation";
+import { StudioLink } from "@/components/landing/studio-link";
 
 const stepIcons = [ImagePlus, Upload, MessageSquareText, Download];
 
@@ -77,12 +77,12 @@ export function HowItWorks() {
 
         <BlurFade delay={0.45} inView>
           <div className="mt-14 flex justify-center">
-            <LocaleLink href="/studio">
+            <StudioLink>
               <ShimmerButton borderRadius="999px" background="#059669" className="px-8 py-3 text-sm font-semibold shadow-lg shadow-emerald-700/20">
                 {t("cta")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </ShimmerButton>
-            </LocaleLink>
+            </StudioLink>
           </div>
         </BlurFade>
       </div>

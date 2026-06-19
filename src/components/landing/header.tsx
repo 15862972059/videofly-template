@@ -24,10 +24,12 @@ import { cn } from "@/components/ui";
 import { LocaleChange } from "@/components/locale-change";
 import { useSigninModal } from "@/hooks/use-signin-modal";
 import { LocaleLink, useLocaleRouter } from "@/i18n/navigation";
-import { authClient, type User } from "@/lib/auth/client";
+import { authClient, useSession, type User } from "@/lib/auth/client";
 import { useCredits } from "@/stores/credits-store";
 
 export function LandingHeader({ user }: { user?: User | null }) {
+  const { data: session } = useSession();
+  const currentUser = user ?? session?.user ?? null;
   const t = useTranslations();
   const tHeader = useTranslations("LandingHeader");
   const tTheme = useTranslations("Theme");
@@ -113,18 +115,18 @@ export function LandingHeader({ user }: { user?: User | null }) {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {user && (
+            {currentUser && (
               <div className="flex h-9 items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 text-sm font-semibold text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
                 <Gem className="h-4 w-4" />
                 <CreditsDisplay />
               </div>
             )}
 
-            {user ? (
+            {currentUser ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button type="button" className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700 transition-opacity hover:opacity-80 dark:bg-emerald-500/15 dark:text-emerald-200">
-                    {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
+                    {currentUser.name?.[0]?.toUpperCase() || currentUser.email?.[0]?.toUpperCase()}
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -159,7 +161,7 @@ export function LandingHeader({ user }: { user?: User | null }) {
           </LocaleLink>
 
           <div className="flex items-center gap-2">
-            {user && (
+            {currentUser && (
               <div className="flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">
                 <Gem className="h-3 w-3" />
                 <CreditsDisplay />
@@ -186,7 +188,7 @@ export function LandingHeader({ user }: { user?: User | null }) {
                     </LocaleLink>
                   ))}
                   <div className="my-4 h-px bg-border" />
-                  {user ? (
+                  {currentUser ? (
                     <button type="button" onClick={handleSignOut} className="rounded-lg px-3 py-2 text-left font-medium text-destructive hover:bg-destructive/10">
                       {t("Common.logout")}
                     </button>

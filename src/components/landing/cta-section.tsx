@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { LocaleLink } from "@/i18n/navigation";
+import { StudioLink } from "@/components/landing/studio-link";
 import { NEW_USER_GIFT } from "@/config/pricing-user";
 
 export function CTASection() {
@@ -52,12 +52,12 @@ export function CTASection() {
                     </li>
                   ))}
                 </ul>
-                <LocaleLink href="/studio" className="mt-8 w-fit">
+                <StudioLink className="mt-8 w-fit">
                   <ShimmerButton borderRadius="999px" background="#059669" className="px-8 py-3 text-sm font-semibold shadow-lg shadow-emerald-700/20">
                     {t("cta")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </ShimmerButton>
-                </LocaleLink>
+                </StudioLink>
               </div>
 
               <motion.div

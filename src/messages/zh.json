@@ -768,7 +768,7 @@
         "id": 1,
         "title": "月夜汉服幻想人像",
         "prompt": "A graceful woman in flowing white hanfu by a moonlit garden pond, soft cinematic shadows, elegant fantasy atmosphere, detailed fabric motion.",
-        "image": "/images/homepage/5.21.png",
+        "image": "/images/homepage/5.21.webp",
         "tag": "幻想"
       },
       {
@@ -796,7 +796,7 @@
         "id": 5,
         "title": "富士山旅行写真",
         "prompt": "Cinematic travel portrait with blooming cherry blossoms, Mt. Fuji backdrop, soft natural daylight, premium editorial photography style.",
-        "image": "/images/homepage/gallery-japan-fuji-mix.png",
+        "image": "/images/homepage/gallery-japan-fuji-mix.webp",
         "tag": "旅行"
       },
       {
@@ -842,13 +842,13 @@
         "tabName": "富士山",
         "sceneLabel": "目的地场景",
         "sceneTitle": "日本富士山场景",
-        "sceneImage": "/images/homepage/gallery-japan-fuji-c.png",
+        "sceneImage": "/images/homepage/gallery-japan-fuji-c.webp",
         "portraitLabel": "上传人像",
         "portraitTitle": "用户人像",
         "portraitImage": "/images/homepage/gallery-japan-fuji-p.jpeg",
         "resultLabel": "生成结果",
         "resultTitle": "富士山重绘成片",
-        "resultImage": "/images/homepage/gallery-japan-fuji-mix.png",
+        "resultImage": "/images/homepage/gallery-japan-fuji-mix.webp",
         "promptSeed": "Cinematic portrait with blooming cherry blossoms, Mt. Fuji backdrop, soft natural daylight, premium travel photography style."
       },
       {
@@ -856,13 +856,13 @@
         "tabName": "巴塞罗那",
         "sceneLabel": "目的地场景",
         "sceneTitle": "巴塞罗那街景",
-        "sceneImage": "/images/homepage/spain-barcelona-c.png",
+        "sceneImage": "/images/homepage/spain-barcelona-c.webp",
         "portraitLabel": "上传人像",
         "portraitTitle": "用户人像",
         "portraitImage": "/images/homepage/spain-barcelona-p.jpeg",
         "resultLabel": "生成结果",
         "resultTitle": "巴塞罗那重绘成片",
-        "resultImage": "/images/homepage/spain-barcelona-mix.png",
+        "resultImage": "/images/homepage/spain-barcelona-mix.webp",
         "promptSeed": "Editorial travel shot in Barcelona, beautiful architectural elements, warm golden hour sunbeams, cinematic depth of field."
       },
       {
@@ -870,13 +870,13 @@
         "tabName": "赛博街区",
         "sceneLabel": "目的地场景",
         "sceneTitle": "霓虹赛博小巷",
-        "sceneImage": "/images/homepage/j-c.png",
+        "sceneImage": "/images/homepage/j-c.webp",
         "portraitLabel": "上传人像",
         "portraitTitle": "用户人像",
-        "portraitImage": "/images/homepage/j-p.png",
+        "portraitImage": "/images/homepage/j-p.webp",
         "resultLabel": "生成结果",
         "resultTitle": "赛博风重绘成片",
-        "resultImage": "/images/homepage/j-mix.png",
+        "resultImage": "/images/homepage/j-mix.webp",
         "promptSeed": "Cyberpunk editorial fashion portrait, neon-lit rainy street style, glowing reflections, ultra-realistic night photography."
       }
     ],

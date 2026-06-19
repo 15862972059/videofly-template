@@ -9,9 +9,9 @@ import type { CreditsDictionary } from "@/hooks/use-credit-packages";
 import type { UserSubscriptionPlan } from "@/types";
 
 export async function PricingSection() {
-  const user = await getCurrentUser();
-  let subscriptionPlan: UserSubscriptionPlan | undefined;
   const isCreem = billingProvider === "creem";
+  const user = isCreem ? null : await getCurrentUser();
+  let subscriptionPlan: UserSubscriptionPlan | undefined;
 
   if (user && !isCreem) {
     subscriptionPlan = await getUserPlans(user.id);

@@ -768,7 +768,7 @@
         "id": 1,
         "title": "Moonlit Hanfu Fantasy Portrait",
         "prompt": "A graceful woman in flowing white hanfu by a moonlit garden pond, soft cinematic shadows, elegant fantasy atmosphere, detailed fabric motion.",
-        "image": "/images/homepage/5.21.png",
+        "image": "/images/homepage/5.21.webp",
         "tag": "Fantasy"
       },
       {
@@ -796,7 +796,7 @@
         "id": 5,
         "title": "Mount Fuji Travel Portrait",
         "prompt": "Cinematic travel portrait with blooming cherry blossoms, Mt. Fuji backdrop, soft natural daylight, premium editorial photography style.",
-        "image": "/images/homepage/gallery-japan-fuji-mix.png",
+        "image": "/images/homepage/gallery-japan-fuji-mix.webp",
         "tag": "Travel"
       },
       {
@@ -842,13 +842,13 @@
         "tabName": "Mt. Fuji",
         "sceneLabel": "Destination Photo",
         "sceneTitle": "Japan Fuji Scene",
-        "sceneImage": "/images/homepage/gallery-japan-fuji-c.png",
+        "sceneImage": "/images/homepage/gallery-japan-fuji-c.webp",
         "portraitLabel": "Upload Portrait",
         "portraitTitle": "User Portrait",
         "portraitImage": "/images/homepage/gallery-japan-fuji-p.jpeg",
         "resultLabel": "Generated Result",
         "resultTitle": "Remixed in Fuji",
-        "resultImage": "/images/homepage/gallery-japan-fuji-mix.png",
+        "resultImage": "/images/homepage/gallery-japan-fuji-mix.webp",
         "promptSeed": "Cinematic portrait with blooming cherry blossoms, Mt. Fuji backdrop, soft natural daylight, premium travel photography style."
       },
       {
@@ -856,13 +856,13 @@
         "tabName": "Barcelona",
         "sceneLabel": "Destination Photo",
         "sceneTitle": "Barcelona Street",
-        "sceneImage": "/images/homepage/spain-barcelona-c.png",
+        "sceneImage": "/images/homepage/spain-barcelona-c.webp",
         "portraitLabel": "Upload Portrait",
         "portraitTitle": "User Portrait",
         "portraitImage": "/images/homepage/spain-barcelona-p.jpeg",
         "resultLabel": "Generated Result",
         "resultTitle": "Remixed in Barcelona",
-        "resultImage": "/images/homepage/spain-barcelona-mix.png",
+        "resultImage": "/images/homepage/spain-barcelona-mix.webp",
         "promptSeed": "Editorial travel shot in Barcelona, beautiful architectural elements, warm golden hour sunbeams, cinematic depth of field."
       },
       {
@@ -870,13 +870,13 @@
         "tabName": "Cyberpunk Street",
         "sceneLabel": "Destination Photo",
         "sceneTitle": "Neon Cyberpunk Alley",
-        "sceneImage": "/images/homepage/j-c.png",
+        "sceneImage": "/images/homepage/j-c.webp",
         "portraitLabel": "Upload Portrait",
         "portraitTitle": "User Portrait",
-        "portraitImage": "/images/homepage/j-p.png",
+        "portraitImage": "/images/homepage/j-p.webp",
         "resultLabel": "Generated Result",
         "resultTitle": "Remixed in Cyberpunk",
-        "resultImage": "/images/homepage/j-mix.png",
+        "resultImage": "/images/homepage/j-mix.webp",
         "promptSeed": "Cyberpunk editorial fashion portrait, neon-lit rainy street style, glowing reflections, ultra-realistic night photography."
       }
     ],

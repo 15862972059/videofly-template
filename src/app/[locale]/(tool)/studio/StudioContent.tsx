@@ -94,16 +94,17 @@ function StudioContentInner() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        {activeTab === "remix" ? (
+        <div hidden={activeTab !== "remix"} className="h-full">
           <RemixWorkspace initialScene={initialScene ?? undefined} />
-        ) : (
+        </div>
+        <div hidden={activeTab !== "text2img"} className="h-full">
           <TextToImage
             onGenerate={handleTextResult}
             generating={generating}
             result={textResult}
             onClearResult={() => setTextResult(null)}
           />
-        )}
+        </div>
       </div>
     </div>
   );

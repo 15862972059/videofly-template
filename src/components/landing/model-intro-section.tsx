@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { MagicCard } from "@/components/magicui/magic-card";
-import { LocaleLink } from "@/i18n/navigation";
+import { StudioLink } from "@/components/landing/studio-link";
 
 const featureIcons = [Shield, Sparkles, Image, Zap];
 
@@ -71,7 +71,7 @@ export function ModelIntroSection() {
 
             <BlurFade delay={0.25} inView>
               <div className="flex flex-wrap items-center gap-4">
-                <LocaleLink href="/studio">
+                <StudioLink>
                   <ShimmerButton
                     shimmerColor="#ffffff"
                     borderRadius="999px"
@@ -81,7 +81,7 @@ export function ModelIntroSection() {
                     {t("cta")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </ShimmerButton>
-                </LocaleLink>
+                </StudioLink>
               </div>
             </BlurFade>
           </div>

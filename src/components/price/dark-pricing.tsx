@@ -6,7 +6,7 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { creem } from "@/lib/auth/client";
+import { creem, useSession } from "@/lib/auth/client";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import * as Icons from "@/components/ui/icons";
@@ -61,11 +61,13 @@ export function DarkPricing({
   const [activeTab, setActiveTab] = useState<PricingTab>("monthly");
   const [isPending, startTransition] = useTransition();
   const signInModal = useSigninModal();
-  const { balance } = useCredits();
+  const { data: session } = useSession();
+  const effectiveUserId = userId ?? session?.user?.id;
+  const { balance } = useCredits(!!effectiveUserId);
   const {
     data: subscription,
     openPortal,
-  } = useSubscriptionStatus(!!userId);
+  } = useSubscriptionStatus(!!effectiveUserId);
   const userPlan = balance?.plan || "FREE";
   const isFreeUser = !userPlan || userPlan === "FREE";
   const hasAccess = !!subscription?.hasAccess;
@@ -94,7 +96,7 @@ export function DarkPricing({
   );
 
   const handleCheckout = (product: LocalizedPackage) => {
-    if (!userId) {
+    if (!effectiveUserId) {
       signInModal.onOpen();
       return;
     }
@@ -222,7 +224,7 @@ export function DarkPricing({
                 features={alignedFeatures}
                 isRecommended={isRecommended}
                 isCurrent={isCurrent}
-                userId={userId}
+                userId={effectiveUserId}
                 isPending={isPending}
                 isRestricted={isRestricted} // Pass restriction status
                 buyCreditsLabel={buyCreditsLabel}

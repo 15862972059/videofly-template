@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FolderOpen, Gem, ImagePlay, Images, Sparkles, Type, User, Video } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -38,6 +38,7 @@ interface SidebarProps {
 
 export function Sidebar({ lang = "en", mobileOpen, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const pathWithoutLang = pathname.replace(new RegExp(`^/${lang}`), "");
   const t = useTranslations("Sidebar");
   const { openModal } = useUpgradeModal();
@@ -62,11 +63,15 @@ export function Sidebar({ lang = "en", mobileOpen, onMobileClose }: SidebarProps
 
   const renderNavItem = (item: (typeof sidebarNavigation)[number]["items"][number], isActive: boolean) => {
     const Icon = item.icon ? iconMap[item.icon as keyof typeof iconMap] : null;
+    const href = `/${lang}${item.href}`;
 
     return (
       <Link
         key={item.id}
-        href={`/${lang}${item.href}`}
+        href={href}
+        prefetch
+        onMouseEnter={() => router.prefetch(href)}
+        onFocus={() => router.prefetch(href)}
         className={cn(
           "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
           isActive

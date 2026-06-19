@@ -5,6 +5,7 @@ import { ArrowRight, Check, Images, Sparkles, Type, WandSparkles } from "lucide-
 import { useTranslations } from "next-intl";
 
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { StudioLink } from "@/components/landing/studio-link";
 import { cn } from "@/components/ui";
 import { NEW_USER_GIFT } from "@/config/pricing-user";
 import { LocaleLink } from "@/i18n/navigation";
@@ -53,18 +54,18 @@ export function HeroSection() {
               <div className="relative rounded-[2rem] border border-white/80 bg-white/78 p-4 shadow-[0_24px_90px_rgba(16,185,129,0.22)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/70">
                 <div className="absolute -inset-8 -z-10 rounded-[3rem] bg-emerald-300/25 blur-3xl" />
                 <div className="flex flex-col gap-4 rounded-[1.5rem] border border-emerald-900/10 bg-white/80 p-5 dark:bg-white/5 sm:flex-row sm:items-center sm:justify-center lg:justify-start">
-                  <LocaleLink href="/studio" className="w-full sm:w-auto">
-                    <ShimmerButton
-                      shimmerColor="#ffffff"
-                      borderRadius="999px"
+                <StudioLink className="w-full sm:w-auto">
+                  <ShimmerButton
+                    shimmerColor="#ffffff"
+                    borderRadius="999px"
                       background="#059669"
                       className="h-12 w-full px-7 text-sm font-semibold shadow-lg shadow-emerald-700/20 sm:w-auto"
                     >
                       <WandSparkles className="mr-2 h-4 w-4" />
-                      {t("primaryCta")}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </ShimmerButton>
-                  </LocaleLink>
+                    {t("primaryCta")}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </ShimmerButton>
+                </StudioLink>
                   <LocaleLink
                     href="/gallery"
                     className={cn(
@@ -106,19 +107,19 @@ export function HeroSection() {
 
           <div className="hero-deck w-full">
             <div className="hero-card hero-card-1">
-              <Image src="/images/homepage/case323.jpg" alt="AI Photo Remix Case 323" fill sizes="(min-width: 1024px) 270px, 48vw" />
+              <Image src="/images/homepage/case323.jpg" alt="AI Photo Remix Case 323" fill sizes="(min-width: 1024px) 270px, 48vw" priority />
               <span>{t("gallery.case323")}</span>
             </div>
             <div className="hero-card hero-card-2">
-              <Image src="/images/homepage/case369.jpg" alt="AI Photo Remix Case 369" fill sizes="(min-width: 1024px) 230px, 44vw" />
+              <Image src="/images/homepage/case369.jpg" alt="AI Photo Remix Case 369" fill sizes="(min-width: 1024px) 230px, 44vw" priority />
               <span>{t("gallery.case369")}</span>
             </div>
             <div className="hero-card hero-card-3">
-              <Image src="/images/homepage/case443.jpg" alt="AI food poster generation example" fill sizes="(min-width: 1024px) 210px, 38vw" />
+              <Image src="/images/homepage/case443.jpg" alt="AI food poster generation example" fill sizes="(min-width: 1024px) 210px, 38vw" loading="lazy" />
               <span>{t("gallery.case443")}</span>
             </div>
             <div className="hero-card hero-card-4">
-              <Image src="/images/homepage/5.21.png" alt="AI Art Case 5.21" fill sizes="(min-width: 1024px) 285px, 52vw" />
+              <Image src="/images/homepage/5.21.webp" alt="AI Art Case 5.21" fill sizes="(min-width: 1024px) 285px, 52vw" loading="lazy" />
               <span>{t("gallery.case521")}</span>
             </div>
           </div>

@@ -35,7 +35,7 @@ interface CreditsState {
   reset: () => void;
 }
 
-const CACHE_DURATION = 30 * 1000; // 30 seconds
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export const useCreditsStore = create<CreditsState>()(
   devtools(
@@ -111,6 +111,7 @@ export const useCreditsStore = create<CreditsState>()(
             set({
               error: error instanceof Error ? error.message : "Unknown error",
               isLoading: false,
+              lastFetchedAt: Date.now(),
             });
           }
         },
@@ -144,13 +145,14 @@ export const useCreditsStore = create<CreditsState>()(
 // ============================================
 
 /** 获取积分余额（自动获取） */
-export function useCredits() {
+export function useCredits(enabled = true) {
   const { balance, isLoading, error, fetchBalance, optimisticFreeze, optimisticRelease, invalidate } = useCreditsStore();
 
   // 自动获取
   useEffect(() => {
+    if (!enabled) return;
     fetchBalance();
-  }, [fetchBalance]);
+  }, [enabled, fetchBalance]);
 
   return { balance, isLoading, error, refetch: fetchBalance, optimisticFreeze, optimisticRelease, invalidate };
 }

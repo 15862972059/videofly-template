@@ -8,7 +8,7 @@ import { BlurFade } from "@/components/magicui/blur-fade";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { LocaleLink } from "@/i18n/navigation";
+import { StudioLink } from "@/components/landing/studio-link";
 
 const primaryIconMap = [Image, MessageSquareText, Layers];
 const supportIconMap = [Zap, Lock, Clock];
@@ -126,11 +126,11 @@ export function FeaturesSection() {
 
         <BlurFade delay={0.5} inView>
           <div className="mt-14 flex justify-center">
-            <LocaleLink href="/studio">
+            <StudioLink>
               <ShimmerButton borderRadius="999px" background="#059669" className="px-8 py-3 text-sm font-semibold shadow-lg shadow-emerald-700/20">
                 {t("cta")}
               </ShimmerButton>
-            </LocaleLink>
+            </StudioLink>
           </div>
         </BlurFade>
       </div>
