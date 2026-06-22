@@ -1,9 +1,12 @@
-import { and, count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, inArray, lt } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { db, imageGenerationJobs } from "@/db";
 
 export type ImageGenerationType = "TEXT" | "REMIX";
 export type ImageGenerationStatus = "QUEUED" | "RUNNING" | "SUCCEEDED" | "FAILED";
+
+export const STALE_IMAGE_JOB_ERROR =
+  "Image generation timed out. Your reserved credit has been released.";
 
 export interface GenerationJobFilters {
   userId?: string;
@@ -132,6 +135,53 @@ export async function updateImageGenerationJobStatus(
     .where(eq(imageGenerationJobs.id, id))
     .returning();
   return updated ?? null;
+}
+
+function staleJobFailureUpdate() {
+  const now = new Date();
+  return {
+    status: "FAILED" as const,
+    errorMessage: STALE_IMAGE_JOB_ERROR,
+    completedAt: now,
+    updatedAt: now,
+  };
+}
+
+export async function failStaleImageGenerationJobs(
+  userId: string,
+  cutoff: Date
+) {
+  return db
+    .update(imageGenerationJobs)
+    .set(staleJobFailureUpdate())
+    .where(
+      and(
+        eq(imageGenerationJobs.userId, userId),
+        inArray(imageGenerationJobs.status, ["QUEUED", "RUNNING"]),
+        lt(imageGenerationJobs.updatedAt, cutoff)
+      )
+    )
+    .returning();
+}
+
+export async function failStaleImageGenerationJob(
+  id: string,
+  userId: string,
+  cutoff: Date
+) {
+  const [job] = await db
+    .update(imageGenerationJobs)
+    .set(staleJobFailureUpdate())
+    .where(
+      and(
+        eq(imageGenerationJobs.id, id),
+        eq(imageGenerationJobs.userId, userId),
+        inArray(imageGenerationJobs.status, ["QUEUED", "RUNNING"]),
+        lt(imageGenerationJobs.updatedAt, cutoff)
+      )
+    )
+    .returning();
+  return job ?? null;
 }
 
 export async function deleteImageGenerationJob(id: string, userId: string) {

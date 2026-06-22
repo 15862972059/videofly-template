@@ -2,6 +2,7 @@ import { requireAuth } from "@/lib/api/auth";
 import { apiSuccess, handleApiError } from "@/lib/api/response";
 import { listImageGenerationJobs } from "@/services/image/generation-jobs";
 import { getStorage } from "@/lib/storage";
+import { reconcileStaleImageGenerationJobs } from "@/services/image/stale-jobs";
 
 export async function GET(request: Request) {
   try {
@@ -13,6 +14,7 @@ export async function GET(request: Request) {
     const type = searchParams.get("type") as "TEXT" | "REMIX" | undefined;
     const status = searchParams.get("status") as "QUEUED" | "RUNNING" | "SUCCEEDED" | "FAILED" | undefined;
 
+    await reconcileStaleImageGenerationJobs(user.id);
     const jobs = await listImageGenerationJobs({ userId: user.id, status, type, limit, offset });
 
     const storage = getStorage();

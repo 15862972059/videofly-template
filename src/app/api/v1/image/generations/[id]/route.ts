@@ -6,6 +6,7 @@ import {
   getImageGenerationJobById,
 } from "@/services/image/generation-jobs";
 import { getStorage } from "@/lib/storage";
+import { reconcileStaleImageGenerationJob } from "@/services/image/stale-jobs";
 
 export async function GET(
   request: NextRequest,
@@ -14,10 +15,15 @@ export async function GET(
   try {
     const user = await requireAuth(request);
     const { id } = await params;
-    const job = await getImageGenerationJobById(id);
+    let job = await getImageGenerationJobById(id);
 
     if (!job || job.userId !== user.id) {
       return apiError("Generation job not found", 404);
+    }
+
+    const reconciled = await reconcileStaleImageGenerationJob(id, user.id);
+    if (reconciled) {
+      job = reconciled;
     }
 
     const storage = getStorage();

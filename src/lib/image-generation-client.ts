@@ -35,7 +35,7 @@ export async function waitForImageGenerationResult(
   options: { intervalMs?: number; timeoutMs?: number } = {}
 ): Promise<ImageGenerationResultPayload> {
   const intervalMs = options.intervalMs ?? 2500;
-  const timeoutMs = options.timeoutMs ?? 300_000;
+  const timeoutMs = options.timeoutMs ?? 330_000;
   const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {
