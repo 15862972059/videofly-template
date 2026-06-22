@@ -57,6 +57,18 @@ videofly/
 └── public/                   # Static assets
 ```
 
+## Critical Image Generation Invariant
+
+Text-to-image and Remix must use `gpt-image-2` with `1024x1024`,
+`quality: low`, JPEG output, and a one-credit cost. Enforce this invariant in
+the server/provider request; frontend defaults alone are not sufficient.
+
+Do not restore 2K/4K, PNG, variable quality, or variable output ratios unless
+the execution infrastructure is first changed to support slower jobs safely.
+Vercel post-response work is still bounded by the function's `maxDuration`, so
+all persisted image jobs must retain stale-job failure and credit-release
+recovery.
+
 ## Core Modules
 
 ### 1. AI Provider Layer (`src/ai/`)
