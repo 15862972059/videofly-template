@@ -1,10 +1,9 @@
 import { generateImage, remixImage } from "@/ai/images";
-import type { ImageModel, ImageQuality, ImageResolution } from "@/ai/images/types";
 import {
-  IMAGE_MODELS,
-  getImageCreditCost,
-  normalizeImageResolution,
-  normalizeImageQuality,
+  FIXED_IMAGE_OUTPUT,
+  type ImageModel,
+  type ImageQuality,
+  type ImageResolution,
 } from "@/ai/images/types";
 import { creditService } from "@/services/credit";
 import { getStorage } from "@/lib/storage";
@@ -12,7 +11,6 @@ import { getClassicImageById, getClassicImageBySlug } from "./gallery";
 import {
   buildRemixPrompt,
   buildTextPrompt,
-  inferRemixAspectRatio,
   isGeneratedRemixPrompt,
 } from "./prompts";
 import {
@@ -124,14 +122,7 @@ export async function startTextImageGeneration(
     throw new Error(`Rate limit exceeded. Resets at ${new Date(rateLimit.resetAt).toISOString()}`);
   }
 
-  const effectiveModel = "gpt-image-2";
-  const effectiveQuality = normalizeImageQuality(effectiveModel, input.quality);
-  const effectiveResolution = normalizeImageResolution(effectiveModel, input.resolution);
-  const imageCreditCost = getImageCreditCost(
-    effectiveModel,
-    effectiveQuality,
-    effectiveResolution
-  );
+  const imageCreditCost = FIXED_IMAGE_OUTPUT.creditCost;
   const finalPrompt = buildTextPrompt({ userPrompt: input.prompt });
   await assertPromptSequenceAllowed({
     userPrompt: input.prompt,
@@ -145,10 +136,11 @@ export async function startTextImageGeneration(
     prompt: finalPrompt,
     creditsUsed: imageCreditCost,
     parameters: {
-      aspectRatio: input.aspectRatio,
-      model: effectiveModel,
-      quality: effectiveQuality,
-      resolution: effectiveResolution,
+      aspectRatio: FIXED_IMAGE_OUTPUT.aspectRatio,
+      model: FIXED_IMAGE_OUTPUT.model,
+      quality: FIXED_IMAGE_OUTPUT.quality,
+      resolution: FIXED_IMAGE_OUTPUT.resolution,
+      format: FIXED_IMAGE_OUTPUT.format,
     },
   });
 
@@ -182,10 +174,10 @@ export async function startTextImageGeneration(
       jobId: job.id,
       userId: input.userId,
       prompt: finalPrompt,
-      aspectRatio: input.aspectRatio,
-      model: effectiveModel,
-      quality: effectiveQuality,
-      resolution: effectiveResolution,
+      aspectRatio: FIXED_IMAGE_OUTPUT.aspectRatio,
+      model: FIXED_IMAGE_OUTPUT.model,
+      quality: FIXED_IMAGE_OUTPUT.quality,
+      resolution: FIXED_IMAGE_OUTPUT.resolution,
     },
   };
 }
@@ -216,13 +208,13 @@ export async function runStartedTextImageGeneration(
     const key = buildImageObjectKey({
       userId: task.userId,
       kind: "result",
-      filename: `${task.jobId}.png`,
+      filename: `${task.jobId}.jpg`,
     });
 
     const uploaded = await persistGeneratedImage({
       imageData: imageUrl,
       key,
-      contentType: "image/png",
+      contentType: "image/jpeg",
       storage: getStorage(),
       allowTemporaryUrlFallback: shouldAllowTemporaryImageUrlFallback(),
     });
@@ -270,14 +262,7 @@ export async function startRemixImageGeneration(
     throw new Error(`Rate limit exceeded. Resets at ${new Date(rateLimit.resetAt).toISOString()}`);
   }
 
-  const effectiveModel = "gpt-image-2";
-  const effectiveQuality = normalizeImageQuality(effectiveModel, input.quality);
-  const effectiveResolution = normalizeImageResolution(effectiveModel, input.resolution);
-  const imageCreditCost = getImageCreditCost(
-    effectiveModel,
-    effectiveQuality,
-    effectiveResolution
-  );
+  const imageCreditCost = FIXED_IMAGE_OUTPUT.creditCost;
 
   let classicImage = null;
   if (input.classicImageId) {
@@ -319,11 +304,6 @@ export async function startRemixImageGeneration(
     externalIdBase: `user_${input.userId}:image_remix`,
   });
 
-  const finalAspectRatio = input.aspectRatio ?? inferRemixAspectRatio({
-    classicTitle: classicImage.title,
-    heroImageUrl: classicImage.hero_image_url,
-  });
-
   const job = await createImageGenerationJob({
     userId: input.userId,
     type: "REMIX",
@@ -332,10 +312,11 @@ export async function startRemixImageGeneration(
     sourceImageKey: input.sourceImageKey,
     creditsUsed: imageCreditCost,
     parameters: {
-      aspectRatio: finalAspectRatio,
-      model: effectiveModel,
-      quality: effectiveQuality,
-      resolution: effectiveResolution,
+      aspectRatio: FIXED_IMAGE_OUTPUT.aspectRatio,
+      model: FIXED_IMAGE_OUTPUT.model,
+      quality: FIXED_IMAGE_OUTPUT.quality,
+      resolution: FIXED_IMAGE_OUTPUT.resolution,
+      format: FIXED_IMAGE_OUTPUT.format,
     },
   });
 
@@ -371,10 +352,10 @@ export async function startRemixImageGeneration(
       prompt: finalPrompt,
       sourceImageUrl,
       sceneImageUrl,
-      aspectRatio: finalAspectRatio,
-      model: effectiveModel,
-      quality: effectiveQuality,
-      resolution: effectiveResolution,
+      aspectRatio: FIXED_IMAGE_OUTPUT.aspectRatio,
+      model: FIXED_IMAGE_OUTPUT.model,
+      quality: FIXED_IMAGE_OUTPUT.quality,
+      resolution: FIXED_IMAGE_OUTPUT.resolution,
     },
   };
 }
@@ -405,13 +386,13 @@ export async function runStartedRemixImageGeneration(
     const key = buildImageObjectKey({
       userId: task.userId,
       kind: "result",
-      filename: `${task.jobId}.png`,
+      filename: `${task.jobId}.jpg`,
     });
 
     const uploaded = await persistGeneratedImage({
       imageData: imageUrl,
       key,
-      contentType: "image/png",
+      contentType: "image/jpeg",
       storage: getStorage(),
       allowTemporaryUrlFallback: shouldAllowTemporaryImageUrlFallback(),
     });

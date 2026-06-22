@@ -16,6 +16,7 @@ const freezeMock = vi.fn();
 const settleMock = vi.fn();
 const releaseMock = vi.fn();
 const getStorageMock = vi.fn();
+const persistGeneratedImageMock = vi.fn();
 
 vi.mock("@/ai/images", () => ({
   generateImage: generateImageMock,
@@ -56,6 +57,11 @@ vi.mock("@/services/credit", () => ({
 
 vi.mock("@/lib/storage", () => ({
   getStorage: getStorageMock,
+}));
+
+vi.mock("@/services/image/persist-result", () => ({
+  persistGeneratedImage: persistGeneratedImageMock,
+  shouldAllowTemporaryImageUrlFallback: () => false,
 }));
 
 describe("image generation Creem moderation", () => {
@@ -131,12 +137,56 @@ describe("image generation Creem moderation", () => {
     expect(started.response).toEqual({
       jobId: "job_1",
       status: "QUEUED",
-      creditsUsed: 5,
+      creditsUsed: 1,
     });
+    expect(createImageGenerationJobMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        creditsUsed: 1,
+        parameters: {
+          aspectRatio: "1:1",
+          model: "gpt-image-2",
+          quality: "low",
+          resolution: "1k",
+          format: "jpeg",
+        },
+      })
+    );
     expect(remixImageMock).not.toHaveBeenCalled();
     expect(updateImageGenerationJobStatusMock).not.toHaveBeenCalledWith(
       "job_1",
       "RUNNING"
+    );
+  });
+
+  test("persists generated text images as JPEG", async () => {
+    generateImageMock.mockResolvedValue({
+      imageUrls: ["https://cdn.example.com/generated.jpg"],
+    });
+    persistGeneratedImageMock.mockResolvedValue({
+      key: "images/user_1/result/job_1.jpg",
+      url: "https://cdn.example.com/result/job_1.jpg",
+      temporary: false,
+    });
+
+    const { runStartedTextImageGeneration } = await import(
+      "@/services/image/image-generation"
+    );
+
+    await runStartedTextImageGeneration({
+      jobId: "job_1",
+      userId: "user_1",
+      prompt: "A modern product photo",
+      aspectRatio: "1:1",
+      model: "gpt-image-2",
+      quality: "low",
+      resolution: "1k",
+    });
+
+    expect(persistGeneratedImageMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        key: expect.stringMatching(/job_1\.jpg$/),
+        contentType: "image/jpeg",
+      })
     );
   });
 

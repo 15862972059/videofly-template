@@ -35,7 +35,7 @@ describe("CiYuan remix provider", () => {
       generateWithCiyuan({
         prompt: "A modern product photo",
         aspectRatio: "16:9",
-        resolution: "4k",
+        resolution: "4k" as never,
       })
     ).resolves.toEqual({
       imageUrls: ["https://cdn.example.com/generated.png"],

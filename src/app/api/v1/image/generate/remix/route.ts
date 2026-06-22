@@ -52,10 +52,6 @@ export async function POST(request: Request) {
       classicImageSlug: parsed.data.classicImageSlug,
       sourceImageKey: parsed.data.sourceImageKey,
       prompt: parsed.data.prompt,
-      aspectRatio: parsed.data.aspectRatio,
-      model: parsed.data.model,
-      quality: parsed.data.quality,
-      resolution: parsed.data.resolution,
     });
 
     after(async () => {

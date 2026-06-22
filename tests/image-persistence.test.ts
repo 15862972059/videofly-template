@@ -16,13 +16,13 @@ describe("persistGeneratedImage", () => {
     await expect(
       persistGeneratedImage({
         imageData: imageUrl,
-        key: "images/user/result/test.png",
-        contentType: "image/png",
+        key: "images/user/result/test.jpg",
+        contentType: "image/jpeg",
         storage,
         allowTemporaryUrlFallback: true,
       })
     ).resolves.toEqual({
-      key: "temporary:images/user/result/test.png",
+      key: "temporary:images/user/result/test.jpg",
       url: imageUrl,
       temporary: true,
     });
@@ -37,8 +37,8 @@ describe("persistGeneratedImage", () => {
     await expect(
       persistGeneratedImage({
         imageData: imageUrl,
-        key: "images/user/result/test.png",
-        contentType: "image/png",
+        key: "images/user/result/test.jpg",
+        contentType: "image/jpeg",
         storage,
         allowTemporaryUrlFallback: false,
       })
