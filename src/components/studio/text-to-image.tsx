@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   ImageIcon,
@@ -9,6 +10,7 @@ import {
   SlidersHorizontal,
   Sparkles,
   WandSparkles,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NEW_USER_GIFT } from "@/config/pricing-user";
@@ -23,6 +25,14 @@ import {
   type ImageGenerationStartPayload,
   waitForImageGenerationResult,
 } from "@/lib/image-generation-client";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import type { ClassicImageData } from "@/types/ai-photo";
+import type { ClassicImage } from "@/db";
 
 interface TextToImageProps {
   onGenerate: (data: { jobId: string; objectKey: string; publicUrl: string }) => void;
@@ -48,10 +58,75 @@ const samplePrompt =
 
 export function TextToImage({ onGenerate, generating, result, onClearResult }: TextToImageProps) {
   const t = useTranslations("Studio.textToImage");
+  const tFilters = useTranslations("GalleryFilters");
   const model = "gpt-image-2" as const;
-  const [prompt, setPrompt] = useState("");
+  const searchParams = useSearchParams();
+
+  const [prompt, setPrompt] = useState(() => {
+    return searchParams.get("prompt") || "";
+  });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Template states
+  const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
+  const [templates, setTemplates] = useState<(ClassicImageData | ClassicImage)[]>([]);
+  const [loadingTemplates, setLoadingTemplates] = useState(false);
+  const [subcategories, setSubcategories] = useState<string[]>([]);
+  const [activeSubcategory, setActiveSubcategory] = useState<string>("all");
+
+  // Initialize/update prompt from search query param if present
+  useEffect(() => {
+    const urlPrompt = searchParams.get("prompt");
+    if (urlPrompt) {
+      setPrompt(urlPrompt);
+    }
+  }, [searchParams]);
+
+  // Fetch templates when dialog opens
+  useEffect(() => {
+    if (templateDialogOpen) {
+      setActiveSubcategory("all");
+      if (templates.length === 0) {
+        setLoadingTemplates(true);
+        fetch("/api/v1/gallery?category=Text-to-Image&limit=100")
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success && Array.isArray(data.data.images)) {
+              setTemplates(data.data.images);
+              if (Array.isArray(data.data.categories)) {
+                setSubcategories(data.data.categories);
+              }
+            }
+          })
+          .catch(console.error)
+          .finally(() => setLoadingTemplates(false));
+      }
+    }
+  }, [templateDialogOpen, templates.length]);
+
+  const getSubcategoryLabel = (sub: string) => {
+    if (sub === "all") return t("allTemplates");
+    if (sub === "Photography & Realism") return tFilters("stylePhotographyRealism");
+    if (sub === "Illustration & Art") return tFilters("styleIllustrationArt");
+    if (sub === "Products & E-commerce") return tFilters("styleProductsEcommerce");
+    if (sub === "Architecture & Spaces") return tFilters("styleArchitectureSpaces");
+    if (sub === "Brand & Logos") return tFilters("styleBrandLogos");
+    if (sub === "Characters & People") return tFilters("styleCharactersPeople");
+    if (sub === "Scenes & Storytelling") return tFilters("styleScenesStorytelling");
+    if (sub === "UI & Interfaces") return tFilters("styleUiInterfaces");
+    if (sub === "Charts & Infographics") return tFilters("styleChartsInfographics");
+    if (sub === "Posters & Typography") return tFilters("stylePostersTypography");
+    if (sub === "History & Classical Themes") return tFilters("styleHistoryClassical");
+    if (sub === "Other Use Cases") return tFilters("styleOtherUseCases");
+    return sub;
+  };
+
+  const filteredTemplates = templates.filter((tpl) => {
+    if (activeSubcategory === "all") return true;
+    const sub = (tpl as ClassicImage).subcategory ?? (tpl as ClassicImageData).subcategory;
+    return sub === activeSubcategory;
+  });
 
   const creditCost = getImageCreditCost(model);
   const isWorking = loading || generating;
@@ -196,11 +271,12 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
                     </p>
                     <button
                       type="button"
-                      onClick={useSamplePrompt}
+                      onClick={() => setTemplateDialogOpen(true)}
                       disabled={isWorking}
-                      className="w-fit rounded-lg bg-blue-600 px-3 py-1.5 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-500 dark:hover:bg-blue-400"
+                      className="flex w-fit items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-500 dark:hover:bg-blue-400"
                     >
-                      {t("trySamplePrompt")}
+                      <ImageIcon className="h-3.5 w-3.5" />
+                      {t("useTemplate")}
                     </button>
                   </div>
                 </div>
@@ -309,6 +385,106 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
           {error}
         </div>
       )}
+
+      <Dialog open={templateDialogOpen} onOpenChange={setTemplateDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto p-6">
+          <DialogHeader className="mb-4">
+            <DialogTitle className="text-xl font-bold flex items-center gap-2">
+              <ImageIcon className="h-5 w-5 text-indigo-500" />
+              {t("selectTemplateTitle")}
+            </DialogTitle>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {t("selectTemplateHint")}
+            </p>
+          </DialogHeader>
+
+          {loadingTemplates ? (
+            <div className="flex h-48 items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+            </div>
+          ) : templates.length === 0 ? (
+            <div className="flex h-48 flex-col items-center justify-center text-slate-400">
+              <ImageIcon className="h-10 w-10 opacity-40 mb-2" />
+              <p className="text-sm font-medium">No templates found</p>
+            </div>
+          ) : (
+            <>
+              {subcategories.length > 0 && (
+                <div className="mb-6 flex flex-wrap gap-2 border-b border-slate-100 pb-4 dark:border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setActiveSubcategory("all")}
+                    className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide transition-colors ${
+                      activeSubcategory === "all"
+                        ? "bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
+                        : "border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700/60 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
+                    }`}
+                  >
+                    {getSubcategoryLabel("all")}
+                  </button>
+                  {subcategories.map((sub) => (
+                    <button
+                      key={sub}
+                      type="button"
+                      onClick={() => setActiveSubcategory(sub)}
+                      className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide transition-colors ${
+                        activeSubcategory === sub
+                          ? "bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
+                          : "border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700/60 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
+                      }`}
+                    >
+                      {getSubcategoryLabel(sub)}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {filteredTemplates.length === 0 ? (
+                <div className="flex h-48 flex-col items-center justify-center text-slate-400">
+                  <ImageIcon className="h-10 w-10 opacity-40 mb-2" />
+                  <p className="text-sm font-medium">No templates found in this category</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                  {filteredTemplates.map((tpl) => {
+                    const url = (tpl as ClassicImage).heroImageUrl ?? (tpl as ClassicImageData).hero_image_url ?? "";
+                    const title = (tpl as ClassicImage).title ?? (tpl as ClassicImageData).title ?? "";
+                    const promptVal = (tpl as ClassicImage).promptTemplate ?? (tpl as ClassicImageData).prompt_template ?? "";
+                    
+                    return (
+                      <button
+                        key={tpl.id}
+                        type="button"
+                        onClick={() => {
+                          setPrompt(promptVal);
+                          setTemplateDialogOpen(false);
+                        }}
+                        className="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white text-left transition hover:border-indigo-500 hover:ring-2 hover:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:hover:border-indigo-500 dark:hover:ring-indigo-900/50"
+                      >
+                        <div className="relative aspect-square w-full overflow-hidden bg-slate-50 dark:bg-slate-900">
+                          {url && (
+                            <img
+                              src={url}
+                              alt={title}
+                              className="absolute inset-0 w-full h-full object-cover transition duration-350 group-hover:scale-105"
+                              loading="lazy"
+                            />
+                          )}
+                        </div>
+                        <div className="p-2 min-w-0">
+                          <p className="truncate text-xs font-semibold text-slate-900 dark:text-slate-100">
+                            {title}
+                          </p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -31,9 +31,13 @@ function StudioContentInner() {
   const searchParams = useSearchParams();
   const [initialScene, setInitialScene] = useState<ClassicImageData | null>(null);
   const [sceneLoading, setSceneLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"remix" | "text2img">(
-    searchParams.get("scene") ? "remix" : "text2img"
-  );
+  const [activeTab, setActiveTab] = useState<"remix" | "text2img">(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam === "text2img" || tabParam === "textToImage") return "text2img";
+    if (tabParam === "remix") return "remix";
+    if (searchParams.get("prompt")) return "text2img";
+    return searchParams.get("scene") ? "remix" : "text2img";
+  });
   const [textResult, setTextResult] = useState<{
     jobId: string;
     objectKey: string;
@@ -55,6 +59,15 @@ function StudioContentInner() {
         })
         .catch(console.error)
         .finally(() => setSceneLoading(false));
+    } else {
+      const tabParam = searchParams.get("tab");
+      if (tabParam === "text2img" || tabParam === "textToImage") {
+        setActiveTab("text2img");
+      } else if (tabParam === "remix") {
+        setActiveTab("remix");
+      } else if (searchParams.get("prompt")) {
+        setActiveTab("text2img");
+      }
     }
   }, [searchParams]);
 

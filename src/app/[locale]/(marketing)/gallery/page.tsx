@@ -11,29 +11,19 @@ import { useLocaleRouter } from "@/i18n/navigation";
 
 const PAGE_SIZE = 15;
 
-interface GalleryState {
-  images: (ClassicImageData | ClassicImage)[];
-  categories: string[];
-  total: number;
-  hasMore: boolean;
-  loading: boolean;
-  loadingMore: boolean;
-  error: string | null;
-}
-
 export default function GalleryPage() {
   const router = useLocaleRouter();
   const t = useTranslations("GalleryPage");
   const requestIdRef = useRef(0);
-  const [state, setState] = useState<GalleryState>({
-    images: [],
-    categories: [],
-    total: 0,
-    hasMore: false,
-    loading: true,
-    loadingMore: false,
-    error: null,
-  });
+
+  const [images, setImages] = useState<(ClassicImageData | ClassicImage)[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [activeMainTab, setActiveMainTab] = useState<"attractions" | "text2img">("attractions");
   const [activeCategory, setActiveCategory] = useState<string | undefined>();
   const [activeSubcategory, setActiveSubcategory] = useState<string | undefined>();
   const [activeQuery, setActiveQuery] = useState<string>("");
@@ -41,25 +31,32 @@ export default function GalleryPage() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [sceneLoading, setSceneLoading] = useState(false);
 
-  useEffect(() => {
-    void fetchGallery(true);
-  }, [activeCategory, activeSubcategory, activeQuery]);
-
   const fetchGallery = async (reset = false) => {
     const requestId = ++requestIdRef.current;
-    const nextOffset = reset ? 0 : state.images.length;
-    const shouldLoadCategories = state.categories.length === 0;
+    const nextOffset = reset ? 0 : images.length;
+    // We load categories if we are resetting AND categories list is empty
+    const shouldLoadCategories = reset && categories.length === 0;
 
-    setState((s) => ({
-      ...s,
-      loading: reset,
-      loadingMore: !reset,
-      error: null,
-    }));
+    if (reset) {
+      setLoading(true);
+    } else {
+      setLoadingMore(true);
+    }
+    setError(null);
 
     try {
       const params = new URLSearchParams();
-      if (activeCategory) params.set("category", activeCategory);
+      if (activeMainTab === "text2img") {
+        params.set("category", "Text-to-Image");
+        if (activeCategory) {
+          params.set("subcategory", activeCategory);
+        }
+      } else {
+        params.set("excludeCategory", "Text-to-Image");
+        if (activeCategory) {
+          params.set("category", activeCategory);
+        }
+      }
       if (activeSubcategory) params.set("subcategory", activeSubcategory);
       if (activeQuery) params.set("q", activeQuery);
       params.set("limit", PAGE_SIZE.toString());
@@ -73,37 +70,39 @@ export default function GalleryPage() {
           if (requestId !== requestIdRef.current) return;
 
           const nextImages = data.data.images as (ClassicImageData | ClassicImage)[];
-          const total = Number(data.data.total ?? nextImages.length);
+          const nextTotal = Number(data.data.total ?? nextImages.length);
 
-          setState((current) => {
-            const images = reset ? nextImages : [...current.images, ...nextImages];
-
-            return {
-              images,
-              categories: data.data.categories ?? current.categories,
-              total,
-              hasMore: images.length < total,
-              loading: false,
-              loadingMore: false,
-              error: null,
-            };
-          });
-
+          setImages((current) => (reset ? nextImages : [...current, ...nextImages]));
+          setTotal(nextTotal);
+          if (data.data.categories) {
+            setCategories(data.data.categories);
+          }
+          setLoading(false);
+          setLoadingMore(false);
           return;
         }
       }
       throw new Error(t("apiError"));
     } catch (err) {
       if (requestId !== requestIdRef.current) return;
-
-      setState((s) => ({
-        ...s,
-        loading: false,
-        loadingMore: false,
-        error: err instanceof Error ? err.message : t("loadError"),
-      }));
+      setError(err instanceof Error ? err.message : t("loadError"));
+      setLoading(false);
+      setLoadingMore(false);
     }
   };
+
+  // Reset category filters and clear categories directly in the tab change handler
+  const handleTabChange = (tab: "attractions" | "text2img") => {
+    setActiveMainTab(tab);
+    setActiveCategory(undefined);
+    setActiveSubcategory(undefined);
+    setCategories([]); // Force reloading categories for the new tab
+  };
+
+  // Trigger fetch when tab, category, subcategory, or query changes
+  useEffect(() => {
+    void fetchGallery(true);
+  }, [activeMainTab, activeCategory, activeSubcategory, activeQuery]);
 
   const handleSelect = (image: ClassicImageData | ClassicImage) => {
     setSelectedImage(image);
@@ -112,10 +111,20 @@ export default function GalleryPage() {
 
   const handleUseScene = (image: ClassicImageData | ClassicImage) => {
     const slug = (image as ClassicImage).slug ?? (image as ClassicImageData).slug;
+    const category = (image as ClassicImage).category ?? (image as ClassicImageData).category;
+    const prompt = (image as ClassicImage).promptTemplate ?? (image as ClassicImageData).prompt_template;
+
     setSceneLoading(true);
     setDetailOpen(false);
-    router.push(`/studio?scene=${slug}`);
+
+    if (category === "Text-to-Image" && prompt) {
+      router.push(`/studio?tab=text2img&prompt=${encodeURIComponent(prompt)}`);
+    } else {
+      router.push(`/studio?scene=${slug}`);
+    }
   };
+
+  const hasMore = images.length < total;
 
   return (
     <div className="container mx-auto max-w-7xl py-8 px-4">
@@ -126,9 +135,34 @@ export default function GalleryPage() {
         </p>
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start">
+      <div className="mb-6 inline-flex rounded-2xl border border-slate-200 bg-white p-1 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <button
+          type="button"
+          onClick={() => handleTabChange("attractions")}
+          className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-xl px-5 py-2 text-sm font-semibold transition-colors ${
+            activeMainTab === "attractions"
+              ? "bg-slate-950 text-white shadow-sm dark:bg-white dark:text-slate-950"
+              : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+          }`}
+        >
+          {t("tabAttractions")}
+        </button>
+        <button
+          type="button"
+          onClick={() => handleTabChange("text2img")}
+          className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-xl px-5 py-2 text-sm font-semibold transition-colors ${
+            activeMainTab === "text2img"
+              ? "bg-slate-950 text-white shadow-sm dark:bg-white dark:text-slate-950"
+              : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+          }`}
+        >
+          {t("tabTextToImage")}
+        </button>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start">
         <GalleryFilters
-          categories={state.categories}
+          categories={categories}
           activeCategory={activeCategory}
           activeSubcategory={activeSubcategory}
           activeQuery={activeQuery}
@@ -138,7 +172,7 @@ export default function GalleryPage() {
         />
 
         <div className="min-w-0">
-          {state.loading ? (
+          {loading ? (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {Array.from({ length: 10 }).map((_, i) => (
                 <div
@@ -147,27 +181,27 @@ export default function GalleryPage() {
                 />
               ))}
             </div>
-          ) : state.error ? (
+          ) : error ? (
             <div className="text-center py-12 text-destructive">
-              {state.error}
+              {error}
             </div>
           ) : (
             <div className="space-y-6">
-              <ClassicImageGrid images={state.images} onSelect={handleSelect} />
+              <ClassicImageGrid images={images} onSelect={handleSelect} />
 
               <div className="flex flex-col items-center gap-3">
                 <p className="text-sm text-muted-foreground">
-                  {t("showing", { current: state.images.length, total: state.total })}
+                  {t("showing", { current: images.length, total: total })}
                 </p>
 
-                {state.hasMore && (
+                {hasMore && (
                   <button
                     type="button"
                     onClick={() => void fetchGallery(false)}
-                    disabled={state.loadingMore}
+                    disabled={loadingMore}
                     className="cursor-pointer rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {state.loadingMore ? t("loadingMore") : t("loadMore")}
+                    {loadingMore ? t("loadingMore") : t("loadMore")}
                   </button>
                 )}
               </div>

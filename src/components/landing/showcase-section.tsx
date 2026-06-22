@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { ArrowRight, Sparkles, Copy, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
@@ -110,16 +109,15 @@ export function ShowcaseSection() {
 
                   {/* Image Container */}
                   <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-950">
-                    <Image
+                    <img
                       src={item.image}
                       alt={item.title}
-                      fill
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
                     />
 
-                    {/* Hover Overlay with Copy Action */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-colors duration-300 flex flex-col justify-end p-5 opacity-0 group-hover:opacity-100">
+                    {/* Hover Overlay with Copy & Create Actions */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-colors duration-300 flex flex-col justify-end p-5 opacity-0 group-hover:opacity-100">
                       <div className="text-white mb-4">
                         <div className="text-[10px] uppercase tracking-wider text-emerald-400 font-bold mb-1">
                           {t("promptSeed")}
@@ -129,23 +127,35 @@ export function ShowcaseSection() {
                         </p>
                       </div>
                       
-                      <button
-                        type="button"
-                        onClick={() => handleCopyPrompt(item.id, item.prompt)}
-                        className="w-full h-10 rounded-xl bg-white hover:bg-emerald-50 text-slate-800 text-xs font-semibold flex items-center justify-center gap-2 shadow transition-colors cursor-pointer"
-                      >
-                        {copiedId === item.id ? (
-                          <>
-                            <Check className="h-3.5 w-3.5 text-emerald-600 animate-scale" />
-                            <span className="text-emerald-600">{t("copied")}</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="h-3.5 w-3.5 text-slate-600" />
-                            <span>{t("copyPrompt")}</span>
-                          </>
-                        )}
-                      </button>
+                      <div className="flex gap-2 w-full">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopyPrompt(item.id, item.prompt);
+                          }}
+                          className="flex-1 h-10 rounded-xl bg-white/20 hover:bg-white/30 text-white text-xs font-semibold flex items-center justify-center gap-1.5 backdrop-blur border border-white/10 transition-colors cursor-pointer"
+                        >
+                          {copiedId === item.id ? (
+                            <>
+                              <Check className="h-3.5 w-3.5 text-emerald-400 animate-scale" />
+                              <span className="text-emerald-400">{t("copied")}</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-3.5 w-3.5 text-white/80" />
+                              <span>{t("copyPrompt")}</span>
+                            </>
+                          )}
+                        </button>
+                        <LocaleLink
+                          href={`/studio?tab=text2img&prompt=${encodeURIComponent(item.prompt)}`}
+                          className="flex-1 h-10 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow transition-colors cursor-pointer"
+                        >
+                          <Sparkles className="h-3.5 w-3.5 text-white" />
+                          <span>{t("generateImage")}</span>
+                        </LocaleLink>
+                      </div>
                     </div>
 
                     {/* Tag */}

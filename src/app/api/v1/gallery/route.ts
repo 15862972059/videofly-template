@@ -1,4 +1,4 @@
-import { listClassicImages, countClassicImages, getGalleryCategories, getClassicImageBySlug } from "@/services/image/gallery";
+import { listClassicImages, countClassicImages, getGalleryCategories, getClassicImageBySlug, getSubcategoriesByCategory } from "@/services/image/gallery";
 import { apiSuccess, handleApiError } from "@/lib/api/response";
 
 export async function GET(request: Request) {
@@ -17,6 +17,7 @@ export async function GET(request: Request) {
     }
 
     const category = searchParams.get("category") ?? undefined;
+    const excludeCategory = searchParams.get("excludeCategory") ?? undefined;
     const subcategory = searchParams.get("subcategory") ?? undefined;
     const query = searchParams.get("q") ?? undefined;
     const limit = searchParams.get("limit") ? Number.parseInt(searchParams.get("limit")!) : undefined;
@@ -24,9 +25,13 @@ export async function GET(request: Request) {
     const includeCategories = searchParams.get("includeCategories") !== "false";
 
     const [images, categories, total] = await Promise.all([
-      listClassicImages({ category, subcategory, query, limit, offset }),
-      includeCategories ? getGalleryCategories() : Promise.resolve(undefined),
-      countClassicImages({ category, subcategory, query }),
+      listClassicImages({ category, excludeCategory, subcategory, query, limit, offset }),
+      includeCategories
+        ? (category === "Text-to-Image"
+            ? getSubcategoriesByCategory("Text-to-Image")
+            : getGalleryCategories().then((cats) => cats.filter((c) => c !== "Text-to-Image")))
+        : Promise.resolve(undefined),
+      countClassicImages({ category, excludeCategory, subcategory, query }),
     ]);
 
     return apiSuccess({ images, categories, total });

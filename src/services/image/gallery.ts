@@ -1,4 +1,4 @@
-import { and, eq, ilike, or, sql } from "drizzle-orm";
+import { and, eq, ne, ilike, or, sql } from "drizzle-orm";
 import { db, classicImages, type ClassicImage } from "@/db";
 import type { ClassicImageData } from "@/types/ai-photo";
 
@@ -20,6 +20,7 @@ function toClassicImageData(row: ClassicImage): ClassicImageData {
 
 export interface GalleryFilters {
   category?: string;
+  excludeCategory?: string;
   subcategory?: string;
   query?: string;
   isActive?: boolean;
@@ -32,6 +33,9 @@ export async function listClassicImages(filters: GalleryFilters = {}): Promise<C
 
   if (filters.category) {
     conditions.push(eq(classicImages.category, filters.category));
+  }
+  if (filters.excludeCategory) {
+    conditions.push(ne(classicImages.category, filters.excludeCategory));
   }
   if (filters.subcategory) {
     conditions.push(eq(classicImages.subcategory, filters.subcategory));
@@ -85,6 +89,9 @@ export async function countClassicImages(filters: GalleryFilters = {}) {
 
   if (filters.category) {
     conditions.push(eq(classicImages.category, filters.category));
+  }
+  if (filters.excludeCategory) {
+    conditions.push(ne(classicImages.category, filters.excludeCategory));
   }
   if (filters.subcategory) {
     conditions.push(eq(classicImages.subcategory, filters.subcategory));

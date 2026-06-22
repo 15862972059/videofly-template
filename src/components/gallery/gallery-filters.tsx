@@ -107,20 +107,40 @@ export function GalleryFilters({
           >
             {t("allScenes")}
           </button>
-          {categories.map((category) => (
-            <button
-              key={category}
-              type="button"
-              onClick={() => handleCategoryClick(category)}
-              className={`min-h-9 cursor-pointer rounded-xl px-3 py-2 text-left text-xs font-semibold capitalize tracking-wide transition-colors ${
-                activeCategory === category
-                  ? "bg-slate-950 text-white shadow-sm dark:bg-white dark:text-slate-950"
-                  : "border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700/60 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
+          {categories.map((category) => {
+            const getCategoryLabel = (cat: string) => {
+              if (cat === "China") return t("categoryChina");
+              if (cat === "Japan") return t("categoryJapan");
+              if (cat === "Text-to-Image") return t("categoryTextToImage");
+              if (cat === "Photography & Realism") return t("stylePhotographyRealism");
+              if (cat === "Illustration & Art") return t("styleIllustrationArt");
+              if (cat === "Products & E-commerce") return t("styleProductsEcommerce");
+              if (cat === "Architecture & Spaces") return t("styleArchitectureSpaces");
+              if (cat === "Brand & Logos") return t("styleBrandLogos");
+              if (cat === "Characters & People") return t("styleCharactersPeople");
+              if (cat === "Scenes & Storytelling") return t("styleScenesStorytelling");
+              if (cat === "UI & Interfaces") return t("styleUiInterfaces");
+              if (cat === "Charts & Infographics") return t("styleChartsInfographics");
+              if (cat === "Posters & Typography") return t("stylePostersTypography");
+              if (cat === "History & Classical Themes") return t("styleHistoryClassical");
+              if (cat === "Other Use Cases") return t("styleOtherUseCases");
+              return cat;
+            };
+            return (
+              <button
+                key={category}
+                type="button"
+                onClick={() => handleCategoryClick(category)}
+                className={`min-h-9 cursor-pointer rounded-xl px-3 py-2 text-left text-xs font-semibold tracking-wide transition-colors ${
+                  activeCategory === category
+                    ? "bg-slate-950 text-white shadow-sm dark:bg-white dark:text-slate-950"
+                    : "border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700/60 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
+                }`}
+              >
+                {getCategoryLabel(category)}
+              </button>
+            );
+          })}
         </div>
       </div>
     </aside>

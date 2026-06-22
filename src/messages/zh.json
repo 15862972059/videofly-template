@@ -610,6 +610,8 @@
   "GalleryPage": {
     "title": "艺术画廊",
     "description": "浏览经典场景，把你的照片重绘成更有氛围的作品。",
+    "tabAttractions": "景点图片",
+    "tabTextToImage": "文生图模板",
     "showing": "已显示 {current} / {total} 个场景",
     "loadMore": "加载更多",
     "loadingMore": "加载中...",
@@ -624,13 +626,32 @@
     "searchButton": "搜索",
     "categories": "分类",
     "clear": "清除",
-    "allScenes": "全部场景"
+    "allScenes": "全部场景",
+    "categoryChina": "中国",
+    "categoryJapan": "日本",
+    "categoryTextToImage": "文生图",
+    "stylePhotographyRealism": "摄影与写实",
+    "styleIllustrationArt": "插画与艺术",
+    "styleProductsEcommerce": "产品与电商",
+    "styleArchitectureSpaces": "建筑与空间",
+    "styleBrandLogos": "品牌与设计",
+    "styleCharactersPeople": "角色与人物",
+    "styleScenesStorytelling": "场景与故事",
+    "styleUiInterfaces": "界面与UI",
+    "styleChartsInfographics": "图表与信息图",
+    "stylePostersTypography": "海报与排版",
+    "styleHistoryClassical": "历史与经典主题",
+    "styleOtherUseCases": "其他应用场景"
   },
   "GalleryDetail": {
     "category": "分类",
     "loading": "加载中...",
     "useScene": "使用这个场景",
-    "close": "关闭"
+    "close": "关闭",
+    "prompt": "提示词",
+    "copyPrompt": "复制提示词",
+    "copied": "已复制！",
+    "generateImage": "生成我的图片"
   },
   "Studio": {
     "tabs": {
@@ -644,6 +665,10 @@
     "textToImage": {
       "title": "文生图工作台",
       "subtitle": "输入提示词，生成一张完整图片。",
+      "useTemplate": "使用画廊模板",
+      "selectTemplateTitle": "选择文生图模板",
+      "selectTemplateHint": "点击一个画廊模板，自动填充其提示词。",
+      "allTemplates": "全部模板",
       "resultTitle": "结果预览",
       "generatedResultTitle": "生成结果",
       "resultHint": "生成后的图片会显示在这里。",
@@ -662,7 +687,7 @@
       "generating": "生成中",
       "outputSettings": "输出设置",
       "outputSettingsHint": "固定规格，生成更快、更稳定。",
-      "fixedOutput": "1024 x 1024 · 低质量 · JPEG",
+      "fixedOutput": "1024 x 1024 · JPEG",
       "fixedOutputHint": "为生成速度优化的方形 JPEG 输出。",
       "model": "模型",
       "aspectRatio": "图片比例",
@@ -700,7 +725,7 @@
       "sceneReady": "场景已就绪",
       "chooseScene": "选择场景",
       "missingInputs": "请上传照片并选择场景",
-      "fixedOutput": "1024 x 1024 · 低质量 · JPEG"
+      "fixedOutput": "1024 x 1024 · JPEG"
     },
     "remixResult": {
       "generatedResult": "生成结果",
@@ -722,7 +747,7 @@
       "credits": "积分",
       "generate": "生成",
       "generating": "生成中",
-      "fixedOutput": "1024 x 1024 · 低质量 · JPEG",
+      "fixedOutput": "1024 x 1024 · JPEG",
       "fixedOutputHint": "快速方形输出 · 1 积分"
     },
     "scenePanel": {
@@ -759,12 +784,13 @@
     }
   },
   "ShowcaseGallery": {
-    "badge": "文生图作品集",
-    "title": "AI 生成的高完成度作品",
-    "subtitle": "由 AI2ART 创作",
-    "description": "浏览由简单提示词生成的精美作品。点击即可复制提示词，并在工作室中继续尝试。",
+    "badge": "文生图模板",
+    "title": "爆款文生图模板案例",
+    "subtitle": "一键复制提示词并直接创作",
+    "description": "浏览由精选提示词模板生成的精美作品。复制提示词，或直接去创作空间进行生成与修改。",
     "promptSeed": "提示词种子",
     "copyPrompt": "复制提示词",
+    "generateImage": "去创作",
     "copied": "已复制",
     "ctaText": "准备开始你的创作之旅了吗？",
     "ctaButton": "开始创作",

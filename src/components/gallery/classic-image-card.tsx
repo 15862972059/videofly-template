@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { ClassicImageData } from "@/types/ai-photo";
 import type { ClassicImage } from "@/db";
 
@@ -30,18 +29,12 @@ export function ClassicImageCard({ image, onSelect, priority = false }: ClassicI
       onClick={() => onSelect(image)}
       className="group relative overflow-hidden rounded-xl bg-muted aspect-[3/4] text-left hover:ring-2 hover:ring-primary transition-all"
     >
-      {thumbnailUrl ? (
-        <Image
+        <img
           src={thumbnailUrl}
           alt={title}
-          fill
-          sizes="(min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-          priority={priority}
-          className="object-cover transition-transform group-hover:scale-105"
+          className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-105"
+          loading="lazy"
         />
-      ) : (
-        <div className="absolute inset-0 bg-muted" />
-      )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform">
         <p className="text-sm font-medium text-white capitalize">
