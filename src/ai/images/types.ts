@@ -9,9 +9,19 @@ export interface ImageGenerationRequest {
 
 export type ImageModel = "gpt-image-2";
 
-export type ImageQuality = "auto";
+export type ImageQuality = "low";
 
-export type ImageResolution = "1k" | "2k" | "4k";
+export type ImageResolution = "1k";
+
+export const FIXED_IMAGE_OUTPUT = {
+  model: "gpt-image-2",
+  quality: "low",
+  resolution: "1k",
+  aspectRatio: "1:1",
+  size: "1024x1024",
+  format: "jpeg",
+  creditCost: 1,
+} as const;
 
 export interface ImageQualityOption {
   value: ImageQuality;
@@ -33,10 +43,10 @@ export const IMAGE_QUALITY_OPTIONS: Record<
 > = {
   "gpt-image-2": [
     {
-      value: "auto",
-      label: "Auto",
-      description: "Automatic quality selection",
-      creditCost: 5,
+      value: "low",
+      label: "Low",
+      description: "Fast image generation",
+      creditCost: 1,
     },
   ],
 };
@@ -51,18 +61,6 @@ export const IMAGE_RESOLUTION_OPTIONS: Record<
       label: "1K",
       description: "Standard generation, fastest option",
       creditCost: 1,
-    },
-    {
-      value: "2k",
-      label: "2K",
-      description: "Higher detail for sharing and light editing",
-      creditCost: 2,
-    },
-    {
-      value: "4k",
-      label: "4K",
-      description: "Largest output for presentation and print crops",
-      creditCost: 5,
     },
   ],
 };
@@ -79,19 +77,14 @@ export function normalizeImageQuality(
   _model: ImageModel,
   _quality?: ImageQuality | string
 ): ImageQuality {
-  return "auto";
+  return FIXED_IMAGE_OUTPUT.quality;
 }
 
 export function normalizeImageResolution(
   model: ImageModel,
   resolution?: ImageResolution | string
 ): ImageResolution {
-  const options = getImageResolutionOptions(model);
-  const fallback = options[0]?.value ?? "1k";
-  if (options.some((option) => option.value === resolution)) {
-    return resolution as ImageResolution;
-  }
-  return fallback;
+  return FIXED_IMAGE_OUTPUT.resolution;
 }
 
 export function getImageCreditCost(
@@ -99,11 +92,7 @@ export function getImageCreditCost(
   _quality?: ImageQuality | string,
   resolution?: ImageResolution | string
 ): number {
-  const effectiveResolution = normalizeImageResolution(model, resolution);
-  return (
-    getImageResolutionOptions(model).find((option) => option.value === effectiveResolution)
-      ?.creditCost ?? IMAGE_QUALITY_OPTIONS[model]?.[0]?.creditCost ?? 5
-  );
+  return FIXED_IMAGE_OUTPUT.creditCost;
 }
 
 export function resolveImageProviderSettings(
@@ -111,7 +100,10 @@ export function resolveImageProviderSettings(
   _quality?: ImageQuality | string,
   resolution?: ImageResolution | string
 ): { quality?: string; resolution?: ImageResolution } {
-  return { resolution: normalizeImageResolution("gpt-image-2", resolution) };
+  return {
+    quality: FIXED_IMAGE_OUTPUT.quality,
+    resolution: FIXED_IMAGE_OUTPUT.resolution,
+  };
 }
 
 export function resolveImageProviderModel(_model: ImageModel): string {
@@ -140,7 +132,7 @@ export const IMAGE_MODELS: Record<
     name: "GPT Image 2",
     description: "High quality image generation and editing",
     provider: "CiYuan",
-    supportedAspectRatios: ["1:1", "16:9", "9:16", "3:4"],
+    supportedAspectRatios: ["1:1"],
     isEnabled: true,
     supportsImageInput: true,
     estimatedDurationMs: 120_000,
@@ -150,17 +142,12 @@ export const IMAGE_MODELS: Record<
 export function getSupportedAspectRatios(
   model: ImageModel
 ): ("1:1" | "16:9" | "9:16" | "3:4")[] {
-  return IMAGE_MODELS[model]?.supportedAspectRatios || ["1:1", "16:9", "9:16"];
+  return IMAGE_MODELS[model]?.supportedAspectRatios || ["1:1"];
 }
 
 export function normalizeAspectRatio(
   ratio: string | undefined,
   model: ImageModel
 ): "1:1" | "16:9" | "9:16" | "3:4" {
-  const supported = getSupportedAspectRatios(model);
-  const safeRatio = (ratio || supported[0]) as "1:1" | "16:9" | "9:16" | "3:4";
-  if (supported.includes(safeRatio)) {
-    return safeRatio;
-  }
-  return supported[0];
+  return FIXED_IMAGE_OUTPUT.aspectRatio;
 }

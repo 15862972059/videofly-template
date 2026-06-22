@@ -3,7 +3,7 @@ import type {
   ImageGenerationResult,
   ImageResolution,
 } from "../types";
-import { normalizeImageResolution } from "../types";
+import { FIXED_IMAGE_OUTPUT } from "../types";
 import { configureGlobalFetchProxy } from "@/lib/proxy";
 
 const DEFAULT_TIMEOUT_MS = 300_000;
@@ -37,48 +37,6 @@ function getGenerationModel(): string {
 
 function getEditModel(): string {
   return normalizeModelOverride(process.env.CIYUAN_IMAGE_EDIT_MODEL) || DEFAULT_EDIT_MODEL;
-}
-
-/** Map aspect ratio and resolution to OpenAI-compatible pixel size */
-function mapAspectRatioToSize(
-  aspectRatio?: string,
-  resolution?: ImageResolution
-): string {
-  const effectiveResolution = normalizeImageResolution(
-    "gpt-image-2",
-    resolution
-  );
-
-  const sizes: Record<ImageResolution, Record<string, string>> = {
-    "1k": {
-      "1:1": "1024x1024",
-      "16:9": "1536x864",
-      "9:16": "864x1536",
-      "3:4": "1152x1536",
-    },
-    "2k": {
-      "1:1": "2048x2048",
-      "16:9": "2048x1152",
-      "9:16": "1152x2048",
-      "3:4": "1536x2048",
-    },
-    "4k": {
-      "1:1": "3072x3072",
-      "16:9": "3840x2160",
-      "9:16": "2160x3840",
-      "3:4": "2160x2880",
-    },
-  };
-
-  switch (aspectRatio) {
-    case "16:9":
-    case "9:16":
-    case "3:4":
-    case "1:1":
-      return sizes[effectiveResolution][aspectRatio];
-    default:
-      return sizes[effectiveResolution]["1:1"];
-  }
 }
 
 async function readApiError(response: Response): Promise<string> {
@@ -126,7 +84,9 @@ export async function generateWithCiyuan(
     const body = {
       model: getGenerationModel(),
       prompt: request.prompt,
-      size: mapAspectRatioToSize(request.aspectRatio, request.resolution),
+      size: FIXED_IMAGE_OUTPUT.size,
+      quality: FIXED_IMAGE_OUTPUT.quality,
+      format: FIXED_IMAGE_OUTPUT.format,
       n: 1,
     };
 
@@ -217,7 +177,9 @@ export async function remixWithCiyuan(request: {
     const body = {
       model: getEditModel(),
       prompt: request.prompt,
-      size: mapAspectRatioToSize(request.aspectRatio, request.resolution),
+      size: FIXED_IMAGE_OUTPUT.size,
+      quality: FIXED_IMAGE_OUTPUT.quality,
+      format: FIXED_IMAGE_OUTPUT.format,
       n: 1,
       image: request.imageUrls,
     };

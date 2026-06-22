@@ -35,14 +35,20 @@ describe("CiYuan remix provider", () => {
       generateWithCiyuan({
         prompt: "A modern product photo",
         aspectRatio: "16:9",
+        resolution: "4k",
       })
     ).resolves.toEqual({
       imageUrls: ["https://cdn.example.com/generated.png"],
     });
 
-    expect(
-      JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body)).model
-    ).toBe("gpt-image-2");
+    expect(JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body))).toEqual({
+      model: "gpt-image-2",
+      prompt: "A modern product photo",
+      size: "1024x1024",
+      quality: "low",
+      format: "jpeg",
+      n: 1,
+    });
   });
 
   test("downloads remix reference images through the proxy-aware downloader", async () => {
@@ -76,7 +82,9 @@ describe("CiYuan remix provider", () => {
     expect(JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body))).toEqual({
       model: "gpt-image-2-all",
       prompt: "Blend the person into the scene naturally",
-      size: "1024x1536",
+      size: "1024x1024",
+      quality: "low",
+      format: "jpeg",
       n: 1,
       image: [
         "https://assets.example.com/scene.jpg",

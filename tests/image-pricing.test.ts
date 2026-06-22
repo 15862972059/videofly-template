@@ -6,6 +6,8 @@ import {
   IMAGE_MODELS,
   getImageCreditCost,
   getImageQualityOptions,
+  getImageResolutionOptions,
+  getSupportedAspectRatios,
   resolveImageProviderModel,
   resolveImageProviderSettings,
 } from "@/ai/images/types";
@@ -15,19 +17,6 @@ import {
   SUBSCRIPTION_PRODUCTS,
 } from "@/config/pricing-user";
 import { priceDataMap } from "@/config/price/price-data";
-
-const ESTIMATED_VENDOR_COST_USD: Record<string, number> = {
-  "gpt-image-2:auto": 0.047,
-};
-
-function cheapestPaidCreditValueUsd(): number {
-  const products = [...SUBSCRIPTION_PRODUCTS, ...CREDIT_PACKAGES].filter(
-    (product) => product.enabled
-  );
-  return Math.min(
-    ...products.map((product) => product.priceUsd / product.credits)
-  );
-}
 
 describe("image generation pricing", () => {
   test("new users receive at least one free credit", () => {
@@ -43,27 +32,23 @@ describe("image generation pricing", () => {
       "gpt-image-2",
     ]);
     expect(getImageQualityOptions("gpt-image-2").map((option) => option.value)).toEqual([
-      "auto",
+      "low",
     ]);
   });
 
-  test("site credits preserve at least 40 percent gross margin at the best paid rate", () => {
-    const creditValueUsd = cheapestPaidCreditValueUsd();
-
-    for (const [key, vendorCostUsd] of Object.entries(ESTIMATED_VENDOR_COST_USD)) {
-      const [model, quality] = key.split(":");
-      const revenueUsd = getImageCreditCost(
-        model as keyof typeof IMAGE_MODELS,
-        quality as never
-      ) * creditValueUsd;
-      const margin = (revenueUsd - vendorCostUsd) / revenueUsd;
-
-      expect(margin, key).toBeGreaterThanOrEqual(0.4);
-    }
+  test("exposes only the fixed fast output contract", () => {
+    expect(getImageResolutionOptions("gpt-image-2").map((option) => option.value)).toEqual([
+      "1k",
+    ]);
+    expect(getSupportedAspectRatios("gpt-image-2")).toEqual(["1:1"]);
+    expect(getImageCreditCost("gpt-image-2", "low" as never, "1k")).toBe(1);
   });
 
   test("quality choices map to the correct provider fields", () => {
-    expect(resolveImageProviderSettings("gpt-image-2", "auto")).toEqual({});
+    expect(resolveImageProviderSettings("gpt-image-2", "low" as never)).toEqual({
+      quality: "low",
+      resolution: "1k",
+    });
   });
 
   test("site model names map to official model ids", () => {
