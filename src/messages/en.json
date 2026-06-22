@@ -649,10 +649,10 @@
       "resultHint": "Your generated image will appear in this canvas.",
       "generatedResultHint": "Save, share, or start another generation.",
       "emptyTitle": "Enter a prompt to generate",
-      "emptyHint": "The canvas keeps the selected ratio and resolution visible while you compose.",
+      "emptyHint": "Your fast square JPEG preview is ready for a new prompt.",
       "newImage": "New image",
       "prompt": "Prompt",
-      "welcomeCredit": "New users get {credits} free credit. The default 1K image costs {cost} credit.",
+      "welcomeCredit": "New users get {credits} free credit. Each fast JPEG costs {cost} credit.",
       "trySamplePrompt": "Try sample prompt",
       "promptPlaceholder": "A beautiful sunset over the Eiffel Tower, golden hour lighting, cinematic composition...",
       "resolution": "Resolution",
@@ -661,7 +661,9 @@
       "generate": "Generate",
       "generating": "Generating",
       "outputSettings": "Output settings",
-      "outputSettingsHint": "1K is the default baseline.",
+      "outputSettingsHint": "Fixed for faster, more reliable generation.",
+      "fixedOutput": "1024 x 1024 · Low · JPEG",
+      "fixedOutputHint": "Square JPEG output optimized for generation speed.",
       "model": "Model",
       "aspectRatio": "Aspect ratio",
       "credits": "credits",
@@ -697,7 +699,8 @@
       "subtitle": "Compose a new image from your portrait and a selected scene.",
       "sceneReady": "Scene ready",
       "chooseScene": "Choose scene",
-      "missingInputs": "Please upload a photo and select a scene"
+      "missingInputs": "Please upload a photo and select a scene",
+      "fixedOutput": "1024 x 1024 · Low · JPEG"
     },
     "remixResult": {
       "generatedResult": "Generated result",
@@ -718,7 +721,9 @@
       "credit": "credit",
       "credits": "credits",
       "generate": "Generate",
-      "generating": "Generating"
+      "generating": "Generating",
+      "fixedOutput": "1024 x 1024 · Low · JPEG",
+      "fixedOutputHint": "Fast square output · 1 credit"
     },
     "scenePanel": {
       "title": "Scene base",

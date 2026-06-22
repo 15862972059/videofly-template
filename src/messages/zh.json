@@ -649,10 +649,10 @@
       "resultHint": "生成后的图片会显示在这里。",
       "generatedResultHint": "保存、分享，或继续生成新的图片。",
       "emptyTitle": "输入提示词开始生成",
-      "emptyHint": "画布会按照你选择的比例和分辨率展示预览。",
+      "emptyHint": "快速方形 JPEG 画布已准备好，输入提示词即可生成。",
       "newImage": "新建图片",
       "prompt": "提示词",
-      "welcomeCredit": "新用户可获得 {credits} 个免费积分。默认 1K 图片消耗 {cost} 个积分。",
+      "welcomeCredit": "新用户可获得 {credits} 个免费积分。每张快速 JPEG 消耗 {cost} 个积分。",
       "trySamplePrompt": "试用示例提示词",
       "promptPlaceholder": "埃菲尔铁塔上空的绝美日落，黄金时刻光线，电影感构图...",
       "resolution": "分辨率",
@@ -661,7 +661,9 @@
       "generate": "生成",
       "generating": "生成中",
       "outputSettings": "输出设置",
-      "outputSettingsHint": "1K 是默认基础规格。",
+      "outputSettingsHint": "固定规格，生成更快、更稳定。",
+      "fixedOutput": "1024 x 1024 · 低质量 · JPEG",
+      "fixedOutputHint": "为生成速度优化的方形 JPEG 输出。",
       "model": "模型",
       "aspectRatio": "图片比例",
       "credits": "积分",
@@ -697,7 +699,8 @@
       "subtitle": "将你的人像与选定场景组合成一张新图片。",
       "sceneReady": "场景已就绪",
       "chooseScene": "选择场景",
-      "missingInputs": "请上传照片并选择场景"
+      "missingInputs": "请上传照片并选择场景",
+      "fixedOutput": "1024 x 1024 · 低质量 · JPEG"
     },
     "remixResult": {
       "generatedResult": "生成结果",
@@ -718,7 +721,9 @@
       "credit": "积分",
       "credits": "积分",
       "generate": "生成",
-      "generating": "生成中"
+      "generating": "生成中",
+      "fixedOutput": "1024 x 1024 · 低质量 · JPEG",
+      "fixedOutputHint": "快速方形输出 · 1 积分"
     },
     "scenePanel": {
       "title": "场景基础图",

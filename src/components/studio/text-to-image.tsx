@@ -14,24 +14,10 @@ import { Button } from "@/components/ui/button";
 import { NEW_USER_GIFT } from "@/config/pricing-user";
 import {
   IMAGE_MODELS,
-  type ImageModel,
-  type ImageQuality,
-  type ImageResolution,
   getImageCreditCost,
-  getImageResolutionOptions,
-  getSupportedAspectRatios,
-  normalizeImageQuality,
-  normalizeImageResolution,
 } from "@/ai/images/types";
 import { GenerationProgress } from "./generation-progress";
 import { GenerationResult } from "./generation-result";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { parseJsonApiResponse } from "@/lib/api/client-response";
 import {
   type ImageGenerationStartPayload,
@@ -49,35 +35,6 @@ interface TextToImageProps {
   onClearResult: () => void;
 }
 
-const modelOptions = Object.entries(IMAGE_MODELS).map(([key, value]) => ({
-  value: key as ImageModel,
-  label: value.name,
-  description: value.description,
-  provider: value.provider,
-  isEnabled: value.isEnabled,
-})).filter((option) => option.isEnabled);
-
-const aspectRatioOptions = [
-  { value: "1:1", label: "1:1" },
-  { value: "3:4", label: "3:4" },
-  { value: "9:16", label: "9:16" },
-  { value: "16:9", label: "16:9" },
-] as const;
-
-const aspectRatioMap: Record<"1:1" | "3:4" | "9:16" | "16:9", string> = {
-  "1:1": "1 / 1",
-  "3:4": "3 / 4",
-  "9:16": "9 / 16",
-  "16:9": "16 / 9",
-};
-
-const canvasWidthClass: Record<"1:1" | "3:4" | "9:16" | "16:9", string> = {
-  "1:1": "max-w-[560px]",
-  "3:4": "max-w-[460px]",
-  "9:16": "max-w-[360px]",
-  "16:9": "max-w-[780px]",
-};
-
 const promptStyles = [
   { labelKey: "photorealistic", suffix: "photorealistic style, natural light, crisp details" },
   { labelKey: "anime", suffix: "anime style, clean line art, expressive lighting" },
@@ -91,28 +48,13 @@ const samplePrompt =
 
 export function TextToImage({ onGenerate, generating, result, onClearResult }: TextToImageProps) {
   const t = useTranslations("Studio.textToImage");
+  const model = "gpt-image-2" as const;
   const [prompt, setPrompt] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [model, setModel] = useState<ImageModel>("gpt-image-2");
-  const [quality, setQuality] = useState<ImageQuality>("auto");
-  const [resolution, setResolution] = useState<ImageResolution>("1k");
-  const [aspectRatio, setAspectRatio] = useState<"1:1" | "3:4" | "9:16" | "16:9">("16:9");
   const [loading, setLoading] = useState(false);
 
-  const supportedRatios = getSupportedAspectRatios(model);
-  const resolutionOptions = getImageResolutionOptions(model);
-  const selectedResolution = resolutionOptions.find((option) => option.value === resolution);
-  const creditCost = getImageCreditCost(model, quality, resolution);
+  const creditCost = getImageCreditCost(model);
   const isWorking = loading || generating;
-
-  const handleModelChange = (value: ImageModel) => {
-    setModel(value);
-    setQuality(normalizeImageQuality(value, quality));
-    setResolution(normalizeImageResolution(value, resolution));
-    if (!getSupportedAspectRatios(value).includes(aspectRatio)) {
-      setAspectRatio(getSupportedAspectRatios(value)[0]);
-    }
-  };
 
   const handleGenerate = async () => {
     if (!prompt.trim() || isWorking) return;
@@ -123,13 +65,7 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
       const res = await fetch("/api/v1/image/generate/text", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: prompt.trim(),
-          model,
-          quality,
-          resolution,
-          aspectRatio,
-        }),
+        body: JSON.stringify({ prompt: prompt.trim() }),
       });
 
       const data = await parseJsonApiResponse<{
@@ -144,11 +80,7 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
         );
       }
 
-      const result = await waitForImageGenerationResult(data.data.jobId, {
-        timeoutMs: IMAGE_MODELS[model]?.estimatedDurationMs
-          ? IMAGE_MODELS[model].estimatedDurationMs * 3
-          : 300_000,
-      });
+      const result = await waitForImageGenerationResult(data.data.jobId);
       onGenerate(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Generation failed");
@@ -185,10 +117,7 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
               {IMAGE_MODELS[model]?.name ?? model}
             </span>
             <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
-              {aspectRatio}
-            </span>
-            <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
-              {resolution.toUpperCase()}
+              {t("fixedOutput")}
             </span>
           </div>
         </div>
@@ -229,13 +158,13 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
 
             <div className="flex min-h-0 flex-1 items-center justify-center bg-slate-50 p-5 dark:bg-slate-900/50">
               {result ? (
-                <div className={`w-full ${canvasWidthClass[aspectRatio]}`}>
-                  <GenerationResult result={result} inline showActions aspectRatio={aspectRatio} />
+                <div className="w-full max-w-[560px]">
+                  <GenerationResult result={result} inline showActions aspectRatio="1:1" />
                 </div>
               ) : (
                 <div
-                  className={`flex w-full flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-slate-400 dark:border-slate-700 dark:bg-slate-950 ${canvasWidthClass[aspectRatio]}`}
-                  style={{ aspectRatio: aspectRatioMap[aspectRatio], minHeight: 340 }}
+                  className="flex w-full max-w-[560px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-slate-400 dark:border-slate-700 dark:bg-slate-950"
+                  style={{ aspectRatio: "1 / 1", minHeight: 340 }}
                 >
                   <div className="mb-3 rounded-xl bg-slate-100 p-3 dark:bg-slate-900">
                     <Send className="h-6 w-6 opacity-60" />
@@ -286,17 +215,11 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
             </div>
 
             <div className="flex min-w-0 flex-col gap-3 lg:w-[332px]">
-              <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="grid grid-cols-[minmax(0,1fr)_88px] gap-2 text-xs">
                 <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{t("resolution")}</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{t("outputSettings")}</p>
                   <p className="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
-                    {selectedResolution?.label ?? resolution.toUpperCase()}
-                  </p>
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{t("ratio")}</p>
-                  <p className="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
-                    {aspectRatio}
+                    {t("fixedOutput")}
                   </p>
                 </div>
                 <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
@@ -343,73 +266,14 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
             </div>
           </div>
 
-          <div className="space-y-4 bg-slate-50 p-3 dark:bg-slate-900/50">
-            <div>
-              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">{t("model")}</p>
-              <Select value={model} onValueChange={handleModelChange} disabled={isWorking}>
-                <SelectTrigger className="h-10 rounded-xl bg-white text-xs dark:bg-slate-950">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {modelOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value} className="text-xs">
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">{t("resolution")}</p>
-              <div className="grid gap-2">
-                {resolutionOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => setResolution(option.value)}
-                    disabled={isWorking}
-                    className={`min-h-11 cursor-pointer rounded-xl border px-3 py-2 text-left transition disabled:cursor-not-allowed disabled:opacity-60 ${
-                      resolution === option.value
-                        ? "border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-500/15 dark:text-blue-200"
-                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300 dark:hover:text-white"
-                    }`}
-                  >
-                    <span className="flex items-center justify-between gap-3 text-sm font-semibold">
-                      {option.label}
-                      <span>{option.creditCost} {t("credits")}</span>
-                    </span>
-                    <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                      {t(`resolutionDescriptions.${option.value}`)}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">{t("aspectRatio")}</p>
-              <div className="grid grid-cols-2 gap-2">
-                {aspectRatioOptions.map((option) => {
-                  const supported = supportedRatios.includes(option.value);
-                  if (!supported) return null;
-                  return (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => setAspectRatio(option.value)}
-                      disabled={isWorking}
-                      className={`min-h-10 cursor-pointer rounded-xl border px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
-                        aspectRatio === option.value
-                          ? "border-slate-950 bg-slate-950 text-white dark:border-white dark:bg-white dark:text-slate-950"
-                          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300 dark:hover:text-white"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  );
-                })}
-              </div>
+          <div className="bg-slate-50 p-3 dark:bg-slate-900/50">
+            <div className="rounded-xl border border-slate-200 bg-white px-3 py-3 dark:border-slate-700 dark:bg-slate-950">
+              <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                {t("fixedOutput")}
+              </p>
+              <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                {t("fixedOutputHint")}
+              </p>
             </div>
           </div>
         </section>

@@ -22,7 +22,7 @@ function ImagePreviewDialog({
   const handleDownload = () => {
     const link = document.createElement("a");
     link.href = `/api/v1/image/download?url=${encodeURIComponent(job.result_image_url!)}`;
-    link.download = "ai-art-generation.png";
+    link.download = "ai-art-generation.jpg";
     link.click();
   };
 
@@ -109,9 +109,7 @@ export default function GenerationsPage() {
       if (!res.ok) throw new Error("Failed to fetch generations");
       const data = await res.json();
       if (data.success) {
-        setJobs((data.data.jobs as GenerationJobData[]).filter(
-          (j) => j.status === "succeeded"
-        ));
+        setJobs(data.data.jobs as GenerationJobData[]);
       } else {
         throw new Error(data.error?.message || "Failed to fetch generations");
       }

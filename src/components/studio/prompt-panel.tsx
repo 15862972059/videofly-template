@@ -4,24 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  IMAGE_MODELS,
-  type ImageModel,
-  type ImageQuality,
-  type ImageResolution,
-  getImageCreditCost,
-  getImageResolutionOptions,
-  normalizeImageQuality,
-  normalizeImageResolution,
-} from "@/ai/images/types";
 import { buildRemixSystemPrompt } from "@/services/image/prompts";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface PromptPanelProps {
   classicScene?: {
@@ -30,35 +13,16 @@ interface PromptPanelProps {
     category: string;
     prompt_template: string;
   };
-  aspectRatio: "1:1" | "3:4" | "9:16" | "16:9";
-  model: ImageModel;
-  onAspectRatioChange: (value: "1:1" | "3:4" | "9:16" | "16:9") => void;
-  onModelChange: (model: ImageModel) => void;
   onGenerate: (prompt: string) => void;
   disabled?: boolean;
   loading?: boolean;
-  quality: ImageQuality;
-  onQualityChange: (value: ImageQuality) => void;
-  resolution: ImageResolution;
-  onResolutionChange: (value: ImageResolution) => void;
-  /** Filter to only models supporting image input (for remix mode) */
-  imageInputOnly?: boolean;
 }
 
 export function PromptPanel({
   classicScene,
-  aspectRatio,
-  model,
-  onAspectRatioChange,
-  onModelChange,
   onGenerate,
   disabled,
   loading,
-  quality,
-  onQualityChange,
-  resolution,
-  onResolutionChange,
-  imageInputOnly,
 }: PromptPanelProps) {
   const t = useTranslations("Studio.promptPanel");
   const [customPrompt, setCustomPrompt] = useState("");
@@ -71,34 +35,10 @@ export function PromptPanel({
     }
   }, [classicScene]);
 
-  const modelOptions = Object.entries(IMAGE_MODELS).map(([key, value]) => ({
-    value: key as ImageModel,
-    label: value.name,
-    provider: value.provider,
-    isEnabled: value.isEnabled,
-    supportsImageInput: value.supportsImageInput,
-  })).filter((option) => option.isEnabled && (!imageInputOnly || option.supportsImageInput));
-
-  const aspectRatioOptions = [
-    { value: "1:1", label: "1:1" },
-    { value: "3:4", label: "3:4" },
-    { value: "9:16", label: "9:16" },
-    { value: "16:9", label: "16:9" },
-  ] as const;
-
-  const resolutionOptions = getImageResolutionOptions(model);
-  const creditCost = getImageCreditCost(model, quality, resolution);
-
   const handleGenerate = () => {
     if (classicScene) {
       onGenerate(customPrompt.trim());
     }
-  };
-
-  const handleModelChange = (value: ImageModel) => {
-    onModelChange(value);
-    onQualityChange(normalizeImageQuality(value, quality));
-    onResolutionChange(normalizeImageResolution(value, resolution));
   };
 
   return (
@@ -122,52 +62,19 @@ export function PromptPanel({
         </div>
 
         <div className="flex min-w-0 flex-col gap-3 lg:w-[332px]">
-          <div className="grid grid-cols-3 gap-2">
-            <Select value={model} onValueChange={handleModelChange}>
-              <SelectTrigger className="h-9 w-full text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {modelOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="text-xs">
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select
-              value={resolution}
-              onValueChange={(v) => onResolutionChange(v as ImageResolution)}
-            >
-              <SelectTrigger className="h-9 w-full text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {resolutionOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="text-xs">
-                    {option.label} - {option.creditCost} {t("credits")}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={aspectRatio} onValueChange={(v: "1:1" | "3:4" | "9:16" | "16:9") => onAspectRatioChange(v)}>
-              <SelectTrigger className="h-9 w-full text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {aspectRatioOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="text-xs">
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
+            <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
+              {t("fixedOutput")}
+            </p>
+            <p className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">
+              {t("fixedOutputHint")}
+            </p>
           </div>
 
           <div className="flex items-center gap-2">
             <div className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
               <p className="truncate text-xs font-medium text-slate-600 dark:text-slate-300">
-                {creditCost} {creditCost > 1 ? t("credits") : t("credit")}
+                1 {t("credit")}
               </p>
             </div>
             <Button

@@ -10,11 +10,7 @@ import { RemixScenePanel } from "./remix-scene-panel";
 import { GenerationProgress } from "./generation-progress";
 import {
   IMAGE_MODELS,
-  type ImageModel,
-  type ImageQuality,
-  type ImageResolution,
 } from "@/ai/images/types";
-import { getSupportedAspectRatios, normalizeImageQuality } from "@/ai/images/types";
 import { parseJsonApiResponse } from "@/lib/api/client-response";
 import {
   type ImageGenerationStartPayload,
@@ -29,28 +25,17 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
   const t = useTranslations("Studio.remix");
   const [sourceImageKey, setSourceImageKey] = useState<string | null>(null);
   const [uploadingSource, setUploadingSource] = useState(false);
-  const [aspectRatio, setAspectRatio] = useState<"1:1" | "3:4" | "9:16" | "16:9">("9:16");
   const [selectedScene, setSelectedScene] = useState<ClassicImageData | null>(initialScene || null);
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState<{ objectKey: string; publicUrl: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [model, setModel] = useState<ImageModel>("gpt-image-2");
-  const [quality, setQuality] = useState<ImageQuality>("auto");
-  const [resolution, setResolution] = useState<ImageResolution>("1k");
+  const model = "gpt-image-2" as const;
 
   useEffect(() => {
     if (initialScene) {
       setSelectedScene(initialScene);
     }
   }, [initialScene]);
-
-  // Auto-adjust aspect ratio when model changes if current ratio is not supported
-  useEffect(() => {
-    const supported = getSupportedAspectRatios(model);
-    if (!supported.includes(aspectRatio)) {
-      setAspectRatio(supported[0]);
-    }
-  }, [model, aspectRatio]);
 
   const handleUpload = (objectKey: string, _previewUrl: string) => {
     setSourceImageKey(objectKey);
@@ -76,10 +61,6 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
           classicImageSlug: selectedScene.slug,
           sourceImageKey,
           prompt,
-          aspectRatio,
-          model,
-          quality,
-          resolution,
         }),
       });
 
@@ -92,11 +73,7 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
         throw new Error(data.error?.message || "Generation failed");
       }
 
-      const completed = await waitForImageGenerationResult(data.data.jobId, {
-        timeoutMs: IMAGE_MODELS[model]?.estimatedDurationMs
-          ? IMAGE_MODELS[model].estimatedDurationMs * 3
-          : 300_000,
-      });
+      const completed = await waitForImageGenerationResult(data.data.jobId);
       setResult(completed);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Generation failed");
@@ -120,10 +97,7 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
               {IMAGE_MODELS[model]?.name ?? model}
             </span>
             <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
-              {aspectRatio}
-            </span>
-            <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
-              {resolution.toUpperCase()}
+              {t("fixedOutput")}
             </span>
             <span className="rounded-full border border-slate-200 px-3 py-1 font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">
               {selectedScene ? t("sceneReady") : t("chooseScene")}
@@ -141,7 +115,6 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
             result={result}
             sourceImageKey={sourceImageKey}
             selectedScene={selectedScene}
-            aspectRatio={aspectRatio}
           />
         </div>
 
@@ -156,21 +129,9 @@ export function RemixWorkspace({ initialScene }: RemixWorkspaceProps) {
                 }
               : undefined
           }
-          aspectRatio={aspectRatio}
-          model={model}
-          onAspectRatioChange={setAspectRatio}
-          onModelChange={(nextModel) => {
-            setModel(nextModel);
-            setQuality(normalizeImageQuality(nextModel, quality));
-          }}
           onGenerate={handleGenerate}
           disabled={generating || uploadingSource || !selectedScene || !sourceImageKey}
           loading={generating}
-          quality={quality}
-          onQualityChange={setQuality}
-          resolution={resolution}
-          onResolutionChange={setResolution}
-          imageInputOnly
         />
       </main>
 

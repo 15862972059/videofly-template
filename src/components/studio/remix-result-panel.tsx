@@ -10,7 +10,6 @@ interface RemixResultPanelProps {
   result: { objectKey: string; publicUrl: string } | null;
   sourceImageKey: string | null;
   selectedScene: ClassicImageData | null;
-  aspectRatio: "1:1" | "3:4" | "9:16" | "16:9";
 }
 
 function getSceneDisplayUrl(scene: ClassicImageData) {
@@ -21,29 +20,14 @@ export function RemixResultPanel({
   result,
   sourceImageKey,
   selectedScene,
-  aspectRatio,
 }: RemixResultPanelProps) {
   const t = useTranslations("Studio.remixResult");
   const [previewMode, setPreviewMode] = useState<"result" | "scene">("result");
   const hasSelectedScene = Boolean(selectedScene);
   const sceneDisplayUrl = selectedScene ? getSceneDisplayUrl(selectedScene) : "";
   const canCompare = Boolean(result && sceneDisplayUrl);
-  const canvasWidthClass = {
-    "1:1": "max-w-[560px]",
-    "3:4": "max-w-[460px]",
-    "9:16": "max-w-[360px]",
-    "16:9": "max-w-[780px]",
-  }[aspectRatio];
-  const aspectStyle = {
-    aspectRatio:
-      aspectRatio === "9:16"
-        ? "9 / 16"
-        : aspectRatio === "16:9"
-          ? "16 / 9"
-          : aspectRatio === "1:1"
-            ? "1 / 1"
-            : "3 / 4",
-  };
+  const canvasWidthClass = "max-w-[560px]";
+  const aspectStyle = { aspectRatio: "1 / 1" };
 
   return (
     <section className="flex min-h-[420px] flex-1 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -93,7 +77,7 @@ export function RemixResultPanel({
       <div className="flex min-h-0 flex-1 items-center justify-center bg-slate-50 p-5 dark:bg-slate-900/50">
         {result && (!canCompare || previewMode === "result") ? (
           <div className={`w-full ${canvasWidthClass}`}>
-            <GenerationResult result={result} inline showActions aspectRatio={aspectRatio} />
+            <GenerationResult result={result} inline showActions aspectRatio="1:1" />
           </div>
         ) : selectedScene && (canCompare ? previewMode === "scene" : true) ? (
           <div
