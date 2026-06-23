@@ -41,9 +41,9 @@ async function main() {
   const selectedCases: any[] = [];
   let copiedCount = 0;
 
-  // 3. Find and copy 150 valid images
+  // 3. Find and copy 200 valid images
   for (const item of cases) {
-    if (copiedCount >= 150) break;
+    if (copiedCount >= 200) break;
 
     const caseId = item.id;
     // Check if image file exists in source (could be .jpg or .png)
@@ -79,7 +79,7 @@ async function main() {
       });
 
       copiedCount++;
-      console.log(`[${copiedCount}/150] Copied case ${caseId} image (${ext})`);
+      console.log(`[${copiedCount}/200] Copied case ${caseId} image (${ext})`);
     }
   }
 
