@@ -387,70 +387,89 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
       )}
 
       <Dialog open={templateDialogOpen} onOpenChange={setTemplateDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto p-6">
-          <DialogHeader className="mb-4">
+        <DialogContent
+          style={{ maxWidth: "85vw", width: "100%", maxHeight: "85vh", height: "80vh" }}
+          className="p-0 overflow-hidden flex flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl gap-0"
+        >
+          <DialogHeader className="px-6 pt-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
               <ImageIcon className="h-5 w-5 text-indigo-500" />
               {t("selectTemplateTitle")}
             </DialogTitle>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               {t("selectTemplateHint")}
             </p>
           </DialogHeader>
 
-          {loadingTemplates ? (
-            <div className="flex h-48 items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
-            </div>
-          ) : templates.length === 0 ? (
-            <div className="flex h-48 flex-col items-center justify-center text-slate-400">
-              <ImageIcon className="h-10 w-10 opacity-40 mb-2" />
-              <p className="text-sm font-medium">No templates found</p>
-            </div>
-          ) : (
-            <>
-              {subcategories.length > 0 && (
-                <div className="mb-6 flex flex-wrap gap-2 border-b border-slate-100 pb-4 dark:border-slate-800">
+          <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+            {/* Categories */}
+            <aside className="border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/50 p-4 lg:w-60 lg:border-b-0 lg:border-r">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                  {tFilters("categories")}
+                </p>
+                {activeSubcategory !== "all" && (
                   <button
                     type="button"
                     onClick={() => setActiveSubcategory("all")}
-                    className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide transition-colors ${
-                      activeSubcategory === "all"
-                        ? "bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
-                        : "border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700/60 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
+                    className="cursor-pointer text-xs font-medium text-slate-500 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                  >
+                    {tFilters("clear")}
+                  </button>
+                )}
+              </div>
+              <div className="grid max-h-32 grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3 lg:max-h-none lg:grid-cols-1">
+                <button
+                  type="button"
+                  onClick={() => setActiveSubcategory("all")}
+                  className={`min-h-9 cursor-pointer rounded-xl px-3 py-2 text-left text-xs font-semibold tracking-wide transition-colors ${
+                    activeSubcategory === "all"
+                      ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-sm"
+                      : "bg-white dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
+                  }`}
+                >
+                  {getSubcategoryLabel("all")}
+                </button>
+                {subcategories.map((sub) => (
+                  <button
+                    key={sub}
+                    type="button"
+                    onClick={() => setActiveSubcategory(sub)}
+                    className={`min-h-9 cursor-pointer rounded-xl px-3 py-2 text-left text-xs font-semibold tracking-wide transition-colors ${
+                      activeSubcategory === sub
+                        ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-sm"
+                        : "bg-white dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    {getSubcategoryLabel("all")}
+                    {getSubcategoryLabel(sub)}
                   </button>
-                  {subcategories.map((sub) => (
-                    <button
-                      key={sub}
-                      type="button"
-                      onClick={() => setActiveSubcategory(sub)}
-                      className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide transition-colors ${
-                        activeSubcategory === sub
-                          ? "bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
-                          : "border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700/60 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
-                      }`}
-                    >
-                      {getSubcategoryLabel(sub)}
-                    </button>
-                  ))}
-                </div>
-              )}
+                ))}
+              </div>
+            </aside>
 
-              {filteredTemplates.length === 0 ? (
+            {/* Grid Area */}
+            <div className="flex-1 overflow-y-auto p-6 min-h-0">
+              {loadingTemplates ? (
+                <div className="flex h-48 items-center justify-center">
+                  <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+                </div>
+              ) : templates.length === 0 ? (
+                <div className="flex h-48 flex-col items-center justify-center text-slate-400">
+                  <ImageIcon className="h-10 w-10 opacity-40 mb-2" />
+                  <p className="text-sm font-medium">No templates found</p>
+                </div>
+              ) : filteredTemplates.length === 0 ? (
                 <div className="flex h-48 flex-col items-center justify-center text-slate-400">
                   <ImageIcon className="h-10 w-10 opacity-40 mb-2" />
                   <p className="text-sm font-medium">No templates found in this category</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                   {filteredTemplates.map((tpl) => {
                     const url = (tpl as ClassicImage).heroImageUrl ?? (tpl as ClassicImageData).hero_image_url ?? "";
                     const title = (tpl as ClassicImage).title ?? (tpl as ClassicImageData).title ?? "";
                     const promptVal = (tpl as ClassicImage).promptTemplate ?? (tpl as ClassicImageData).prompt_template ?? "";
-                    
+
                     return (
                       <button
                         key={tpl.id}
@@ -481,8 +500,8 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
                   })}
                 </div>
               )}
-            </>
-          )}
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
