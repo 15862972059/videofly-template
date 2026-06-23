@@ -101,6 +101,14 @@ export default function GalleryPage() {
 
   // Trigger fetch when tab, category, subcategory, or query changes
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get("tab");
+      if (tab === "text2img" && activeMainTab !== "text2img") {
+        handleTabChange("text2img");
+        return;
+      }
+    }
     void fetchGallery(true);
   }, [activeMainTab, activeCategory, activeSubcategory, activeQuery]);
 

@@ -187,19 +187,29 @@ export function ShowcaseSection() {
             className="text-center"
           >
             <p className="text-slate-500 dark:text-slate-400 mb-6 text-sm">{t("ctaText")}</p>
-            <LocaleLink href="/#generator">
-              <ShimmerButton
-                shimmerColor="#ffffff"
-                shimmerSize="0.05em"
-                shimmerDuration="3s"
-                borderRadius="100px"
-                background="linear-gradient(135deg, #10b981 0%, #059669 100%)"
-                className="px-8 py-3 text-base font-medium shadow-lg shadow-emerald-500/25"
-              >
-                {t("ctaButton")}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </ShimmerButton>
-            </LocaleLink>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <LocaleLink href="/#generator">
+                <ShimmerButton
+                  shimmerColor="#ffffff"
+                  shimmerSize="0.05em"
+                  shimmerDuration="3s"
+                  borderRadius="100px"
+                  background="linear-gradient(135deg, #10b981 0%, #059669 100%)"
+                  className="px-8 py-3 text-base font-medium shadow-lg shadow-emerald-500/25 w-full sm:w-auto"
+                >
+                  {t("ctaButton")}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </ShimmerButton>
+              </LocaleLink>
+              <LocaleLink href="/gallery?tab=text2img">
+                <button
+                  type="button"
+                  className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-full border border-slate-200 bg-white px-8 text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50 transition-colors dark:border-white/10 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-850 cursor-pointer"
+                >
+                  {t("viewAllTemplates")}
+                </button>
+              </LocaleLink>
+            </div>
           </motion.div>
         </BlurFade>
       </div>

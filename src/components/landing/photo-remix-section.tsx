@@ -208,7 +208,7 @@ export function PhotoRemixSection() {
                     transition={{ delay: index * 0.03 }}
                     className="group overflow-hidden rounded-2xl border border-emerald-900/10 bg-white shadow-sm dark:bg-white/5"
                   >
-                    <div className="relative aspect-[5/6] overflow-hidden">
+                    <div className="relative aspect-[3/4] overflow-hidden">
                       <Image
                         src={destination.image}
                         alt={`${destination.title} scene template`}
