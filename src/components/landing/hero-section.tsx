@@ -125,6 +125,14 @@ export function HeroSection() {
               <Image src="/images/homepage/5.21.webp" alt="AI Art Case 5.21" fill sizes="(min-width: 1024px) 285px, 52vw" loading="lazy" />
               <span>{t("gallery.case521")}</span>
             </div>
+            <div className="hero-card hero-card-5">
+              <Image src="/images/homepage/case429.jpg" alt="AI Art Case 429" fill sizes="(min-width: 1024px) 240px, 42vw" loading="lazy" />
+              <span>{t("gallery.case429")}</span>
+            </div>
+            <div className="hero-card hero-card-6">
+              <Image src="/images/homepage/gallery-japan-fuji-mix.webp" alt="AI Art Mount Fuji" fill sizes="(min-width: 1024px) 250px, 50vw" loading="lazy" />
+              <span>{t("gallery.caseFuji")}</span>
+            </div>
           </div>
         </div>
       </div>
