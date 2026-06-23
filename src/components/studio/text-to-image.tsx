@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import {
   ImageIcon,
   Loader2,
@@ -53,11 +54,12 @@ function ImageWithFallback({ src, alt, className, loading = "lazy" }: { src: str
       {!loaded && (
         <div className={`${className} animate-pulse bg-slate-100 dark:bg-slate-800`} />
       )}
-      <img
+      <Image
         src={src}
         alt={alt}
-        loading={loading}
-        decoding="async"
+        fill
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 200px"
+        priority={loading === "eager"}
         className={`${className} transition-opacity duration-200 ${loaded ? "opacity-100" : "opacity-0 absolute"}`}
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
@@ -168,6 +170,12 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
       fetchTemplates(true, 0);
     }
   }, [templateDialogOpen, activeSubcategory, fetchTemplates]);
+
+  const handlePrefetchTemplates = () => {
+    if (templates.length === 0 && !loadingTemplates) {
+      void fetchTemplates(true, 0);
+    }
+  };
 
   const getSubcategoryLabel = (sub: string) => {
     if (sub === "all") return t("allTemplates");
@@ -336,6 +344,7 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
                     <button
                       type="button"
                       onClick={() => setTemplateDialogOpen(true)}
+                      onMouseEnter={handlePrefetchTemplates}
                       disabled={isWorking}
                       className="flex w-fit items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-500 dark:hover:bg-blue-400"
                     >

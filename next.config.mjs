@@ -13,14 +13,26 @@ const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "avatars.githubusercontent.com" },
-      { protocol: "https", hostname: "www.twillot.com" },
-      { protocol: "https", hostname: "cdnv2.ruguoapp.com" },
-      { protocol: "https", hostname: "www.setupyourpay.com" },
-      { protocol: "https", hostname: "cdnv2.ruguoapp.com" },
-    ],
+    remotePatterns: (() => {
+      const patterns = [
+        { protocol: "https", hostname: "images.unsplash.com" },
+        { protocol: "https", hostname: "avatars.githubusercontent.com" },
+        { protocol: "https", hostname: "www.twillot.com" },
+        { protocol: "https", hostname: "cdnv2.ruguoapp.com" },
+        { protocol: "https", hostname: "www.setupyourpay.com" },
+        { protocol: "https", hostname: "cdnv2.ruguoapp.com" },
+      ];
+      if (process.env.STORAGE_DOMAIN) {
+        const domain = process.env.STORAGE_DOMAIN.trim();
+        const hostname = domain.startsWith("http")
+          ? domain.replace(/^https?:\/\//, "").split("/")[0]
+          : domain.split("/")[0];
+        if (hostname && !patterns.some(p => p.hostname === hostname)) {
+          patterns.push({ protocol: "https", hostname });
+        }
+      }
+      return patterns;
+    })(),
     // Allow generated user images from storage domain (uses plain <img> for dynamic hosts)
     unoptimized: false,
   },

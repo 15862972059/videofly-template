@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowRight, Sparkles, Copy, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { BorderBeam } from "@/components/magicui/border-beam";
@@ -109,11 +110,12 @@ export function ShowcaseSection() {
 
                   {/* Image Container */}
                   <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-950">
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.title}
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
                     />
 
                     {/* Hover Overlay with Copy & Create Actions */}
