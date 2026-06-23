@@ -980,28 +980,30 @@
   },
   "HeroLanding": {
     "badge": "Powered by GPT Image 2",
-    "title": "Turn Your Photos Into Polished AI Art",
-    "description": "Choose a destination, upload a photo you have rights to use, and let AI2ART turn it into polished artwork.",
+    "title": "Zero Prompts Needed. Turn Photos into AI Art in One Click",
+    "description": "Tired of writing complex AI prompts? You don't need any prompt skills here! Simply pick from our massive curated templates, upload your photo, and generate high-quality artwork for only 1 credit. Fast, easy, and super affordable.",
     "primaryCta": "Start Creating Free",
     "secondaryCta": "Browse Scenes",
     "trust": {
       "noCard": "No credit card",
       "freeCredits": "{credits} free credit",
-      "hdOutput": "HD output"
+      "hdOutput": "HD output",
+      "noPrompts": "❌ No prompts needed",
+      "oneCredit": "💎 1 Credit = 1 Image",
+      "ultraCheap": "🔥 Super affordable & cheap"
     },
     "cards": {
       "sceneIdeas": {
-        "title": "AI Scene Ideas",
-        "description": "Ask for scene prompts like “Paris sunset editorial portrait” or “Kyoto lantern street.”"
+        "title": "❌ Zero Prompts Needed",
+        "description": "Directly choose from massive ready-made templates and styles. Simply upload your photo, saving you from the tedious process of tweaking prompts."
       },
       "model": {
-        "title": "AI Model",
-        "prefix": "Powered by",
-        "suffix": "for detailed, style-aware image generation."
+        "title": "💎 1 Credit per Image",
+        "description": "Based on the leading GPT Image 2 model, generating 1 ultra-clear image costs only 1 credit, making it the most cost-effective solution on the market."
       },
       "fast": {
-        "title": "Fast",
-        "description": "template-based remix workflow"
+        "title": "🔥 Ultra-Low Cost",
+        "description": "Subscription starts at only $9/month for 250 images. Each image costs only pennies, leaving you with massive value."
       }
     },
     "gallery": {

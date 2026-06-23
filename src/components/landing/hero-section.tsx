@@ -16,6 +16,9 @@ export function HeroSection() {
     t("trust.noCard"),
     t("trust.freeCredits", { credits: NEW_USER_GIFT.credits || 1 }),
     t("trust.hdOutput"),
+    t("trust.noPrompts"),
+    t("trust.oneCredit"),
+    t("trust.ultraCheap"),
   ];
 
   return (
@@ -93,7 +96,7 @@ export function HeroSection() {
                       {t("cards.model.title")}
                     </div>
                     <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
-                      {t("cards.model.prefix")} <strong className="font-bold text-emerald-700 dark:text-emerald-300">GPT Image 2</strong> {t("cards.model.suffix")}
+                      {t("cards.model.description")}
                     </p>
                   </div>
                   <div className="flex flex-col justify-center rounded-2xl border border-emerald-900/10 bg-emerald-50/80 p-4 text-left dark:bg-emerald-500/10">
