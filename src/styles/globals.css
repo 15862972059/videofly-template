@@ -608,7 +608,7 @@ html body[data-scroll-locked] {
 
 .hero-deck {
   position: relative;
-  min-height: 780px;
+  min-height: 560px;
   width: 100%;
 }
 
@@ -712,30 +712,10 @@ html body[data-scroll-locked] {
   z-index: 14;
 }
 
-.hero-card-5 {
-  --tilt: -5deg;
-  top: 490px;
-  left: 40px;
-  width: 240px;
-  height: 290px;
-  animation-delay: -4.5s;
-  z-index: 20;
-}
-
-.hero-card-6 {
-  --tilt: 4deg;
-  top: 470px;
-  right: 15px;
-  width: 250px;
-  height: 270px;
-  animation-delay: -5.6s;
-  z-index: 18;
-}
-
 /* Responsive styles for smaller screens (tablet) */
 @media (max-width: 1024px) {
   .hero-deck {
-    min-height: 610px;
+    min-height: 430px;
     margin-top: 40px;
   }
 
@@ -767,22 +747,6 @@ html body[data-scroll-locked] {
     width: 52%;
     height: 190px;
     z-index: 14;
-  }
-
-  .hero-card-5 {
-    top: 410px;
-    left: 10px;
-    width: 42%;
-    height: 200px;
-    z-index: 20;
-  }
-
-  .hero-card-6 {
-    top: 390px;
-    right: 0;
-    width: 50%;
-    height: 180px;
-    z-index: 18;
   }
 }
 
