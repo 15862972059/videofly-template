@@ -126,7 +126,7 @@ export default function GalleryPage() {
     setDetailOpen(false);
 
     if (category === "Text-to-Image" && prompt) {
-      router.push(`/studio?tab=text2img&prompt=${encodeURIComponent(prompt)}`);
+      router.push(`/studio?tab=text2img&prompt=${encodeURIComponent(prompt)}&template=${slug}`);
     } else {
       router.push(`/studio?scene=${slug}`);
     }

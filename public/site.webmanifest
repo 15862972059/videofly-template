@@ -1,11 +1,11 @@
 {
-  "name": "VideoFly",
-  "short_name": "VideoFly",
-  "description": "AI-powered video generation platform",
+  "name": "AI2ART",
+  "short_name": "AI2ART",
+  "description": "AI photo remix and art generation platform",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0f0d",
-  "theme_color": "#1a7a42",
+  "background_color": "#fffaf4",
+  "theme_color": "#0f172a",
   "icons": [
     {
       "src": "/icon-192.png",

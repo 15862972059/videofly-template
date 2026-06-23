@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
@@ -49,13 +48,7 @@ export default async function LoginPage({
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
-          <Image
-            src="/images/avatars/saasfly-logo.svg"
-            className="mx-auto"
-            width="64"
-            height="64"
-            alt="AI2ART Logo - AI Photo Remix & Art Generation Platform"
-          />
+          <Icons.Logo className="mx-auto h-16 w-16" />
           <h1 className="text-2xl font-semibold tracking-tight">
             {t("welcome_back")}
           </h1>

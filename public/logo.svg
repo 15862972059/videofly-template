@@ -1,6 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect x="0" y="0" width="512" height="512" rx="80" ry="80" fill="#059669"/>
-  <text x="256" y="256" text-anchor="middle" dominant-baseline="central"
-    font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
-    font-size="176" font-weight="bold" fill="#ffffff">A2</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="64" y1="56" x2="448" y2="456" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2f6bff" />
+      <stop offset="52%" stop-color="#6d63ff" />
+      <stop offset="100%" stop-color="#ff8a3d" />
+    </linearGradient>
+    <linearGradient id="brush" x1="162" y1="336" x2="356" y2="284" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1d4ed8" />
+      <stop offset="55%" stop-color="#ef5f7a" />
+      <stop offset="100%" stop-color="#ffb020" />
+    </linearGradient>
+  </defs>
+  <rect x="32" y="32" width="448" height="448" rx="112" fill="url(#bg)" />
+  <path
+    d="M176 380L252.1 142h7.8L336 380h-44.2l-12.6-41.5h-46.4L220.1 380H176Zm80-81.4h11.8l-5.9-20-.3-3.8-.2 3.8-5.4 20Z"
+    fill="#fff"
+  />
+  <path
+    d="M158 353.4c51.1-23.5 112.8-36.2 191.4-40.7"
+    stroke="url(#brush)"
+    stroke-width="29"
+    stroke-linecap="round"
+  />
+  <path
+    d="M255.9 205.8l17.8 36.8 39.3 17.8-39.3 17.8-17.8 36.8-17.8-36.8-39.3-17.8 39.3-17.8 17.8-36.8Z"
+    fill="#fff"
+    opacity="0.95"
+  />
+  <path
+    d="M256 228.2l11.3 23.2 24.8 11.3-24.8 11.3L256 297.2l-11.3-23.2-24.8-11.3 24.8-11.3L256 228.2Z"
+    fill="#0f172a"
+  />
 </svg>

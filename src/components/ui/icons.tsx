@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useId, type ReactElement } from "react";
 import type { LucideProps } from "lucide-react";
 import * as Lucide from "lucide-react";
 
@@ -23,7 +23,48 @@ export const Heart = Lucide.Heart;
 export const Key = Lucide.Key;
 export const Languages = Lucide.Languages;
 export const Laptop = Lucide.Laptop;
-export const Logo = Lucide.Command;
+export const Logo: Icon = (props) => {
+  const id = useId();
+  const bgGradientId = `${id}-bg`;
+  const brushGradientId = `${id}-brush`;
+
+  return (
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <defs>
+        <linearGradient id={bgGradientId} x1="10" y1="8" x2="54" y2="56">
+          <stop offset="0%" stopColor="#2f6bff" />
+          <stop offset="52%" stopColor="#6d63ff" />
+          <stop offset="100%" stopColor="#ff8a3d" />
+        </linearGradient>
+        <linearGradient id={brushGradientId} x1="18" y1="40" x2="50" y2="28">
+          <stop offset="0%" stopColor="#1d4ed8" />
+          <stop offset="55%" stopColor="#ef5f7a" />
+          <stop offset="100%" stopColor="#ffb020" />
+        </linearGradient>
+      </defs>
+      <rect x="4" y="4" width="56" height="56" rx="15" fill={`url(#${bgGradientId})`} />
+      <path
+        d="M22 46L31.9 16h.2L42 46h-5.8l-1.9-6.3h-4.7L27.7 46H22Zm10-12.1h2.1l-1-3.4-.1-.6-.1.6-1 3.4Z"
+        fill="#fff"
+      />
+      <path
+        d="M19 41.8c6.7-3.1 14.8-4.8 25.1-5.4"
+        stroke={`url(#${brushGradientId})`}
+        strokeLinecap="round"
+        strokeWidth="4.8"
+      />
+      <path
+        d="M31.8 22.8l2.3 4.8 5.1 2.3-5.1 2.3-2.3 4.8-2.3-4.8-5.1-2.3 5.1-2.3 2.3-4.8Z"
+        fill="#fff"
+        opacity="0.95"
+      />
+      <path
+        d="M32 25.6l1.5 3.1 3.2 1.5-3.2 1.5-1.5 3.1-1.5-3.1-3.2-1.5 3.2-1.5 1.5-3.1Z"
+        fill="#0f172a"
+      />
+    </svg>
+  );
+};
 export const Mail = Lucide.Mail;
 export const Menu = Lucide.Menu;
 export const Moon = Lucide.Moon;

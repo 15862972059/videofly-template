@@ -666,6 +666,7 @@
       "title": "文生图工作台",
       "subtitle": "输入提示词，生成一张完整图片。",
       "useTemplate": "使用画廊模板",
+      "change": "换一个",
       "selectTemplateTitle": "选择文生图模板",
       "selectTemplateHint": "点击一个画廊模板，自动填充其提示词。",
       "allTemplates": "全部模板",

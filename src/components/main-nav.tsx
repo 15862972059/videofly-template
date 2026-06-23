@@ -31,8 +31,13 @@ export function MainNav({
   return (
     <div className="flex gap-6 md:gap-10">
       <div className="flex items-center">
-        <LocaleLink href="/" className="hidden items-center space-x-2 md:flex">
-          <div className="text-3xl">AI2ART</div>
+        <LocaleLink
+          href="/"
+          className="hidden items-center gap-2 md:flex"
+          aria-label="AI2ART home"
+        >
+          <Icons.Logo className="h-8 w-8 shrink-0" />
+          <div className="text-3xl font-semibold tracking-tight">AI2ART</div>
         </LocaleLink>
 
         <a
@@ -52,7 +57,7 @@ export function MainNav({
         className="flex items-center space-x-2 md:hidden"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
       >
-        {showMobileMenu ? <Icons.Close/> : <Icons.Logo/>}
+        {showMobileMenu ? <Icons.Close /> : <Icons.Menu />}
         <span className="font-bold">Menu</span>
       </button>
       {showMobileMenu && items && (

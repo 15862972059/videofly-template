@@ -666,6 +666,7 @@
       "title": "Text to Image Workspace",
       "subtitle": "Turn a written prompt into a finished image.",
       "useTemplate": "Use Gallery Template",
+      "change": "Change",
       "selectTemplateTitle": "Select Text to Image Template",
       "selectTemplateHint": "Click a template from the gallery to populate its prompt.",
       "allTemplates": "All Templates",
