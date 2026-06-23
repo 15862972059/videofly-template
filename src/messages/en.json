@@ -247,7 +247,7 @@
     "history": "Transaction History",
     "packages": {
       "starter": {
-        "name": "30 Credits",
+        "name": "100 Credits",
         "description": "A light one-time top-up"
       },
       "basic": {
@@ -263,11 +263,11 @@
         "description": "Built for studios and teams"
       },
       "standard": {
-        "name": "120 Credits",
+        "name": "350 Credits",
         "description": "Balanced one-time credit pack"
       },
       "propack": {
-        "name": "360 Credits",
+        "name": "1000 Credits",
         "description": "Best value one-time top-up"
       }
     },

@@ -80,13 +80,13 @@ function generatePriceData() {
       },
       benefits: {
         zh: [
-          "每月 80 积分",
+          "每月 250 积分",
           "AI image generation access",
           "AI 图片生成与重绘",
           "商业使用授权",
         ],
         en: [
-          "80 credits/month",
+          "250 credits/month",
           "AI image generation access",
           "AI image generation and remix",
           "Commercial license",
@@ -105,14 +105,14 @@ function generatePriceData() {
       },
       benefits: {
         zh: [
-          "每月 220 积分",
+          "每月 600 积分",
           "AI image generation access",
           "AI 图片生成与重绘",
           "商业使用授权",
           "优先支持",
         ],
         en: [
-          "220 credits/month",
+          "600 credits/month",
           "AI image generation access",
           "AI image generation and remix",
           "Commercial license",
@@ -132,7 +132,7 @@ function generatePriceData() {
       },
       benefits: {
         zh: [
-          "每月 700 积分",
+          "每月 1800 积分",
           "AI image generation access",
           "AI 图片生成与重绘",
           "商业使用授权",
@@ -140,7 +140,7 @@ function generatePriceData() {
           "团队协作权益",
         ],
         en: [
-          "700 credits/month",
+          "1800 credits/month",
           "AI image generation access",
           "AI image generation and remix",
           "Commercial license",

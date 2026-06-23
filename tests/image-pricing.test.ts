@@ -57,15 +57,15 @@ describe("image generation pricing", () => {
 
   test("pricing page data only includes enabled monthly subscription credits", () => {
     expect(priceDataMap.en.find((plan) => plan.id === "basic")?.credits).toEqual({
-      monthly: 80,
+      monthly: 250,
       yearly: 0,
     });
     expect(priceDataMap.en.find((plan) => plan.id === "pro")?.credits).toEqual({
-      monthly: 220,
+      monthly: 600,
       yearly: 0,
     });
     expect(priceDataMap.en.find((plan) => plan.id === "ultimate")?.credits).toEqual({
-      monthly: 700,
+      monthly: 1800,
       yearly: 0,
     });
   });

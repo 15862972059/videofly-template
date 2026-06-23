@@ -247,7 +247,7 @@
     "history": "交易历史",
     "packages": {
       "starter": {
-        "name": "30 积分",
+        "name": "100 积分",
         "description": "轻量一次性补充"
       },
       "basic": {
@@ -263,11 +263,11 @@
         "description": "适合团队与工作室"
       },
       "standard": {
-        "name": "120 积分",
+        "name": "350 积分",
         "description": "均衡型一次性积分包"
       },
       "propack": {
-        "name": "360 积分",
+        "name": "1000 积分",
         "description": "高性价比一次性补充"
       }
     },

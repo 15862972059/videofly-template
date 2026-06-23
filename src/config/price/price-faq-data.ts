@@ -16,19 +16,19 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-2",
       question: "Starter 会员多少钱？",
       answer:
-        "Starter 月付为 9 美元，每月包含 80 积分，适合轻度使用和首次体验。",
+        "Starter 月付为 9 美元，每月包含 250 积分，适合轻度使用 and 首次体验。",
     },
     {
       id: "item-3",
       question: "Creator 会员包含什么？",
       answer:
-        "Creator 月付为 19 美元，每月包含 220 积分，并提供优先支持，适合高频创作者。",
+        "Creator 月付为 19 美元，每月包含 600 积分，并提供优先支持，适合高频创作者。",
     },
     {
       id: "item-4",
       question: "可以一次性购买积分吗？",
       answer:
-        "可以。当前一次性积分包为 30 Credits（5 美元）、120 Credits（15 美元）和 360 Credits（39 美元），购买后积分有效期为 1 年。",
+        "可以。当前一次性积分包为 100 Credits（5 美元）、350 Credits（15 美元）和 1000 Credits（39 美元），购买后积分有效期为 1 年。",
     },
     {
       id: "item-5",
@@ -54,19 +54,19 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-2",
       question: "How much does the Starter plan cost?",
       answer:
-        "The Starter plan is $9/month and includes 80 credits each month.",
+        "The Starter plan is $9/month and includes 250 credits each month.",
     },
     {
       id: "item-3",
       question: "What's included in the Creator plan?",
       answer:
-        "The Creator plan is $19/month with 220 credits and priority support, making it the best fit for active creators.",
+        "The Creator plan is $19/month with 600 credits and priority support, making it the best fit for active creators.",
     },
     {
       id: "item-4",
       question: "Can I purchase credits one-time?",
       answer:
-        "Yes. We offer 30 Credits for $5, 120 Credits for $15, and 360 Credits for $39. One-time credits stay valid for 1 year.",
+        "Yes. We offer 100 Credits for $5, 350 Credits for $15, and 1000 Credits for $39. One-time credits stay valid for 1 year.",
     },
     {
       id: "item-5",
@@ -92,25 +92,25 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-2",
       question: "Starter プランの料金はいくらですか？",
       answer:
-        "Starter プランは月額 9 ドルで、毎月 80 クレジットが含まれます。",
+        "Starter プランは月額 9 ドルで、毎月 250 クレジットが含まれます。",
     },
     {
       id: "item-3",
       question: "Creator プランには何が含まれますか？",
       answer:
-        "Creator プランは月額 19 ドルで、毎月 220 クレジットと優先サポートが含まれます。",
+        "Creator プラン is 月額 19 ドルで、毎月 600 クレジットと優先サポートが含まれます。",
     },
     {
       id: "item-4",
       question: "クレジットを一回だけ購入できますか？",
       answer:
-        "はい。30 Credits は 5 ドル、120 Credits は 15 ドル、360 Credits は 39 ドルです。購入したクレジットは 1 年間有効です。",
+        "はい。100 Credits は 5 ドル、350 Credits は 15 ドル、1000 Credits は 39 ドルです。購入したクレジットは 1 年間有効です。",
     },
     {
       id: "item-5",
-      question: "サブスクリプションと単発購入の違いは何ですか？",
+      question: "サブスクリプションと単发購入の違いは何ですか？",
       answer:
-        "サブスクリプションは毎月自動でクレジットが追加され、月次クレジットは 30 日間有効です。単発購入は一度きりの支払いで、1 年間有効です。",
+        "サブスクリプションは毎月自動でクレジットが追加され、月次クレジットは 30 日間有効です。単发購入は一度きりの支払いで、1 年間有効です。",
     },
     {
       id: "item-6",
@@ -130,19 +130,19 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
       id: "item-2",
       question: "Starter 플랜은 얼마인가요?",
       answer:
-        "Starter 플랜은 월 9달러이며 매월 80크레딧이 포함됩니다.",
+        "Starter 플랜은 월 9달러이며 매월 250크레딧이 포함됩니다.",
     },
     {
       id: "item-3",
       question: "Creator 플랜에는 무엇이 포함되나요?",
       answer:
-        "Creator 플랜은 월 19달러이며 매월 220크레딧과 우선 지원이 포함됩니다.",
+        "Creator 플랜은 월 19달러이며 매월 600크레딧과 우선 지원이 포함됩니다.",
     },
     {
       id: "item-4",
       question: "크레딧을 일회성으로 구매할 수 있나요?",
       answer:
-        "네. 30 Credits는 5달러, 120 Credits는 15달러, 360 Credits는 39달러입니다. 일회성 크레딧은 1년 동안 유효합니다.",
+        "네. 100 Credits는 5달러, 350 Credits는 15달러, 1000 Credits는 39달러입니다. 일회성 크레딧은 1년 동안 유효합니다.",
     },
     {
       id: "item-5",
