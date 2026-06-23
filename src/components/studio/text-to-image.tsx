@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
@@ -33,6 +33,38 @@ import {
 } from "@/components/ui/dialog";
 import type { ClassicImageData } from "@/types/ai-photo";
 import type { ClassicImage } from "@/db";
+
+const TEMPLATE_PAGE_SIZE = 15;
+
+function ImageWithFallback({ src, alt, className, loading = "lazy" }: { src: string; alt: string; className?: string; loading?: "lazy" | "eager" }) {
+  const [error, setError] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  if (error || !src) {
+    return (
+      <div className={`${className} flex items-center justify-center bg-slate-100 dark:bg-slate-800`}>
+        <ImageIcon className="h-6 w-6 text-slate-300 dark:text-slate-600" />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {!loaded && (
+        <div className={`${className} animate-pulse bg-slate-100 dark:bg-slate-800`} />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+        className={`${className} transition-opacity duration-200 ${loaded ? "opacity-100" : "opacity-0 absolute"}`}
+        onLoad={() => setLoaded(true)}
+        onError={() => setError(true)}
+      />
+    </>
+  );
+}
 
 interface TextToImageProps {
   onGenerate: (data: { jobId: string; objectKey: string; publicUrl: string }) => void;
@@ -71,9 +103,14 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
   // Template states
   const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
   const [templates, setTemplates] = useState<(ClassicImageData | ClassicImage)[]>([]);
+  const [totalTemplates, setTotalTemplates] = useState(0);
   const [loadingTemplates, setLoadingTemplates] = useState(false);
+  const [loadingMoreTemplates, setLoadingMoreTemplates] = useState(false);
   const [subcategories, setSubcategories] = useState<string[]>([]);
   const [activeSubcategory, setActiveSubcategory] = useState<string>("all");
+
+  const templateRequestIdRef = useRef(0);
+  const fetchedSubcategoriesRef = useRef<string[] | null>(null);
 
   // Initialize/update prompt from search query param if present
   useEffect(() => {
@@ -83,27 +120,54 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
     }
   }, [searchParams]);
 
-  // Fetch templates when dialog opens
-  useEffect(() => {
-    if (templateDialogOpen) {
-      setActiveSubcategory("all");
-      if (templates.length === 0) {
-        setLoadingTemplates(true);
-        fetch("/api/v1/gallery?category=Text-to-Image&limit=100")
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.success && Array.isArray(data.data.images)) {
-              setTemplates(data.data.images);
-              if (Array.isArray(data.data.categories)) {
-                setSubcategories(data.data.categories);
-              }
-            }
-          })
-          .catch(console.error)
-          .finally(() => setLoadingTemplates(false));
+  const fetchTemplates = useCallback(async (reset = false, offset = 0) => {
+    const requestId = ++templateRequestIdRef.current;
+    setLoadingTemplates(reset);
+    setLoadingMoreTemplates(!reset);
+    try {
+      const params = new URLSearchParams();
+      params.set("category", "Text-to-Image");
+      if (activeSubcategory !== "all") {
+        params.set("subcategory", activeSubcategory);
+      }
+      params.set("limit", TEMPLATE_PAGE_SIZE.toString());
+      params.set("offset", offset.toString());
+
+      const res = await fetch(`/api/v1/gallery?${params.toString()}`);
+      const data = await res.json();
+      
+      if (requestId !== templateRequestIdRef.current) return;
+      
+      if (data.success) {
+        const nextTemplates = Array.isArray(data.data.images) ? data.data.images : [];
+        setTemplates((current) => (reset ? nextTemplates : [...current, ...nextTemplates]));
+        setTotalTemplates(Number(data.data.total ?? nextTemplates.length));
+        
+        if (fetchedSubcategoriesRef.current) {
+          setSubcategories(fetchedSubcategoriesRef.current);
+        } else if (Array.isArray(data.data.categories)) {
+          setSubcategories(data.data.categories);
+          fetchedSubcategoriesRef.current = data.data.categories;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch templates:", err);
+    } finally {
+      if (requestId === templateRequestIdRef.current) {
+        setLoadingTemplates(false);
+        setLoadingMoreTemplates(false);
       }
     }
-  }, [templateDialogOpen, templates.length]);
+  }, [activeSubcategory]);
+
+  // Fetch templates when dialog opens or category changes
+  useEffect(() => {
+    if (templateDialogOpen) {
+      setTemplates([]);
+      setTotalTemplates(0);
+      fetchTemplates(true, 0);
+    }
+  }, [templateDialogOpen, activeSubcategory, fetchTemplates]);
 
   const getSubcategoryLabel = (sub: string) => {
     if (sub === "all") return t("allTemplates");
@@ -386,7 +450,12 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
         </div>
       )}
 
-      <Dialog open={templateDialogOpen} onOpenChange={setTemplateDialogOpen}>
+      <Dialog open={templateDialogOpen} onOpenChange={(open) => {
+        setTemplateDialogOpen(open);
+        if (!open) {
+          setActiveSubcategory("all");
+        }
+      }}>
         <DialogContent
           style={{ maxWidth: "85vw", width: "100%", maxHeight: "85vh", height: "80vh" }}
           className="p-0 overflow-hidden flex flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl gap-0"
@@ -430,74 +499,100 @@ export function TextToImage({ onGenerate, generating, result, onClearResult }: T
                 >
                   {getSubcategoryLabel("all")}
                 </button>
-                {subcategories.map((sub) => (
-                  <button
-                    key={sub}
-                    type="button"
-                    onClick={() => setActiveSubcategory(sub)}
-                    className={`min-h-9 cursor-pointer rounded-xl px-3 py-2 text-left text-xs font-semibold tracking-wide transition-colors ${
-                      activeSubcategory === sub
-                        ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-sm"
-                        : "bg-white dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
-                    }`}
-                  >
-                    {getSubcategoryLabel(sub)}
-                  </button>
-                ))}
+                {subcategories.length === 0 && loadingTemplates ? (
+                  Array.from({ length: 8 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-9 rounded-xl bg-slate-100 dark:bg-slate-800/60 animate-pulse border border-slate-200/40 dark:border-slate-800/40"
+                    />
+                  ))
+                ) : (
+                  subcategories.map((sub) => (
+                    <button
+                      key={sub}
+                      type="button"
+                      onClick={() => setActiveSubcategory(sub)}
+                      className={`min-h-9 cursor-pointer rounded-xl px-3 py-2 text-left text-xs font-semibold tracking-wide transition-colors ${
+                        activeSubcategory === sub
+                          ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-sm"
+                          : "bg-white dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
+                      }`}
+                    >
+                      {getSubcategoryLabel(sub)}
+                    </button>
+                  ))
+                )}
               </div>
             </aside>
 
             {/* Grid Area */}
             <div className="flex-1 overflow-y-auto p-6 min-h-0">
               {loadingTemplates ? (
-                <div className="flex h-48 items-center justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {Array.from({ length: 10 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="aspect-square rounded-xl bg-slate-100 dark:bg-slate-800/80 animate-pulse border border-slate-200/40 dark:border-slate-800/40"
+                    />
+                  ))}
                 </div>
               ) : templates.length === 0 ? (
                 <div className="flex h-48 flex-col items-center justify-center text-slate-400">
                   <ImageIcon className="h-10 w-10 opacity-40 mb-2" />
                   <p className="text-sm font-medium">No templates found</p>
                 </div>
-              ) : filteredTemplates.length === 0 ? (
-                <div className="flex h-48 flex-col items-center justify-center text-slate-400">
-                  <ImageIcon className="h-10 w-10 opacity-40 mb-2" />
-                  <p className="text-sm font-medium">No templates found in this category</p>
-                </div>
               ) : (
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-                  {filteredTemplates.map((tpl) => {
-                    const url = (tpl as ClassicImage).heroImageUrl ?? (tpl as ClassicImageData).hero_image_url ?? "";
-                    const title = (tpl as ClassicImage).title ?? (tpl as ClassicImageData).title ?? "";
-                    const promptVal = (tpl as ClassicImage).promptTemplate ?? (tpl as ClassicImageData).prompt_template ?? "";
+                <div className="space-y-5">
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+                    {templates.map((tpl, index) => {
+                      const url = (tpl as ClassicImage).heroImageUrl ?? (tpl as ClassicImageData).hero_image_url ?? "";
+                      const title = (tpl as ClassicImage).title ?? (tpl as ClassicImageData).title ?? "";
+                      const promptVal = (tpl as ClassicImage).promptTemplate ?? (tpl as ClassicImageData).prompt_template ?? "";
 
-                    return (
-                      <button
-                        key={tpl.id}
-                        type="button"
-                        onClick={() => {
-                          setPrompt(promptVal);
-                          setTemplateDialogOpen(false);
-                        }}
-                        className="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white text-left transition hover:border-indigo-500 hover:ring-2 hover:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:hover:border-indigo-500 dark:hover:ring-indigo-900/50"
-                      >
-                        <div className="relative aspect-square w-full overflow-hidden bg-slate-50 dark:bg-slate-900">
-                          {url && (
-                            <img
+                      return (
+                        <button
+                          key={tpl.id}
+                          type="button"
+                          onClick={() => {
+                            setPrompt(promptVal);
+                            setTemplateDialogOpen(false);
+                            setActiveSubcategory("all");
+                          }}
+                          className="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white text-left transition hover:border-indigo-500 hover:ring-2 hover:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:hover:border-indigo-500 dark:hover:ring-indigo-900/50"
+                        >
+                          <div className="relative aspect-square w-full overflow-hidden bg-slate-50 dark:bg-slate-900">
+                            <ImageWithFallback
                               src={url}
                               alt={title}
                               className="absolute inset-0 w-full h-full object-cover transition duration-350 group-hover:scale-105"
-                              loading="lazy"
+                              loading={index < 8 ? "eager" : "lazy"}
                             />
-                          )}
-                        </div>
-                        <div className="p-2 min-w-0">
-                          <p className="truncate text-xs font-semibold text-slate-900 dark:text-slate-100">
-                            {title}
-                          </p>
-                        </div>
+                          </div>
+                          <div className="p-2 min-w-0">
+                            <p className="truncate text-xs font-semibold text-slate-900 dark:text-slate-100">
+                              {title}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="flex flex-col items-center gap-3 pt-4">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      {t("showing", { count: templates.length, total: totalTemplates })}
+                    </p>
+                    {templates.length < totalTemplates && (
+                      <button
+                        type="button"
+                        onClick={() => fetchTemplates(false, templates.length)}
+                        disabled={loadingMoreTemplates}
+                        className="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-white"
+                      >
+                        {loadingMoreTemplates ? t("loading") : t("loadMore")}
                       </button>
-                    );
-                  })}
+                    )}
+                  </div>
                 </div>
               )}
             </div>
