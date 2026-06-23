@@ -129,7 +129,7 @@ export async function getUserSubscriptionSnapshot({
     );
 
   const localMatch = selectBestLocalCreemSubscription(localSubscriptions);
-  if (localMatch?.hasAccess) {
+  if (localMatch) {
     return {
       hasAccess: localMatch.hasAccess,
       status: localMatch.status,
@@ -140,42 +140,7 @@ export async function getUserSubscriptionSnapshot({
     };
   }
 
-  if (!email) {
-    return emptySnapshot();
-  }
-
-  const remoteMatch = await getRemoteSubscriptionSnapshotByEmail(email);
-  if (!remoteMatch) {
-    if (localMatch) {
-      return {
-        hasAccess: localMatch.hasAccess,
-        status: localMatch.status,
-        productId: localMatch.productId,
-        periodEnd: localMatch.currentPeriodEnd,
-        source: "database",
-        canManage: true,
-      };
-    }
-
-    return emptySnapshot();
-  }
-
-  await syncCreemSubscription({
-    userId,
-    productId: remoteMatch.productId,
-    subscriptionId: remoteMatch.subscriptionId,
-    status: remoteMatch.status,
-    currentPeriodEnd: remoteMatch.periodEnd,
-  });
-
-  return {
-    hasAccess: remoteMatch.hasAccess,
-    status: remoteMatch.status,
-    productId: remoteMatch.productId,
-    periodEnd: remoteMatch.periodEnd,
-    source: "creem_api",
-    canManage: true,
-  };
+  return emptySnapshot();
 }
 
 export async function createUserCreemPortalUrl(email: string) {

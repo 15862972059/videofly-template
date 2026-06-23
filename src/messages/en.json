@@ -345,7 +345,7 @@
     "default_title": "Upgrade Your Plan",
     "default_description": "Choose a plan that fits your needs",
     "insufficient_credits_title": "Insufficient Credits",
-    "insufficient_credits_description": "You need at least {credits} credits to generate this video. Purchase a credit pack or upgrade to continue.",
+    "insufficient_credits_description": "You need at least {credits} credits to generate images. Purchase a credit pack or upgrade to continue.",
     "expired_title": "Credits Expired",
     "expired_description": "Your credits have expired. Purchase a new pack or subscribe to continue creating."
   },

@@ -345,7 +345,7 @@
     "default_title": "升级您的方案",
     "default_description": "选择适合您的方案",
     "insufficient_credits_title": "积分不足",
-    "insufficient_credits_description": "您需要至少 {credits} 积分来生成此视频。请购买积分包或升级方案以继续。",
+    "insufficient_credits_description": "您需要至少 {credits} 积分来生成图片。请购买积分包或升级方案以继续。",
     "expired_title": "积分已过期",
     "expired_description": "您的积分已过期。请购买新的积分包或订阅方案以继续创作。"
   },

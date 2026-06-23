@@ -1,46 +1,46 @@
 import { db } from "@/db";
-import { users, videos, creditPackages, creditTransactions, VideoStatus } from "@/db/schema";
-import { count, eq, and, sql, gt } from "drizzle-orm";
+import { users, imageGenerationJobs, creditPackages, creditTransactions } from "@/db/schema";
+import { count, eq, and, sql } from "drizzle-orm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Users as UsersIcon,
-  Video,
   Coins,
   TrendingUp,
   CheckCircle,
   XCircle,
   Clock,
+  BarChart3,
 } from "@/components/ui/icons";
+import { Image as ImageIcon } from "lucide-react";
 
 export default async function AdminDashboardPage() {
   // 获取统计数据
   const [
     totalUsersResult,
-    totalVideosResult,
+    totalImagesResult,
     totalCreditPackagesResult,
-    completedVideosResult,
-    failedVideosResult,
-    pendingVideosResult,
+    completedImagesResult,
+    failedImagesResult,
+    pendingImagesResult,
   ] = await Promise.all([
     db.select({ count: count() }).from(users),
-    db.select({ count: count() }).from(videos),
+    db.select({ count: count() }).from(imageGenerationJobs),
     db.select({ count: count() }).from(creditPackages),
-    db.select({ count: count() }).from(videos).where(eq(videos.status, VideoStatus.COMPLETED)),
-    db.select({ count: count() }).from(videos).where(eq(videos.status, VideoStatus.FAILED)),
-    db.select({ count: count() }).from(videos).where(eq(videos.status, VideoStatus.PENDING)),
+    db.select({ count: count() }).from(imageGenerationJobs).where(eq(imageGenerationJobs.status, "SUCCEEDED")),
+    db.select({ count: count() }).from(imageGenerationJobs).where(eq(imageGenerationJobs.status, "FAILED")),
+    db.select({ count: count() }).from(imageGenerationJobs).where(sql`${imageGenerationJobs.status} IN ('QUEUED', 'RUNNING')`),
   ]);
 
   const totalUsers = totalUsersResult[0]?.count || 0;
-  const totalVideos = totalVideosResult[0]?.count || 0;
-  totalCreditPackagesResult;
-  const completedVideos = completedVideosResult[0]?.count || 0;
-  const failedVideos = failedVideosResult[0]?.count || 0;
-  const pendingVideos = pendingVideosResult[0]?.count || 0;
+  const totalImages = totalImagesResult[0]?.count || 0;
+  const completedImages = completedImagesResult[0]?.count || 0;
+  const failedImages = failedImagesResult[0]?.count || 0;
+  const pendingImages = pendingImagesResult[0]?.count || 0;
 
-  // 计算视频成功率
-  const totalFinishedVideos = completedVideos + failedVideos;
-  const successRate = totalFinishedVideos > 0
-    ? (completedVideos / totalFinishedVideos) * 100
+  // 计算图片生成成功率
+  const totalFinishedImages = completedImages + failedImages;
+  const successRate = totalFinishedImages > 0
+    ? (completedImages / totalFinishedImages) * 100
     : 0;
 
   // 获取最近注册用户（最近7天）
@@ -53,12 +53,12 @@ export default async function AdminDashboardPage() {
     .where(sql`${users.createdAt} >= ${sevenDaysAgoStr}::timestamp`);
   const recentUsers = recentUsersResult[0]?.count || 0;
 
-  // 获取最近视频生成（最近7天）
-  const recentVideosResult = await db
+  // 获取最近图片生成（最近7天）
+  const recentImagesResult = await db
     .select({ count: count() })
-    .from(videos)
-    .where(sql`${videos.createdAt} >= ${sevenDaysAgoStr}::timestamp`);
-  const recentVideos = recentVideosResult[0]?.count || 0;
+    .from(imageGenerationJobs)
+    .where(sql`${imageGenerationJobs.createdAt} >= ${sevenDaysAgoStr}::timestamp`);
+  const recentImages = recentImagesResult[0]?.count || 0;
 
   return (
     <div className="space-y-6">
@@ -90,14 +90,14 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              视频生成总数
+              图片生成总数
             </CardTitle>
-            <Video className="h-4 w-4 text-muted-foreground" />
+            <ImageIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalVideos}</div>
+            <div className="text-2xl font-bold">{totalImages}</div>
             <p className="text-xs text-muted-foreground">
-              最近7天: +{recentVideos}
+              最近7天: +{recentImages}
             </p>
           </CardContent>
         </Card>
@@ -112,7 +112,7 @@ export default async function AdminDashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">{successRate.toFixed(1)}%</div>
             <p className="text-xs text-muted-foreground">
-              {completedVideos} / {totalFinishedVideos} 完成
+              {completedImages} / {totalFinishedImages} 完成
             </p>
           </CardContent>
         </Card>
@@ -133,7 +133,7 @@ export default async function AdminDashboardPage() {
         </Card>
       </div>
 
-      {/* Video Status Breakdown */}
+      {/* Image Status Breakdown */}
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -143,9 +143,9 @@ export default async function AdminDashboardPage() {
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{completedVideos}</div>
+            <div className="text-2xl font-bold text-green-600">{completedImages}</div>
             <p className="text-xs text-muted-foreground">
-              {totalVideos > 0 ? ((completedVideos / totalVideos) * 100).toFixed(1) : 0}% 的总数
+              {totalImages > 0 ? ((completedImages / totalImages) * 100).toFixed(1) : 0}% 的总数
             </p>
           </CardContent>
         </Card>
@@ -158,9 +158,9 @@ export default async function AdminDashboardPage() {
             <XCircle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{failedVideos}</div>
+            <div className="text-2xl font-bold text-red-600">{failedImages}</div>
             <p className="text-xs text-muted-foreground">
-              {totalVideos > 0 ? ((failedVideos / totalVideos) * 100).toFixed(1) : 0}% 的总数
+              {totalImages > 0 ? ((failedImages / totalImages) * 100).toFixed(1) : 0}% 的总数
             </p>
           </CardContent>
         </Card>
@@ -173,9 +173,9 @@ export default async function AdminDashboardPage() {
             <Clock className="h-4 w-4 text-yellow-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{pendingVideos}</div>
+            <div className="text-2xl font-bold text-yellow-600">{pendingImages}</div>
             <p className="text-xs text-muted-foreground">
-              {totalVideos > 0 ? ((pendingVideos / totalVideos) * 100).toFixed(1) : 0}% 的总数
+              {totalImages > 0 ? ((pendingImages / totalImages) * 100).toFixed(1) : 0}% 的总数
             </p>
           </CardContent>
         </Card>

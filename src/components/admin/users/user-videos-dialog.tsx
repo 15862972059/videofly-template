@@ -30,23 +30,21 @@ import {
 import {
   ChevronLeft,
   ChevronRight,
-  Video,
   CheckCircle,
   XCircle,
   Clock,
   Spinner,
 } from "@/components/ui/icons";
+import { Image as ImageIcon } from "lucide-react";
 
 interface UserVideo {
-  id: number;
+  id: string;
   uuid: string;
   prompt: string;
   model: string;
   status: string;
   videoUrl: string | null;
   thumbnailUrl: string | null;
-  duration: number | null;
-  resolution: string | null;
   creditsUsed: number;
   createdAt: string;
   completedAt: string | null;
@@ -82,7 +80,7 @@ export function UserVideosDialog({
   } | null>(null);
   const [loading, setLoading] = React.useState(false);
 
-  // 加载视频列表和统计信息
+  // 加载图片列表和统计信息
   const loadData = React.useCallback(async () => {
     setLoading(true);
     try {
@@ -103,7 +101,7 @@ export function UserVideosDialog({
       setTotalVideos(data.totalVideos);
       setStats(data.stats);
     } catch (error) {
-      console.error("加载视频失败:", error);
+      console.error("加载图片失败:", error);
     } finally {
       setLoading(false);
     }
@@ -124,6 +122,7 @@ export function UserVideosDialog({
   // 获取状态标签
   const getStatusBadge = (status: string) => {
     switch (status) {
+      case "completed":
       case "COMPLETED":
         return (
           <Badge variant="default" className="gap-1 bg-green-600">
@@ -131,6 +130,7 @@ export function UserVideosDialog({
             已完成
           </Badge>
         );
+      case "failed":
       case "FAILED":
         return (
           <Badge variant="destructive" className="gap-1">
@@ -138,18 +138,12 @@ export function UserVideosDialog({
             失败
           </Badge>
         );
+      case "generating":
       case "GENERATING":
         return (
           <Badge variant="default" className="gap-1 bg-yellow-600">
             <Spinner className="h-3 w-3 animate-spin" />
             生成中
-          </Badge>
-        );
-      case "UPLOADING":
-        return (
-          <Badge variant="default" className="gap-1 bg-blue-600">
-            <Clock className="h-3 w-3" />
-            上传中
           </Badge>
         );
       default:
@@ -167,11 +161,11 @@ export function UserVideosDialog({
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Video className="h-5 w-5" />
-            用户视频历史
+            <ImageIcon className="h-5 w-5" />
+            用户图片历史
           </DialogTitle>
           <DialogDescription>
-            {userName || userEmail} 的视频生成记录
+            {userName || userEmail} 的图片生成记录
           </DialogDescription>
         </DialogHeader>
 
@@ -180,7 +174,7 @@ export function UserVideosDialog({
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="rounded-lg border p-3">
               <div className="text-2xl font-bold">{stats.total}</div>
-              <div className="text-xs text-muted-foreground">总视频数</div>
+              <div className="text-xs text-muted-foreground">总图片数</div>
             </div>
             <div className="rounded-lg border p-3">
               <div className="text-2xl font-bold text-green-600">
@@ -225,7 +219,7 @@ export function UserVideosDialog({
           </Select>
         </div>
 
-        {/* 视频列表 */}
+        {/* 图片列表 */}
         <div className="flex-1 overflow-auto">
           {loading ? (
             <div className="flex items-center justify-center h-64">
@@ -233,26 +227,24 @@ export function UserVideosDialog({
             </div>
           ) : videos.length === 0 ? (
             <div className="flex items-center justify-center h-64 text-muted-foreground">
-              暂无视频记录
+              暂无图片记录
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[200px]">提示词</TableHead>
+                  <TableHead className="w-[300px]">提示词</TableHead>
                   <TableHead>模型</TableHead>
                   <TableHead>状态</TableHead>
-                  <TableHead>视频</TableHead>
-                  <TableHead>时长</TableHead>
-                  <TableHead>分辨率</TableHead>
-                  <TableHead>积分</TableHead>
+                  <TableHead>图片预览</TableHead>
+                  <TableHead>消耗积分</TableHead>
                   <TableHead>创建时间</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {videos.map((video) => (
                   <TableRow key={video.id}>
-                    <TableCell className="max-w-[200px]">
+                    <TableCell className="max-w-[300px]">
                       <div className="truncate" title={video.prompt}>
                         {video.prompt}
                       </div>
@@ -262,33 +254,19 @@ export function UserVideosDialog({
                     </TableCell>
                     <TableCell>{getStatusBadge(video.status)}</TableCell>
                     <TableCell>
-                      {video.status === "COMPLETED" && video.videoUrl ? (
-                        video.thumbnailUrl ? (
-                          <a
-                            href={video.videoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="block"
-                          >
-                            <img
-                              src={video.thumbnailUrl}
-                              alt="视频缩略图"
-                              className="h-16 w-28 object-cover rounded border hover:opacity-80 transition-opacity"
-                            />
-                          </a>
-                        ) : (
-                          <Button variant="outline" size="sm" asChild>
-                            <a
-                              href={video.videoUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-1"
-                            >
-                              <Video className="h-4 w-4" />
-                              查看视频
-                            </a>
-                          </Button>
-                        )
+                      {video.videoUrl ? (
+                        <a
+                          href={video.videoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-fit"
+                        >
+                          <img
+                            src={video.videoUrl}
+                            alt="图片预览"
+                            className="h-16 w-16 object-cover rounded border hover:opacity-80 transition-opacity"
+                          />
+                        </a>
                       ) : video.errorMessage ? (
                         <span
                           className="text-xs text-red-600 cursor-help"
@@ -299,12 +277,6 @@ export function UserVideosDialog({
                       ) : (
                         <span className="text-muted-foreground">-</span>
                       )}
-                    </TableCell>
-                    <TableCell>
-                      {video.duration ? `${video.duration}s` : "-"}
-                    </TableCell>
-                    <TableCell>
-                      {video.resolution || "-"}
                     </TableCell>
                     <TableCell>{video.creditsUsed}</TableCell>
                     <TableCell className="text-muted-foreground">
@@ -324,7 +296,7 @@ export function UserVideosDialog({
         {totalPages > 1 && (
           <div className="flex items-center justify-between border-t pt-4">
             <div className="text-sm text-muted-foreground">
-              共 {totalVideos} 个视频，第 {page} / {totalPages} 页
+              共 {totalVideos} 个图片，第 {page} / {totalPages} 页
             </div>
             <div className="flex gap-2">
               <Button

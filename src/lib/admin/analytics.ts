@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { users, videos, creditTransactions, VideoStatus, CreditTransType } from "@/db/schema";
+import { users, imageGenerationJobs, creditTransactions, CreditTransType } from "@/db/schema";
 import { count, eq, and, sql, desc, gte } from "drizzle-orm";
 
 export type TimeRange = "today" | "7d" | "30d" | "90d" | "all";
@@ -8,17 +8,17 @@ export interface Stats {
   totalUsers: number;
   totalOrders: number;
   paidOrders: number;
-  totalVideos: number;
-  firstVideoConversionRate: number;
+  totalVideos: number; // 映射为图片总数
+  firstVideoConversionRate: number; // 映射为首张图片转化率
   paymentConversionRate: number;
-  videoSuccessRate: number;
-  usersWithoutVideos: number;
+  videoSuccessRate: number; // 映射为图片生成成功率
+  usersWithoutVideos: number; // 映射为未生成图片用户数
 }
 
 export interface FunnelData {
   registeredUsers: number;
-  firstVideoUsers: number;
-  successfulFirstVideoUsers: number;
+  firstVideoUsers: number; // 映射为首张图片生成用户数
+  successfulFirstVideoUsers: number; // 映射为首张图片成功用户数
 }
 
 export interface TrendDataPoint {
@@ -58,24 +58,24 @@ class AnalyticsService {
   }
 
   private buildTimeCondition(timeFilter: Date | null) {
-    if (!timeFilter) return sql``;
+    if (!timeFilter) return sql`true`;
     return sql`${users.createdAt} >= ${timeFilter.toISOString()}::timestamp`;
   }
 
-  private buildVideoTimeCondition(timeFilter: Date | null) {
-    if (!timeFilter) return sql``;
-    return sql`${videos.createdAt} >= ${timeFilter.toISOString()}::timestamp`;
+  private buildImageTimeCondition(timeFilter: Date | null) {
+    if (!timeFilter) return sql`true`;
+    return sql`${imageGenerationJobs.createdAt} >= ${timeFilter.toISOString()}::timestamp`;
   }
 
   private buildTransactionTimeCondition(timeFilter: Date | null) {
-    if (!timeFilter) return sql``;
+    if (!timeFilter) return sql`true`;
     return sql`${creditTransactions.createdAt} >= ${timeFilter.toISOString()}::timestamp`;
   }
 
   async getStats(range: TimeRange): Promise<Stats> {
     const timeFilter = this.getTimeFilter(range);
     const timeCondition = this.buildTimeCondition(timeFilter);
-    const videoTimeCondition = this.buildVideoTimeCondition(timeFilter);
+    const imageTimeCondition = this.buildImageTimeCondition(timeFilter);
     const transactionTimeCondition = this.buildTransactionTimeCondition(timeFilter);
 
     // Parallel queries for better performance
@@ -83,10 +83,10 @@ class AnalyticsService {
       totalUsersResult,
       totalOrdersResult,
       paidOrdersResult,
-      totalVideosResult,
-      completedVideosResult,
-      failedVideosResult,
-      usersWithVideosResult,
+      totalImagesResult,
+      completedImagesResult,
+      failedImagesResult,
+      usersWithImagesResult,
       payingUsersResult,
     ] = await Promise.all([
       // 1. Total users
@@ -128,29 +128,29 @@ class AnalyticsService {
             .then((orders) => ({ count: orders.length }));
         }),
 
-      // 4. Total videos (not deleted)
+      // 4. Total image generation jobs
       db
         .select({ count: count() })
-        .from(videos)
-        .where(and(videoTimeCondition, eq(videos.isDeleted, false))),
+        .from(imageGenerationJobs)
+        .where(imageTimeCondition),
 
-      // 5. Completed videos
+      // 5. Completed images (SUCCEEDED)
       db
         .select({ count: count() })
-        .from(videos)
-        .where(and(videoTimeCondition, eq(videos.status, VideoStatus.COMPLETED), eq(videos.isDeleted, false))),
+        .from(imageGenerationJobs)
+        .where(and(imageTimeCondition, eq(imageGenerationJobs.status, "SUCCEEDED"))),
 
-      // 6. Failed videos
+      // 6. Failed images (FAILED)
       db
         .select({ count: count() })
-        .from(videos)
-        .where(and(videoTimeCondition, eq(videos.status, VideoStatus.FAILED), eq(videos.isDeleted, false))),
+        .from(imageGenerationJobs)
+        .where(and(imageTimeCondition, eq(imageGenerationJobs.status, "FAILED"))),
 
-      // 7. Users who generated at least one video
+      // 7. Users who generated at least one image
       db
-        .selectDistinct({ userId: videos.userId })
-        .from(videos)
-        .where(and(videoTimeCondition, eq(videos.isDeleted, false)))
+        .selectDistinct({ userId: imageGenerationJobs.userId })
+        .from(imageGenerationJobs)
+        .where(imageTimeCondition)
         .then((result) => ({ count: result.length })),
 
       // 8. Users who made at least one payment
@@ -169,21 +169,21 @@ class AnalyticsService {
     const totalUsers = totalUsersResult[0]?.count || 0;
     const totalOrders = totalOrdersResult[0]?.count || 0;
     const paidOrders = paidOrdersResult.count || 0;
-    const totalVideos = totalVideosResult[0]?.count || 0;
-    const completedVideos = completedVideosResult[0]?.count || 0;
-    const failedVideos = failedVideosResult[0]?.count || 0;
-    const usersWithVideos = usersWithVideosResult.count || 0;
+    const totalVideos = totalImagesResult[0]?.count || 0;
+    const completedImages = completedImagesResult[0]?.count || 0;
+    const failedImages = failedImagesResult[0]?.count || 0;
+    const usersWithImages = usersWithImagesResult.count || 0;
     const payingUsers = payingUsersResult.count || 0;
 
     // Calculate rates
-    const firstVideoConversionRate = totalUsers > 0 ? (usersWithVideos / totalUsers) * 100 : 0;
+    const firstVideoConversionRate = totalUsers > 0 ? (usersWithImages / totalUsers) * 100 : 0;
     const paymentConversionRate = totalUsers > 0 ? (payingUsers / totalUsers) * 100 : 0;
 
-    const totalFinishedVideos = completedVideos + failedVideos;
-    const videoSuccessRate = totalFinishedVideos > 0 ? (completedVideos / totalFinishedVideos) * 100 : 0;
+    const totalFinishedImages = completedImages + failedImages;
+    const videoSuccessRate = totalFinishedImages > 0 ? (completedImages / totalFinishedImages) * 100 : 0;
 
-    // Users who haven't generated any video
-    const usersWithoutVideos = totalUsers - usersWithVideos;
+    // Users who haven't generated any image
+    const usersWithoutVideos = totalUsers - usersWithImages;
 
     return {
       totalUsers,
@@ -200,7 +200,7 @@ class AnalyticsService {
   async getFunnelData(range: TimeRange): Promise<FunnelData> {
     const timeFilter = this.getTimeFilter(range);
     const timeCondition = this.buildTimeCondition(timeFilter);
-    const videoTimeCondition = this.buildVideoTimeCondition(timeFilter);
+    const imageTimeCondition = this.buildImageTimeCondition(timeFilter);
 
     // Get total registered users
     const [totalUsersResult] = await Promise.all([
@@ -209,29 +209,28 @@ class AnalyticsService {
 
     const registeredUsers = totalUsersResult[0]?.count || 0;
 
-    // Get users with their first video
-    // Using a subquery to find the first video for each user
-    const firstVideosQuery = db
+    // Get users with their first image job
+    const firstImagesQuery = db
       .select({
-        userId: videos.userId,
-        status: videos.status,
-        createdAt: videos.createdAt,
-        rn: sql<number>`ROW_NUMBER() OVER (PARTITION BY ${videos.userId} ORDER BY ${videos.createdAt} ASC)`.as("rn"),
+        userId: imageGenerationJobs.userId,
+        status: imageGenerationJobs.status,
+        createdAt: imageGenerationJobs.createdAt,
+        rn: sql<number>`ROW_NUMBER() OVER (PARTITION BY ${imageGenerationJobs.userId} ORDER BY ${imageGenerationJobs.createdAt} ASC)`.as("rn"),
       })
-      .from(videos)
-      .where(and(videoTimeCondition, eq(videos.isDeleted, false)))
-      .as("first_videos");
+      .from(imageGenerationJobs)
+      .where(imageTimeCondition)
+      .as("first_images");
 
-    const firstVideosResult = await db
+    const firstImagesResult = await db
       .select({
-        userId: firstVideosQuery.userId,
-        status: firstVideosQuery.status,
+        userId: firstImagesQuery.userId,
+        status: firstImagesQuery.status,
       })
-      .from(firstVideosQuery)
-      .where(sql`${firstVideosQuery.rn} = 1`);
+      .from(firstImagesQuery)
+      .where(sql`${firstImagesQuery.rn} = 1`);
 
-    const firstVideoUsers = firstVideosResult.length;
-    const successfulFirstVideoUsers = firstVideosResult.filter((v) => v.status === VideoStatus.COMPLETED).length;
+    const firstVideoUsers = firstImagesResult.length;
+    const successfulFirstVideoUsers = firstImagesResult.filter((v) => v.status === "SUCCEEDED").length;
 
     return {
       registeredUsers,
@@ -274,29 +273,29 @@ class AnalyticsService {
       dailyRegistrations[row.date] = row.count;
     });
 
-    // Get users with their first video by date
-    const firstVideoData = await db
+    // Get users with their first image by date
+    const firstImageData = await db
       .select({
-        userId: videos.userId,
-        createdAt: videos.createdAt,
-        status: videos.status,
-        rn: sql<number>`ROW_NUMBER() OVER (PARTITION BY ${videos.userId} ORDER BY ${videos.createdAt} ASC)`.as("rn"),
+        userId: imageGenerationJobs.userId,
+        createdAt: imageGenerationJobs.createdAt,
+        status: imageGenerationJobs.status,
+        rn: sql<number>`ROW_NUMBER() OVER (PARTITION BY ${imageGenerationJobs.userId} ORDER BY ${imageGenerationJobs.createdAt} ASC)`.as("rn"),
       })
-      .from(videos)
-      .where(and(gte(videos.createdAt, startDate), eq(videos.isDeleted, false)));
+      .from(imageGenerationJobs)
+      .where(gte(imageGenerationJobs.createdAt, startDate));
 
-    // Group first videos by date
-    const dailyFirstVideos: Record<string, { total: number; successful: number }> = {};
+    // Group first images by date
+    const dailyFirstImages: Record<string, { total: number; successful: number }> = {};
 
-    firstVideoData.forEach((row) => {
+    firstImageData.forEach((row) => {
       if (row.rn === 1) {
         const date = new Date(row.createdAt).toISOString().split("T")[0];
-        if (!dailyFirstVideos[date]) {
-          dailyFirstVideos[date] = { total: 0, successful: 0 };
+        if (!dailyFirstImages[date]) {
+          dailyFirstImages[date] = { total: 0, successful: 0 };
         }
-        dailyFirstVideos[date].total++;
-        if (row.status === VideoStatus.COMPLETED) {
-          dailyFirstVideos[date].successful++;
+        dailyFirstImages[date].total++;
+        if (row.status === "SUCCEEDED") {
+          dailyFirstImages[date].successful++;
         }
       }
     });
@@ -304,9 +303,9 @@ class AnalyticsService {
     // Build trend data
     const trend: TrendDataPoint[] = dates.map((date) => {
       const registeredUsers = dailyRegistrations[date] || 0;
-      const firstVideoData = dailyFirstVideos[date] || { total: 0, successful: 0 };
-      const firstVideoUsers = firstVideoData.total;
-      const successfulFirstVideoUsers = firstVideoData.successful;
+      const firstImageDataVal = dailyFirstImages[date] || { total: 0, successful: 0 };
+      const firstVideoUsers = firstImageDataVal.total;
+      const successfulFirstVideoUsers = firstImageDataVal.successful;
 
       const firstVideoConversionRate = registeredUsers > 0 ? (firstVideoUsers / registeredUsers) * 100 : 0;
       const firstVideoSuccessRate = firstVideoUsers > 0 ? (successfulFirstVideoUsers / firstVideoUsers) * 100 : 0;

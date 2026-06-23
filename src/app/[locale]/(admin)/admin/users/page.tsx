@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { users, creditPackages, videos } from "@/db/schema";
+import { users, creditPackages, imageGenerationJobs } from "@/db/schema";
 import { eq, count, sql, desc } from "drizzle-orm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -65,7 +65,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
   const usersWithStats = await Promise.all(
     usersList.map(async (user) => {
       const [videoCountResult, creditPackagesResult] = await Promise.all([
-        db.select({ count: count() }).from(videos).where(eq(videos.userId, user.id)),
+        db.select({ count: count() }).from(imageGenerationJobs).where(eq(imageGenerationJobs.userId, user.id)),
         db
           .select({ count: count(), sum: sql<number>`COALESCE(SUM(${creditPackages.remainingCredits}), 0)` })
           .from(creditPackages)
@@ -127,7 +127,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
                 <TableRow>
                   <TableHead>用户</TableHead>
                   <TableHead>邮箱</TableHead>
-                  <TableHead>视频数</TableHead>
+                  <TableHead>图片数</TableHead>
                   <TableHead>积分包</TableHead>
                   <TableHead>可用积分</TableHead>
                   <TableHead>状态</TableHead>

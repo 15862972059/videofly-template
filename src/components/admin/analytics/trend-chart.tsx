@@ -37,7 +37,7 @@ export function TrendChart({ data }: TrendChartProps) {
       <CardHeader>
         <CardTitle>转化率趋势</CardTitle>
         <CardDescription>
-          首视频转化率和首个视频成功率的每日变化趋势
+          首图片转化率和首张图片成功率的每日变化趋势
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -66,7 +66,7 @@ export function TrendChart({ data }: TrendChartProps) {
               formatter={(value, name) => {
                 const formattedValue = typeof value === "number" ? `${value.toFixed(1)}%` : String(value);
                 const formattedName =
-                  name === "firstVideoConversionRate" ? "首视频转化率" : "首个视频成功率";
+                  name === "firstVideoConversionRate" ? "首图片转化率" : "首张图片成功率";
                 return [formattedValue, formattedName];
               }}
               labelFormatter={(label) => `日期: ${label}`}
@@ -78,7 +78,7 @@ export function TrendChart({ data }: TrendChartProps) {
             />
             <Legend
               formatter={(value) =>
-                value === "firstVideoConversionRate" ? "首视频转化率" : "首个视频成功率"
+                value === "firstVideoConversionRate" ? "首图片转化率" : "首张图片成功率"
               }
             />
             <Line
@@ -105,7 +105,7 @@ export function TrendChart({ data }: TrendChartProps) {
         {/* Summary stats */}
         <div className="mt-4 grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-muted-foreground">平均首视频转化率</p>
+            <p className="text-sm text-muted-foreground">平均首图片转化率</p>
             <p className="text-2xl font-bold text-purple-600">
               {data.length > 0
                 ? (
@@ -116,7 +116,7 @@ export function TrendChart({ data }: TrendChartProps) {
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">平均首个视频成功率</p>
+            <p className="text-sm text-muted-foreground">平均首张图片成功率</p>
             <p className="text-2xl font-bold text-green-600">
               {data.length > 0
                 ? (

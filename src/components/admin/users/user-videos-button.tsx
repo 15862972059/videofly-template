@@ -29,7 +29,7 @@ export function UserVideosButton({
         disabled={videoCount === 0}
       >
         <Video className="h-4 w-4 mr-1" />
-        查看视频
+        查看图片
       </Button>
       <UserVideosDialog
         userId={userId}

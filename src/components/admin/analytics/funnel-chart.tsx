@@ -21,8 +21,8 @@ interface FunnelChartProps {
 
 const FUNNEL_DATA = [
   { name: "注册用户", value: 0, color: "#8b5cf6" },
-  { name: "生成首个视频", value: 0, color: "#a78bfa" },
-  { name: "首个视频成功", value: 0, color: "#c4b5fd" },
+  { name: "生成首张图片", value: 0, color: "#a78bfa" },
+  { name: "首张图片成功", value: 0, color: "#c4b5fd" },
 ];
 
 export function FunnelChart({ data }: FunnelChartProps) {
@@ -30,9 +30,9 @@ export function FunnelChart({ data }: FunnelChartProps) {
     switch (item.name) {
       case "注册用户":
         return { ...item, value: data.registeredUsers };
-      case "生成首个视频":
+      case "生成首张图片":
         return { ...item, value: data.firstVideoUsers };
-      case "首个视频成功":
+      case "首张图片成功":
         return { ...item, value: data.successfulFirstVideoUsers };
       default:
         return item;
@@ -44,7 +44,7 @@ export function FunnelChart({ data }: FunnelChartProps) {
       <CardHeader>
         <CardTitle>用户激活漏斗</CardTitle>
         <CardDescription>
-          用户从注册到成功生成首个视频的转化过程
+          用户从注册到成功生成首张图片的转化过程
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -92,7 +92,7 @@ export function FunnelChart({ data }: FunnelChartProps) {
         {/* Conversion rates */}
         <div className="mt-4 space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">注册 → 首视频</span>
+            <span className="text-muted-foreground">注册 → 首张图片</span>
             <span className="font-medium">
               {data.registeredUsers > 0
                 ? ((data.firstVideoUsers / data.registeredUsers) * 100).toFixed(1)
@@ -100,7 +100,7 @@ export function FunnelChart({ data }: FunnelChartProps) {
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">首视频 → 成功</span>
+            <span className="text-muted-foreground">首张图片 → 成功</span>
             <span className="font-medium">
               {data.firstVideoUsers > 0
                 ? ((data.successfulFirstVideoUsers / data.firstVideoUsers) * 100).toFixed(1)
