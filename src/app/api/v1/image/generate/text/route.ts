@@ -1,3 +1,4 @@
+import "@/lib/proxy-config";
 import { requireAuth } from "@/lib/api/auth";
 import { apiSuccess, apiError } from "@/lib/api/response";
 import { textGenerationRequestSchema } from "@/lib/validators/image";

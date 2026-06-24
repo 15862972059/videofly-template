@@ -6,7 +6,10 @@ import { reconcileStaleImageGenerationJobs } from "@/services/image/stale-jobs";
 
 export async function GET(request: Request) {
   try {
+    console.time("generations-api-auth");
     const user = await requireAuth(request);
+    console.timeEnd("generations-api-auth");
+
     const { searchParams } = new URL(request.url);
 
     const limit = searchParams.get("limit") ? Number.parseInt(searchParams.get("limit")!) : 20;
@@ -14,8 +17,13 @@ export async function GET(request: Request) {
     const type = searchParams.get("type") as "TEXT" | "REMIX" | undefined;
     const status = searchParams.get("status") as "QUEUED" | "RUNNING" | "SUCCEEDED" | "FAILED" | undefined;
 
+    console.time("generations-api-reconcile");
     await reconcileStaleImageGenerationJobs(user.id);
+    console.timeEnd("generations-api-reconcile");
+
+    console.time("generations-api-list");
     const jobs = await listImageGenerationJobs({ userId: user.id, status, type, limit, offset });
+    console.timeEnd("generations-api-list");
 
     const storage = getStorage();
 
