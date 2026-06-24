@@ -1,4 +1,5 @@
 import { drizzle } from "drizzle-orm/postgres-js";
+import { eq } from "drizzle-orm";
 import postgres from "postgres";
 import * as schema from "../src/db/schema";
 import * as fs from "fs";
@@ -22,8 +23,18 @@ const TARGET_IMAGES_DIR = path.join(process.cwd(), "public", "images", "text2img
 async function main() {
   console.log("Starting image copy and seed process...");
 
-  // 1. Ensure target directory exists
-  if (!fs.existsSync(TARGET_IMAGES_DIR)) {
+  // 1. Ensure target directory exists and is clean
+  if (fs.existsSync(TARGET_IMAGES_DIR)) {
+    console.log(`Cleaning target directory: ${TARGET_IMAGES_DIR}`);
+    const files = fs.readdirSync(TARGET_IMAGES_DIR);
+    for (const file of files) {
+      try {
+        fs.unlinkSync(path.join(TARGET_IMAGES_DIR, file));
+      } catch (err) {
+        console.error(`Failed to delete file ${file}:`, err);
+      }
+    }
+  } else {
     fs.mkdirSync(TARGET_IMAGES_DIR, { recursive: true });
     console.log(`Created target directory: ${TARGET_IMAGES_DIR}`);
   }
@@ -41,9 +52,9 @@ async function main() {
   const selectedCases: any[] = [];
   let copiedCount = 0;
 
-  // 3. Find and copy 200 valid images
+  // 3. Find and copy 300 valid images
   for (const item of cases) {
-    if (copiedCount >= 200) break;
+    if (copiedCount >= 300) break;
 
     const caseId = item.id;
     // Check if image file exists in source (could be .jpg or .png)
@@ -79,7 +90,7 @@ async function main() {
       });
 
       copiedCount++;
-      console.log(`[${copiedCount}/200] Copied case ${caseId} image (${ext})`);
+      console.log(`[${copiedCount}/300] Copied case ${caseId} image (${ext})`);
     }
   }
 
@@ -94,6 +105,15 @@ async function main() {
   console.log("Connecting to database and seeding classic_images table...");
   const sql = postgres(databaseUrl as string, { ssl: "require" });
   const db = drizzle(sql, { schema });
+
+  // Clean up existing Text-to-Image records to avoid leftovers
+  console.log("Deleting existing 'Text-to-Image' category records from database...");
+  try {
+    await db.delete(schema.classicImages).where(eq(schema.classicImages.category, "Text-to-Image"));
+    console.log("Deleted existing records.");
+  } catch (err) {
+    console.error("Failed to delete existing records:", err);
+  }
 
   let insertedCount = 0;
   for (const img of selectedCases) {

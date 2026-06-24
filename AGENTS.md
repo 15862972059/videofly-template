@@ -1,8 +1,8 @@
-# VideoFly - AI Video Generation Platform
+# AI2ART - AI Photo Remix & Art Generator
 
 ## Project Overview
 
-VideoFly is a SaaS platform for AI-powered video generation. It's built as a standalone Next.js application with AI video generation capabilities.
+AI2ART is a SaaS platform for AI-powered photo remixing and art generation. It is built as a standalone Next.js application using advanced AI models.
 
 ## Tech Stack
 
@@ -17,19 +17,21 @@ VideoFly is a SaaS platform for AI-powered video generation. It's built as a sta
 ## Project Structure
 
 ```
-videofly/
+ai2art/
 ├── src/
 │   ├── app/                  # Next.js App Router pages
 │   │   ├── api/              # API Routes
 │   │   │   ├── v1/           # REST API v1
 │   │   │   ├── auth/         # Better Auth endpoints
-│   │   │   ├── trpc/         # Legacy tRPC
 │   │   │   └── webhooks/     # Webhooks (Stripe, Creem)
 │   │   └── [locale]/         # i18n pages (marketing, dashboard, tool)
 │   ├── ai/                   # AI provider abstraction
-│   │   ├── providers/        # evolink, kie providers
-│   │   └── types.ts
+│   │   ├── images/           # Image generation (MiniMax, Evolink, CIYUAN)
+│   │   └── providers/        # Video generation providers (evolink, kie)
 │   ├── components/           # React components
+│   │   ├── gallery/          # Gallery grid and cards
+│   │   ├── studio/           # Studio workbenches (text-to-image, remix)
+│   │   └── ...
 │   ├── config/               # Configuration
 │   │   ├── credits.ts        # Credit/Model pricing config
 │   │   └── pricing-user.ts   # User-facing pricing config
@@ -46,7 +48,7 @@ videofly/
 │   │   └── webhooks.ts       # Stripe webhooks
 │   ├── services/             # Business services
 │   │   ├── credit.ts         # Credit system (freeze/settle/release)
-│   │   ├── video.ts          # Video generation lifecycle
+│   │   ├── image/            # Image generation services
 │   │   └── billing.ts
 │   ├── stores/               # Zustand state stores
 │   ├── hooks/                # React hooks
@@ -59,53 +61,24 @@ videofly/
 
 ## Critical Image Generation Invariant
 
-Text-to-image and Remix must use `gpt-image-2` with `1024x1024`,
-`quality: low`, JPEG output, and a one-credit cost. Enforce this invariant in
-the server/provider request; frontend defaults alone are not sufficient.
+Text-to-image and Remix must use `gpt-image-2` with `1024x1024`, `quality: low`, JPEG output, and a one-credit cost. Enforce this invariant in the server/provider request; frontend defaults alone are not sufficient.
 
-Do not restore 2K/4K, PNG, variable quality, or variable output ratios unless
-the execution infrastructure is first changed to support slower jobs safely.
-Vercel post-response work is still bounded by the function's `maxDuration`, so
-all persisted image jobs must retain stale-job failure and credit-release
-recovery.
+Do not restore 2K/4K, PNG, variable quality, or variable output ratios unless the execution infrastructure is first changed to support slower jobs safely. Vercel post-response work is still bounded by the function's `maxDuration`, so all persisted image jobs must retain stale-job failure and credit-release recovery.
 
 ## Core Modules
 
 ### 1. AI Provider Layer (`src/ai/`)
 
-Unified abstraction for multiple AI video generation providers.
+Unified abstraction for multiple AI generation providers.
 
-**Supported Providers:**
-- **evolink** - Primary provider
-  - Sora 2 (image-to-video, 10-15s, 16:9/9:16)
-  - Wan 2.6 (image-to-video, 5-15s, multiple ratios)
-  - Veo 3.1 (short clips, 4-8s)
-  - Seedance 1.5 Pro (multiple qualities 480P-1080P)
-- **kie** - Secondary provider
-
-**Key Files:**
-- `index.ts` - Provider factory
-- `providers/evolink.ts` - Evolink implementation
-- `providers/kie.ts` - Kie implementation
-- `types.ts` - Interface definitions
-
-**Usage:**
-```typescript
-import { getProvider } from "@/ai";
-const provider = getProvider("evolink");
-const task = await provider.createTask({ prompt, duration, aspectRatio });
-```
+**Supported Image Providers:**
+- **MiniMax** - Core provider
+- **Evolink** - Secondary provider
+- **Ciyuan** - Secondary provider
 
 ### 2. Credit System (`src/services/credit.ts`)
 
 FIFO-based credit management with freeze/settle/release pattern.
-
-**Features:**
-- Credit packages with expiration dates
-- Freeze credits during video generation
-- Settle on success, release on failure
-- Transaction history tracking
-- Expiring credits warning
 
 **Key Methods:**
 - `getBalance(userId)` - Get available/frozen/used credits
@@ -114,75 +87,29 @@ FIFO-based credit management with freeze/settle/release pattern.
 - `release(videoUuid)` - Release frozen credits on failure
 - `recharge({ userId, credits, orderNo, transType })` - Add credits from purchase
 
-### 3. Video Service (`src/services/video.ts`)
+### 3. Image Generation Service (`src/services/image/`)
 
-Handles video generation lifecycle.
-
-**Flow:**
-1. `generate()` - Create task, freeze credits, call AI API
-2. AI provider processes asynchronously
-3. `handleCallback()` - Receive completion webhook
-4. `tryCompleteGeneration()` - Download video, upload to R2, settle credits
-
-**Key Methods:**
-- `generate(params)` - Start video generation
-- `handleCallback(provider, payload, videoUuid)` - Process AI callback
-- `refreshStatus(uuid, userId)` - Poll status for frontend
-- `listVideos(userId, options)` - Get user's videos
+Handles the asynchronous image generation job lifecycle, tracking status, saving generated results, and uploading outputs to R2.
 
 ### 4. Storage (`src/lib/storage.ts`)
 
-R2/S3-compatible storage for video files.
+R2/S3-compatible storage for image assets and user uploads.
 
-**Features:**
-- Presigned upload URLs
-- Download from AI provider and re-upload to R2
-- Public URL generation
+## UI/UX & Layout Invariants
 
-## Authentication (`src/lib/auth/`)
+### 1. Homepage Hero Section
+- **Upper Grid**: Consists of a text content column on the left (badge, title, description, trust badges) and a floating image deck on the right.
+- **Floating Image Deck**: Must contain **exactly 4 case image cards** (`hero-card-1` to `hero-card-4`).
+  - Cards must use theme-adaptive styles (white backgrounds in light mode, dark slate `#0f172a` in dark mode).
+  - Drift animation keyframes must preserve the cards' tilted angles (`rotate(var(--tilt))`).
+  - Stacking order is explicitly controlled by z-indexes. Hover state pauses animation and lifts the cards with a spring-like cubic-bezier transition.
+- **Lower CTA Block**: Positioned directly below the upper grid with a top margin of `mt-12 lg:mt-16` for breathing room. Features centered buttons and 3 equal-width advantage cards (`md:grid-cols-3`).
 
-**Providers:**
-- Google OAuth
-- Magic Link (email)
-- Creem payment integration
-
-**Key Files:**
-- `auth.ts` - Better Auth configuration with Creem plugin
-- `index.ts` - Server-side auth helpers (`getCurrentUser`, `requireAuth`)
-
-## Payment Channels
-
-### Creem (Primary)
-- `@creem_io/better-auth` plugin
-- Handles subscriptions and one-time credit purchases
-- Webhook automatically credits user account
-
-### Stripe (Secondary/Backup)
-- Full Stripe SDK integration
-- Stripe Webhooks support
-- Customer/subscription management
-
-## API Routes
-
-### REST API (`/api/v1/`)
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/video/generate` | POST | Start video generation |
-| `/api/v1/video/list` | GET | List user's videos |
-| `/api/v1/video/[uuid]` | GET/DELETE | Get/delete video |
-| `/api/v1/video/task` | GET | Get task status |
-| `/api/v1/video/callback/[provider]` | POST | AI provider webhook |
-| `/api/v1/credit/history` | GET | Get credit transactions |
-| `/api/v1/config/models` | GET | Get available models |
-
-### Auth API (`/api/auth/`)
-
-Handled by Better Auth - includes login, register, session management.
-
-### tRPC API (`/api/trpc/`)
-
-Legacy tRPC endpoints for existing features (K8s, etc.).
+### 2. Studio Text-to-Image tab (`text-to-image.tsx`)
+- **Right Sidebar**: Shows selected template image.
+- **"Change" (换一个) Button**: Displayed next to the template header if `selectedTemplate` is active, allowing direct access to the picker dialog.
+- **Prompt Starters (提示词风格) Card**: Rendered conditionally; **must be hidden** when a template is active to keep the workspace clean and focused.
+- **Query Parameter Loading**: Pre-loads template prompt and selected template state using the URL slug parameter `?template=slug`.
 
 ## Database Schema
 
@@ -215,14 +142,19 @@ credit_transactions (
   hold_id, remark, created_at
 )
 
--- Video generation records
-videos (
-  id, uuid, user_id, prompt, model, parameters,
-  status, provider, external_task_id, error_message,
-  start_image_url, original_video_url, video_url,
-  thumbnail_url, duration, resolution, aspect_ratio,
-  file_size, credits_used, created_at, updated_at,
-  completed_at, generation_time, is_deleted
+-- Classic Images (Templates)
+classic_images (
+  id, slug, title, description, category, subcategory,
+  prompt_template, hero_image_url, thumbnail_url,
+  is_active, created_at, updated_at
+)
+
+-- Image Generation Jobs
+image_generation_jobs (
+  id, user_id, type, status, classic_image_id, prompt,
+  source_image_key, result_image_key, result_image_url,
+  credits_used, error_message, parameters,
+  created_at, updated_at, completed_at
 )
 
 -- Payment
@@ -237,115 +169,3 @@ creem_subscriptions (
   current_period_end, created_at, updated_at
 )
 ```
-
-### Enums
-
-- `VideoStatus`: PENDING, GENERATING, UPLOADING, COMPLETED, FAILED
-- `CreditTransType`: NEW_USER, ORDER_PAY, SUBSCRIPTION, VIDEO_CONSUME, REFUND, EXPIRED, SYSTEM_ADJUST
-- `CreditPackageStatus`: ACTIVE, DEPLETED, EXPIRED
-- `SubscriptionPlan`: FREE, PRO, BUSINESS
-
-## Frontend Pages
-
-Route groups with `(locale)`:
-
-| Route Group | Path | Description |
-|-------------|------|-------------|
-| `(marketing)` | `/[lang]/` | Landing page |
-| `(marketing)` | `/[lang]/pricing` | Pricing page |
-| `(tool)` | `/[lang]/demo` | Video generator demo |
-| `(dashboard)` | `/[lang]/dashboard` | User dashboard |
-| `(dashboard)` | `/[lang]/dashboard/videos` | Video history |
-| `(auth)` | `/[lang]/login` | Login page |
-| `(auth)` | `/[lang]/register` | Registration |
-| `(admin)` | `/[lang]/admin` | Admin panel |
-
-## Key Components
-
-- `VideoGeneratorInput` - Main video generation form
-- `VideoStatusCard` - Shows generation progress
-- `VideoCard` - Video card for history list
-- `CreationCard` - Creation preview card
-
-## Environment Variables
-
-```bash
-# Database
-DATABASE_URL=postgresql://...
-POSTGRES_URL=...
-
-# Auth
-BETTER_AUTH_SECRET=...
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-
-# Storage (R2/S3)
-STORAGE_ENDPOINT=...
-STORAGE_ACCESS_KEY=...
-STORAGE_SECRET_KEY=...
-STORAGE_BUCKET=...
-STORAGE_DOMAIN=...
-
-# AI Providers
-EVOLINK_API_KEY=...
-KIE_API_KEY=...
-AI_CALLBACK_URL=https://your-domain.com/api/v1/video/callback
-AI_CALLBACK_SECRET=...
-
-# Payment - Creem (Primary)
-CREEM_API_KEY=...
-CREEM_WEBHOOK_SECRET=...
-
-# Payment - Stripe (Secondary)
-STRIPE_API_KEY=...
-STRIPE_WEBHOOK_SECRET=...
-
-# Email
-RESEND_FROM=...
-
-# Analytics
-NEXT_PUBLIC_POSTHOG_KEY=...
-NEXT_PUBLIC_POSTHOG_HOST=...
-```
-
-## Development
-
-```bash
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-
-# Database operations
-pnpm db:generate   # Generate migrations
-pnpm db:migrate    # Run migrations
-pnpm db:push       # Push schema (dev only)
-pnpm db:studio     # Open Drizzle Studio
-
-# Type checking
-pnpm typecheck
-
-# Linting
-pnpm lint
-
-# Formatting
-pnpm format
-
-# Run scripts
-pnpm script:add-credits   # Add credits to user
-pnpm script:check-credits # Check user credits
-pnpm script:reset-credits # Reset user credits
-```
-
-## Architecture Decisions
-
-1. **Drizzle ORM over Kysely/Prisma** - Better TypeScript inference, lighter runtime, simpler migrations
-2. **Single package over Turborepo** - Simpler project structure for this scale
-3. **REST API over tRPC for new features** - Simpler for webhook integrations, Better Auth compatibility
-4. **Creem as primary payment** - Better developer experience with better-auth plugin
-5. **FIFO credit consumption** - Fair expiration handling across multiple packages
-6. **Callback-based AI integration** - Async generation with webhook completion
-7. **R2 storage** - Cost-effective video storage with CDN
-8. **Route groups for page organization** - Clean separation of marketing/dashboard/tool/auth/admin pages
