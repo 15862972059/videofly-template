@@ -50,6 +50,7 @@ interface TextImageGenerationTask {
   jobId: string;
   userId: string;
   prompt: string;
+  userPrompt?: string;
   aspectRatio?: string;
   model: ImageModel;
   quality: ImageQuality;
@@ -72,6 +73,7 @@ interface RemixImageGenerationTask {
   jobId: string;
   userId: string;
   prompt: string;
+  userPrompt?: string;
   sourceImageUrl: string;
   sceneImageUrl: string;
   aspectRatio: string;
@@ -124,11 +126,6 @@ export async function startTextImageGeneration(
 
   const imageCreditCost = FIXED_IMAGE_OUTPUT.creditCost;
   const finalPrompt = buildTextPrompt({ userPrompt: input.prompt });
-  await assertPromptSequenceAllowed({
-    userPrompt: input.prompt,
-    finalPrompt,
-    externalIdBase: `user_${input.userId}:image_text`,
-  });
 
   const job = await createImageGenerationJob({
     userId: input.userId,
@@ -174,6 +171,7 @@ export async function startTextImageGeneration(
       jobId: job.id,
       userId: input.userId,
       prompt: finalPrompt,
+      userPrompt: input.prompt,
       aspectRatio: FIXED_IMAGE_OUTPUT.aspectRatio,
       model: FIXED_IMAGE_OUTPUT.model,
       quality: FIXED_IMAGE_OUTPUT.quality,
@@ -188,6 +186,13 @@ export async function runStartedTextImageGeneration(
   let creditFrozen = true;
 
   try {
+    // 1. Run safety checks/moderation in the background task to avoid blocking the HTTP response
+    await assertPromptSequenceAllowed({
+      userPrompt: task.userPrompt,
+      finalPrompt: task.prompt,
+      externalIdBase: `user_${task.userId}:image_text`,
+    });
+
     await updateImageGenerationJobStatus(task.jobId, "RUNNING");
 
     console.log(`[text-generate] Job ${task.jobId}: Calling AI model ${task.model}...`);
@@ -298,12 +303,6 @@ export async function startRemixImageGeneration(
         userPrompt: input.prompt,
         promptTemplate: classicImage.prompt_template,
       });
-  await assertPromptSequenceAllowed({
-    userPrompt: input.prompt,
-    finalPrompt,
-    externalIdBase: `user_${input.userId}:image_remix`,
-  });
-
   const job = await createImageGenerationJob({
     userId: input.userId,
     type: "REMIX",
@@ -350,6 +349,7 @@ export async function startRemixImageGeneration(
       jobId: job.id,
       userId: input.userId,
       prompt: finalPrompt,
+      userPrompt: input.prompt,
       sourceImageUrl,
       sceneImageUrl,
       aspectRatio: FIXED_IMAGE_OUTPUT.aspectRatio,
@@ -366,6 +366,13 @@ export async function runStartedRemixImageGeneration(
   let creditFrozen = true;
 
   try {
+    // 1. Run safety checks/moderation in the background task to avoid blocking the HTTP response
+    await assertPromptSequenceAllowed({
+      userPrompt: task.userPrompt,
+      finalPrompt: task.prompt,
+      externalIdBase: `user_${task.userId}:image_remix`,
+    });
+
     await updateImageGenerationJobStatus(task.jobId, "RUNNING");
 
     const result = await remixImage({

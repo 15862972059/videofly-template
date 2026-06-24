@@ -3,13 +3,11 @@ import { apiSuccess, handleApiError } from "@/lib/api/response";
 import { listImageGenerationJobs } from "@/services/image/generation-jobs";
 import { getStorage } from "@/lib/storage";
 import { reconcileStaleImageGenerationJobs } from "@/services/image/stale-jobs";
+import { after } from "next/server";
 
 export async function GET(request: Request) {
   try {
-    console.time("generations-api-auth");
     const user = await requireAuth(request);
-    console.timeEnd("generations-api-auth");
-
     const { searchParams } = new URL(request.url);
 
     const limit = searchParams.get("limit") ? Number.parseInt(searchParams.get("limit")!) : 20;
@@ -17,13 +15,16 @@ export async function GET(request: Request) {
     const type = searchParams.get("type") as "TEXT" | "REMIX" | undefined;
     const status = searchParams.get("status") as "QUEUED" | "RUNNING" | "SUCCEEDED" | "FAILED" | undefined;
 
-    console.time("generations-api-reconcile");
-    await reconcileStaleImageGenerationJobs(user.id);
-    console.timeEnd("generations-api-reconcile");
+    // Run stale job reconciliation in the background so it doesn't block the UI list rendering
+    after(async () => {
+      try {
+        await reconcileStaleImageGenerationJobs(user.id);
+      } catch (err) {
+        console.error("[generations-api] Background reconcile failed:", err);
+      }
+    });
 
-    console.time("generations-api-list");
     const jobs = await listImageGenerationJobs({ userId: user.id, status, type, limit, offset });
-    console.timeEnd("generations-api-list");
 
     const storage = getStorage();
 
