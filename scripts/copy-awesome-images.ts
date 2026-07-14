@@ -2,8 +2,8 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import { eq } from "drizzle-orm";
 import postgres from "postgres";
 import * as schema from "../src/db/schema";
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import dotenv from "dotenv";
 
 // Load environment variables

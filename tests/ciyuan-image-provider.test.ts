@@ -51,15 +51,20 @@ describe("CiYuan remix provider", () => {
     });
   });
 
-  test("downloads remix reference images through the proxy-aware downloader", async () => {
-    const fetchMock = vi.fn().mockResolvedValue(
-      new Response(
-        JSON.stringify({
-          data: [{ url: "https://cdn.example.com/remix.png" }],
-        }),
-        { status: 200 }
-      )
-    );
+  test("downloads remix reference images and submits form data to /images/edits", async () => {
+    const fetchMock = vi.fn().mockImplementation((url) => {
+      if (typeof url === "string" && url.startsWith("https://assets.example.com/")) {
+        return Promise.resolve(new Response(new ArrayBuffer(10)));
+      }
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: [{ url: "https://cdn.example.com/remix.png" }],
+          }),
+          { status: 200 }
+        )
+      );
+    });
     vi.stubGlobal("fetch", fetchMock);
 
     const { remixWithCiyuan } = await import("@/ai/images/providers/ciyuan");
@@ -77,24 +82,35 @@ describe("CiYuan remix provider", () => {
       imageUrls: ["https://cdn.example.com/remix.png"],
     });
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock.mock.calls[0]?.[0]).toBe("https://ciyuan.today/v1/images/generations");
-    expect(JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body))).toEqual({
-      model: "gpt-image-2-all",
-      prompt: "Blend the person into the scene naturally",
-      size: "1024x1024",
-      quality: "low",
-      format: "jpeg",
-      n: 1,
-      image: [
-        "https://assets.example.com/scene.jpg",
-        "https://assets.example.com/person.png",
-      ],
-    });
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(fetchMock.mock.calls[0]?.[0]).toBe("https://assets.example.com/scene.jpg");
+    expect(fetchMock.mock.calls[1]?.[0]).toBe("https://assets.example.com/person.png");
+    
+    const lastCall = fetchMock.mock.calls[2];
+    expect(lastCall?.[0]).toBe("https://ciyuan.today/v1/images/edits");
+    
+    const sentBody = lastCall?.[1]?.body as FormData;
+    expect(sentBody).toBeInstanceOf(FormData);
+    expect(sentBody.get("model")).toBe("gpt-image-2");
+    expect(sentBody.get("prompt")).toBe("Blend the person into the scene naturally");
+    expect(sentBody.get("size")).toBe("1024x1024");
+    expect(sentBody.get("quality")).toBe("low");
+    expect(sentBody.get("format")).toBe("jpeg");
+    expect(sentBody.get("n")).toBe("1");
+
+    const images = sentBody.getAll("image");
+    expect(images.length).toBe(2);
+    expect(images[0]).toBeInstanceOf(Blob);
+    expect(images[1]).toBeInstanceOf(Blob);
   });
 
   test("wraps remix API failures with context", async () => {
-    const fetchMock = vi.fn().mockRejectedValue(new TypeError("fetch failed"));
+    const fetchMock = vi.fn().mockImplementation((url) => {
+      if (typeof url === "string" && url.startsWith("https://assets.example.com/")) {
+        return Promise.resolve(new Response(new ArrayBuffer(10)));
+      }
+      return Promise.reject(new TypeError("fetch failed"));
+    });
     vi.stubGlobal("fetch", fetchMock);
 
     const { remixWithCiyuan } = await import("@/ai/images/providers/ciyuan");

@@ -8,7 +8,7 @@ import { configureGlobalFetchProxy } from "@/lib/proxy";
 
 const DEFAULT_TIMEOUT_MS = 300_000;
 const DEFAULT_GENERATION_MODEL = "gpt-image-2";
-const DEFAULT_EDIT_MODEL = "gpt-image-2-all";
+const DEFAULT_EDIT_MODEL = "gpt-image-2";
 
 function getApiBase(): string {
   const configured = process.env.CIYUAN_API_URL?.trim();
@@ -156,9 +156,17 @@ export async function generateWithCiyuan(
   }
 }
 
+async function downloadImage(url: string): Promise<Buffer> {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Failed to download image from URL ${url}: ${res.statusText}`);
+  }
+  return Buffer.from(await res.arrayBuffer());
+}
+
 /**
- * Image compositing/editing via CiYuan API using the official JSON image-array format.
- * POST /v1/images/generations
+ * Image compositing/editing via CiYuan API using standard multipart/form-data.
+ * POST /v1/images/edits
  */
 export async function remixWithCiyuan(request: {
   prompt: string;
@@ -174,25 +182,32 @@ export async function remixWithCiyuan(request: {
   try {
     console.log(`[ciyuan] Remix request: ${request.imageUrls.length} images`);
 
-    const body = {
-      model: getEditModel(),
-      prompt: request.prompt,
-      size: FIXED_IMAGE_OUTPUT.size,
-      quality: FIXED_IMAGE_OUTPUT.quality,
-      format: FIXED_IMAGE_OUTPUT.format,
-      n: 1,
-      image: request.imageUrls,
-    };
+    // Download reference images to buffers
+    const buffers = await Promise.all(
+      request.imageUrls.map((url) => downloadImage(url))
+    );
+
+    const formData = new FormData();
+    formData.append("model", getEditModel());
+    formData.append("prompt", request.prompt);
+    formData.append("size", FIXED_IMAGE_OUTPUT.size);
+    formData.append("quality", FIXED_IMAGE_OUTPUT.quality);
+    formData.append("format", FIXED_IMAGE_OUTPUT.format);
+    formData.append("n", "1");
+
+    for (let i = 0; i < buffers.length; i++) {
+      const blob = new Blob([buffers[i]], { type: "image/png" });
+      formData.append("image", blob, `image_${i}.png`);
+    }
 
     let response: Response;
     try {
-      response = await fetch(`${getApiBase()}/images/generations`, {
+      response = await fetch(`${getApiBase()}/images/edits`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${getApiKey()}`,
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify(body),
+        body: formData,
         signal: controller.signal,
       });
     } catch (error) {
