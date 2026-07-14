@@ -716,7 +716,11 @@
       "save": "Save",
       "share": "Share",
       "shareTitle": "My AI Art Creation",
-      "shareText": "Check out my AI-generated image!"
+      "shareText": "Check out my AI-generated image!",
+      "shareX": "Share on X",
+      "shareReddit": "Share on Reddit",
+      "copyLink": "Copy Link",
+      "linkCopied": "Link copied to clipboard!"
     },
     "generationProgress": {
       "generatingWith": "Generating with ",

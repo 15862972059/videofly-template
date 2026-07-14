@@ -716,7 +716,11 @@
       "save": "保存",
       "share": "分享",
       "shareTitle": "我的 AI 艺术作品",
-      "shareText": "看看我用 AI 生成的图片！"
+      "shareText": "看看我用 AI 生成的图片！",
+      "shareX": "分享到 X",
+      "shareReddit": "分享到 Reddit",
+      "copyLink": "复制链接",
+      "linkCopied": "链接已复制到剪贴板"
     },
     "generationProgress": {
       "generatingWith": "正在使用 ",
