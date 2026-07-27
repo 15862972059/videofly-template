@@ -4,6 +4,10 @@
 
 **AI2ART** 是一款基于 **Next.js 15 (App Router)** 和 **React 19** 构建的高性能 AI 照片重绘与艺术创作 SaaS 平台。支持文本生成图像 (Text-to-Image)、照片风格重绘 (Photo Remix)、艺术模板选择、精细化积分管理 (FIFO) 以及双支付渠道集成，帮助你快速搭建并运营生产级的 AI 图像与艺术创作服务。
 
+> 🌐 **官方在线平台 / Live App**: [https://ai2art.net](https://ai2art.net/)  
+> 💡 欢迎访问 [AI2ART 官网](https://ai2art.net/) 免费体验照片重绘、艺术人像生成与极速创作功能！
+
+[![Live Platform](https://img.shields.io/badge/🌐_Official_Site-ai2art.net-059669?style=for-the-badge&logo=vercel)](https://ai2art.net/)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -14,6 +18,8 @@
 ---
 
 ## 📸 界面预览 / Screenshots
+
+> 🚀 **即刻体验**: 前往 [ai2art.net](https://ai2art.net/) 即可直接在线使用以下同款界面与图像生成功能。
 
 ### 首页 (Homepage)
 ![AI2ART Homepage Screenshot](public/preview.png)

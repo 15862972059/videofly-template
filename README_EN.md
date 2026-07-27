@@ -4,6 +4,10 @@
 
 **AI2ART** is a production-grade AI photo remixing and art generation SaaS platform built with **Next.js 15 (App Router)** and **React 19**. It features Text-to-Image generation, Photo Remixing, preset art style templates, fine-grained FIFO credit system, and dual payment provider integration.
 
+> 🌐 **Official Live Platform**: [https://ai2art.net](https://ai2art.net/)  
+> 💡 Visit [AI2ART Official Site](https://ai2art.net/) to try out AI photo remixing and art generation for free!
+
+[![Live Platform](https://img.shields.io/badge/🌐_Official_Site-ai2art.net-059669?style=for-the-badge&logo=vercel)](https://ai2art.net/)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -14,6 +18,8 @@
 ---
 
 ## 📸 Screenshots
+
+> 🚀 **Try it Live**: Visit [ai2art.net](https://ai2art.net/) to experience the live application built with this template!
 
 ### Homepage
 ![AI2ART Homepage Screenshot](public/preview.png)
