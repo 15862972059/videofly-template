@@ -13,9 +13,13 @@
 
 ---
 
-## 📸 Interface Preview
+## 📸 Screenshots
 
-![AI2ART UI Preview](public/preview.png)
+### Homepage
+![AI2ART Homepage Screenshot](public/preview.png)
+
+### Photo Remix Studio
+![AI2ART Photo Remix Studio Screenshot](public/preview-remix.png)
 
 ---
 

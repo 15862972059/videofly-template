@@ -13,9 +13,13 @@
 
 ---
 
-## 📸 界面预览 / Preview
+## 📸 界面预览 / Screenshots
 
-![AI2ART UI Preview](public/preview.png)
+### 首页 (Homepage)
+![AI2ART Homepage Screenshot](public/preview.png)
+
+### 照片重绘与创作工作台 (Photo Remix Studio)
+![AI2ART Photo Remix Studio Screenshot](public/preview-remix.png)
 
 ---
 
