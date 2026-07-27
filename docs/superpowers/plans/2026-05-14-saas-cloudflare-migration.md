@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` or `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Migrate `D:\dev\cc\saas_cloudflare` into `D:\dev\cc\videofly-template` as a Vercel-ready Next.js template, using VideoFly's PostgreSQL/Drizzle database, Better Auth authentication, shared credit/payment system, storage layer, frontend conventions, and API style.
+**Goal:** Migrate `D:\dev\cc\saas_cloudflare` into `D:\dev\cc\videofly-template` as a Vercel-ready Next.js template, using AI2ART's PostgreSQL/Drizzle database, Better Auth authentication, shared credit/payment system, storage layer, frontend conventions, and API style.
 
 **Architecture:** Keep `videofly-template` as the host application and port source features into its `src/` structure. Rewrite Cloudflare-only pieces instead of copying them: D1 repositories become Drizzle services, Supabase auth becomes Better Auth, R2 bindings become S3/R2 API calls through `src/lib/storage.ts`, and OpenNext/Wrangler deployment code is removed from the migrated runtime. Preserve the existing video generation code and APIs, but remove public navigation, landing page, sitemap, and dashboard entry points so the product surface becomes the migrated AI photo/gallery/studio experience.
 
@@ -849,7 +849,7 @@ export const headerTools = [
 
 - [ ] Remove video routes from sitemap output.
 
-- [ ] Replace landing page copy and hero from VideoFly video generation to source AI photo/gallery/studio product.
+- [ ] Replace landing page copy and hero from AI2ART video generation to source AI photo/gallery/studio product.
 
 - [ ] Keep pricing linked to target credit products.
 

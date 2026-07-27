@@ -1,6 +1,6 @@
-# VideoFly 邮件系统使用指南
+# AI2ART 邮件系统使用指南
 
-本文档说明如何使用 VideoFly 的邮件系统，包括欢迎邮件、密码重置邮件和邮件预览功能。
+本文档说明如何使用 AI2ART 的邮件系统，包括欢迎邮件、密码重置邮件和邮件预览功能。
 
 ## 快速开始
 
@@ -62,7 +62,7 @@ src/messages/
 {
   "subject": "邮件标题",
   "greeting": "Hi {name}",
-  "title": "Welcome to VideoFly!",
+  "title": "Welcome to AI2ART!",
   "body": "邮件正文",
   "features": "功能介绍标题",
   "featuresList": {
@@ -189,10 +189,10 @@ cp src/messages/en.json src/messages/ko.json
 {
   "Emails": {
     "welcome": {
-      "subject": "VideoFlyへようこそ！",
+      "subject": "AI2ARTへようこそ！",
       "greeting": "{name}さん、",
-      "title": "VideoFlyへようこそ！",
-      "body": "VideoFlyにご登録いただき、ありがとうございます。",
+      "title": "AI2ARTへようこそ！",
+      "body": "AI2ARTにご登録いただき、ありがとうございます。",
       // ... 其他翻译
     },
     "resetPassword": {
@@ -257,7 +257,7 @@ interface WelcomeEmailProps {
 
 ## 邮件预览系统
 
-VideoFly 提供了浏览器邮件预览功能，方便开发和测试邮件模板。
+AI2ART 提供了浏览器邮件预览功能，方便开发和测试邮件模板。
 
 ### 启动预览服务器
 
@@ -346,10 +346,10 @@ import { EmailLayout, EmailHeader, EmailButton, EmailFooter } from "@/lib/emails
 
 export const MyEmail = () => (
   <EmailLayout preview="Email Preview Text">
-    <EmailHeader appName="VideoFly" />
+    <EmailHeader appName="AI2ART" />
     <EmailText>Email content here...</EmailText>
     <EmailButton href="https://videofly.app">Click Here</EmailButton>
-    <EmailFooter appName="VideoFly" />
+    <EmailFooter appName="AI2ART" />
   </EmailLayout>
 );
 ```

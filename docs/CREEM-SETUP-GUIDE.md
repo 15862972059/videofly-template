@@ -447,4 +447,4 @@ WHERE user_id = 'your_user_id';
 ---
 
 *最后更新: 2026-02-02*
-*适用版本: VideoFly v1.0+*
+*适用版本: AI2ART v1.0+*

@@ -1,4 +1,4 @@
-# VideoFly 组件使用规范
+# AI2ART 组件使用规范
 
 > AI 辅助开发参考文档 | 最后更新: 2026-01-20
 
@@ -11,7 +11,7 @@ src/components/
 ├── ui/              # shadcn/ui 基础组件 (55)
 ├── magicui/         # Magic UI 动画组件 (36)
 ├── animate-ui/      # Animate UI 动画组件 (6)
-├── video-generator/ # 视频生成业务组件 (3)
+├── video-generator/ # 图像生成业务组件 (3)
 ├── price/           # 定价组件 (5)
 ├── k8s/             # K8s 组件 (4)
 ├── docs/            # 文档组件 (4)

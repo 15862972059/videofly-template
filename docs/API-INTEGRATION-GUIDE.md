@@ -1,6 +1,6 @@
 # API 集成指南
 
-本文档详细描述项目中使用的外部 API 集成方案，包括 AI 视频生成 API 和 Creem 支付 API。
+本文档详细描述项目中使用的外部 API 集成方案，包括 AI 图像/照片重绘生成 API 和 Creem 支付 API。
 
 ---
 
@@ -67,7 +67,7 @@ AI_CALLBACK_SECRET=your_callback_secret
 | **认证方式** | `Authorization: Bearer YOUR_API_KEY` |
 | **Content-Type** | `application/json` |
 
-### 2.2 创建视频生成任务
+### 2.2 创建图像生成任务
 
 **Endpoint**: `POST /videos/generations`
 
@@ -253,7 +253,7 @@ const response = await fetch(
 | **认证方式** | `Authorization: Bearer YOUR_API_KEY` |
 | **Content-Type** | `application/json` |
 
-### 3.2 创建视频生成任务
+### 3.2 创建图像生成任务
 
 **Endpoint**: `POST /jobs/createTask`
 
@@ -619,7 +619,7 @@ model CreemSubscription {
 **文件**: `packages/common/src/ai/types.ts`
 
 ```typescript
-// 统一的视频生成参数
+// 统一的图像生成参数
 export interface VideoGenerationParams {
   prompt: string;
   aspectRatio?: "16:9" | "9:16" | "1:1";

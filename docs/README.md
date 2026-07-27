@@ -1,6 +1,6 @@
-# VideoFly 文档中心
+# AI2ART 文档中心
 
-欢迎来到 VideoFly 项目文档中心。本文档提供了所有项目文档的导航和快速索引。
+欢迎来到 AI2ART 项目文档中心。本文档提供了所有项目文档的导航和快速索引。
 
 ---
 
@@ -38,7 +38,7 @@
   - 统一 API 抽象层设计
 
 - **[AI 提供商集成](./spec/AI_PROVIDER_INTEGRATION.md)**
-  - AI 视频生成 API 集成架构
+  - AI 图像/照片重绘生成 API 集成架构
   - Provider 接口设计
   - 回调处理流程
 
@@ -89,7 +89,7 @@
 
 ### 场景 1：新项目配置
 
-如果你正在设置新的 VideoFly 实例，按以下顺序阅读：
+如果你正在设置新的 AI2ART 实例，按以下顺序阅读：
 
 1. **[配置指南](./CONFIGURATION_GUIDE.md)** - 了解所有配置项
 2. **[价格方案参考](./spec/PRICING_REFERENCE.md)** - 理解定价策略

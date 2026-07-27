@@ -1,4 +1,4 @@
-# VideoFly 管理页 (Dashboard) 完整设计方案 V2
+# AI2ART 管理页 (Dashboard) 完整设计方案 V2
 
 > 版本: V2.0 | 最后更新: 2026-01-20 | 基于 V1.0 用户反馈修订
 
@@ -845,7 +845,7 @@ interface VideosStore {
       "history": "积分历史",
       "loadMore": "加载更多",
       "types": {
-        "videoGenerate": "视频生成",
+        "videoGenerate": "图像生成",
         "purchase": "购买",
         "refund": "退款",
         "subscription": "订阅",

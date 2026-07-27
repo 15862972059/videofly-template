@@ -1,6 +1,6 @@
-# VideoFly 配置指南
+# AI2ART 配置指南
 
-本文档是 VideoFly 项目的主要配置指南，涵盖了所有核心配置文件的说明和修改方法。
+本文档是 AI2ART 项目的主要配置指南，涵盖了所有核心配置文件的说明和修改方法。
 
 ---
 
@@ -491,9 +491,9 @@ export const CREDIT_EXPIRATION = {
 ## 📚 相关文档
 
 - [价格参考文档](./spec/PRICING_REFERENCE.md) - 完整的价格方案和计算说明
-- [积分计算系统](./spec/CREDIT_CALCULATOR.md) - 如何计算视频生成的积分消耗
+- [积分计算系统](./spec/CREDIT_CALCULATOR.md) - 如何计算图像生成的积分消耗
 - [API 集成指南](./API-INTEGRATION-GUIDE.md) - Creem 和 Stripe 支付集成
-- [AI 提供商集成](./spec/AI_PROVIDER_INTEGRATION.md) - AI 视频生成 API 集成
+- [AI 提供商集成](./spec/AI_PROVIDER_INTEGRATION.md) - AI 图像/照片重绘生成 API 集成
 - [邮件模板](./spec/RESEND_EMAIL_TEMPLATES.md) - 邮件模板配置
 
 ---
