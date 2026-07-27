@@ -1,234 +1,216 @@
-# VideoFly 🎬
+# AI2ART 🎨✨
 
-一个生产级 AI 视频生成 SaaS 模板，基于 Next.js 15 构建，支持 Sora 2、Veo 3.1 等先进 AI 模型。
+**AI2ART** 是一款基于 **Next.js 15 (App Router)** 和 **React 19** 构建的高性能 AI 照片重绘与艺术创作 SaaS 平台。支持文本生成图像 (Text-to-Image)、照片风格重绘 (Photo Remix)、艺术模板拼接、精细化积分管理 (FIFO) 以及双支付渠道集成，帮助你快速构建并运营生产级的 AI 图像与艺术创作服务。
 
-> 本模板帮助你在几分钟内搭建自己的 AI 视频生成平台，包含完整的用户认证、积分系统、支付集成和精美的 UI 界面。
+🌐 **在线演示 / Live Demo**: [https://ai2art.net](https://ai2art.net)
+
+[![Live Demo](https://img.shields.io/badge/Live_Demo-ai2art.net-7c3aed?style=for-the-badge&logo=vercel)](https://ai2art.net)
+[![Next.js](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38bdf8?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![Drizzle ORM](https://img.shields.io/badge/Drizzle_ORM-0.45-c5f74f?style=for-the-badge&logo=drizzle)](https://orm.drizzle.team/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+
+---
+
+## 📸 界面预览 / Preview
+
+![AI2ART Website Preview](public/preview.png)
+
+> ✨ 访问 [ai2art.net](https://ai2art.net) 体验完整在线功能（包含艺术照片重绘、文字生图、模版选择与积分充值流程）。
+
+---
 
 ## ✨ 核心特性
 
-### 🎬 AI 视频生成
+### 🎨 AI 图像生成与风格重绘 (Photo Remix)
+- **多模型与多提供商支持**：内置对接 MiniMax、Evolink、Ciyuan 等前沿 AI 图像模型。
+- **Text-to-Image / Photo Remix 工作流**：支持自定义 Prompt、艺术模板预设、参考图重绘与细节增强。
+- **异步生成与任务轮询**：完善的后台任务生命周期追踪（排队、生成中、完成、失败及异常判定处理）。
 
-- **多模型支持** - Sora 2、Wan 2.6、Veo 3.1、Seedance、Kie.ai
-- **多种模式** - 文本转视频、图片转视频、视频增强
-- **智能积分系统** - FIFO 积分消耗，支持冻结/结算/释放
-- **实时状态追踪** - 生成进度实时更新
+### 💎 精细化 FIFO 积分管理系统
+- **先进先出 (FIFO) 消费机制**：优先扣除即将过期的赠送积分或订阅包积分。
+- **三段式事务扣费锁 (Freeze / Settle / Release)**：生成任务发起时即时**冻结 (Freeze)** 积分，成功后**结算 (Settle)** 消耗，若 API 调用或图片处理失败则自动**释放 (Release)** 冻结积分，保障用户资产安全。
 
-### 🎨 现代化 UI
+### 💳 灵活的双支付集成 (Creem + Stripe)
+- **支持 Creem 与 Stripe** 两种独立或并行支付网关。
+- **订阅与单次积分包**：支持月付/年付订阅方案及单点积分补充包。
+- **自动化 Webhook 充值与同步**。
 
-- **Tailwind CSS 4 + shadcn/ui** - 精美可定制界面
-- **深色主题** - 专为视频创作场景优化
-- **流畅动画** - Framer Motion 动画效果
-- **响应式设计** - 完美支持移动端
+### 🔐 现代身份验证与权限 (Better Auth)
+- **多途径登录**：开箱即用支持 Google OAuth、Magic Link 验证码登录。
+- **角色与管理员控制**：内置 Admin 标志，支持后台给特定用户增减积分与日志排查。
 
-### 🏢 企业级架构
+### 🌐 国际化与 SEO
+- **i18n 多语言支持**：基于 `next-intl` 实现中文/英文无缝切换与路由定位。
+- **SEO 与 OpenGraph 优化**：自动生成 Semantic HTML、Meta 标签及适配社交媒体展示。
 
-- **Next.js 15** - 最新 App Router 架构
-- **React 19** - 最新 React 特性
-- **Drizzle ORM** - 类型安全的数据库操作
-- **Better Auth** - Google OAuth + Magic Link
-- **Creem + Stripe** - 双支付渠道支持
+---
 
-### 🌍 国际化
+## 🛠 技术栈
 
-- **多语言支持** - 英语、中文无缝切换
-- **SEO 优化** - 元数据自动生成
-- **本地化路由** - `/en/`、`/zh/` 前缀
+| 模块 / 分类 | 使用技术与框架 |
+|-----------|----------------|
+| **核心框架** | Next.js 15 (App Router), React 19, TypeScript |
+| **数据库 & ORM** | PostgreSQL + Drizzle ORM (支持 Neon, Supabase 或自建) |
+| **认证组件** | Better Auth + Google OAuth + Email Magic Link |
+| **UI & 样式** | Tailwind CSS 4, Radix UI (shadcn/ui), Framer Motion |
+| **存储服务** | R2 / S3 兼容对象存储 (`s3mini`) |
+| **AI 模型集成** | MiniMax (Core image generation), Evolink, Ciyuan |
+| **支付与订阅** | Creem, Stripe |
+| **邮件服务** | Resend + React Email 模版渲染 |
 
-## 🚀 快速开始
-
-### 环境要求
-
-- Node.js 18+
-- pnpm 9+
-- PostgreSQL 数据库
-
-### 安装
-
-```bash
-# 克隆仓库（使用模板仓库）
-git clone https://github.com/zifeixu85/videofly-template.git your-project
-cd your-project
-
-# 安装依赖
-pnpm install
-
-# 配置环境变量
-cp .env.example .env.local
-# 编辑 .env.local 填入你的配置
-
-# 初始化数据库
-pnpm db:push
-
-# 启动开发服务器
-pnpm dev
-```
-
-访问 [http://localhost:3000](http://localhost:3000) 查看效果。
-
-### 一键部署
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/zifeixu85/videofly-template)
+---
 
 ## 📁 项目结构
 
 ```
-videofly/
+ai2art/
 ├── src/
-│   ├── app/                  # Next.js App Router 页面
-│   │   ├── api/              # API 路由
-│   │   │   ├── v1/           # REST API v1
-│   │   │   ├── auth/         # Better Auth 端点
-│   │   │   └── webhooks/     # 支付 Webhook
-│   │   └── [locale]/         # 国际化页面
-│   ├── ai/                   # AI 提供商抽象层
-│   │   └── providers/        # Evolink、Kie 实现
-│   ├── components/           # React 组件
-│   ├── config/               # 配置
-│   │   ├── credits.ts        # 积分/模型定价
-│   │   └── pricing-user.ts   # 用户定价配置
-│   ├── db/                   # 数据库
-│   │   ├── schema.ts         # Drizzle schema
-│   │   └── index.ts
-│   ├── lib/                  # 工具函数
-│   │   ├── auth/             # Better Auth 配置
-│   │   └── storage.ts        # R2/S3 存储
-│   ├── payment/              # 支付集成
-│   ├── services/             # 业务服务
-│   │   ├── credit.ts         # 积分系统
-│   │   └── video.ts          # 视频生成
-│   ├── stores/               # Zustand 状态管理
-│   ├── hooks/                # React Hooks
-│   ├── i18n/                 # 国际化
-│   └── middleware.ts
-├── scripts/                  # 工具脚本
-├── docs/                     # 文档
-└── public/                   # 静态资源
+│   ├── ai/                   # AI 服务提供商抽象层 (MiniMax, Evolink, Ciyuan)
+│   ├── app/                  # Next.js App Router 路由与 API 端点
+│   │   ├── api/              # API 路由 (v1 REST, auth, webhooks)
+│   │   └── [locale]/         # i18n 多语言页面 (Marketing, Studio, Dashboard)
+│   ├── components/           # React 可复用组件 (Gallery, Studio, UI, Modals)
+│   ├── config/               # 积分定价 (credits.ts) 与用户定价方案 (pricing-user.ts)
+│   ├── db/                   # Drizzle Schema 与数据库连接实例
+│   ├── lib/                  # Auth 模块、R2 存储及基础工具函数
+│   ├── payment/              # Stripe & Creem 客户端与 Webhook 逻辑
+│   ├── services/             # 核心业务服务 (Credit 积分服务, Image 生成服务)
+│   └── stores/               # Zustand 状态管理
+├── scripts/                  # 数据库初始化、积分增减、测试与恢复脚本
+├── docs/                     # 架构说明与 API 集成指南
+└── public/                   # 静态图片、预览图与媒体资源
 ```
 
-## 🛠 技术栈
+---
 
-| 类别 | 技术 |
-|------|------|
-| 框架 | Next.js 15 (App Router) |
-| 运行时 | React 19 |
-| 语言 | TypeScript |
-| 数据库 | PostgreSQL + Drizzle ORM |
-| 认证 | Better Auth + Google OAuth + Magic Link |
-| 样式 | Tailwind CSS 4 + shadcn/ui |
-| 支付 | Creem + Stripe |
-| 存储 | R2/S3 |
-| 动画 | Framer Motion |
+## 🚀 快速开始与部署
 
-## 📝 环境变量
+### 在线体验与一键部署
+
+本仓库可直接连接部署至 Vercel：
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/ai2art)
+
+### 本地环境要求
+
+- **Node.js**: `>= 18.0.0`
+- **Package Manager**: `pnpm >= 9.0.0`
+- **PostgreSQL**: `>= 14.0` (推荐 Neon, Supabase 或自建 PostgreSQL)
+
+### 本地开发步骤
+
+1. **克隆代码库**
+   ```bash
+   git clone https://github.com/your-username/ai2art.git
+   cd ai2art
+   ```
+
+2. **安装依赖**
+   ```bash
+   pnpm install
+   ```
+
+3. **配置环境变量**
+   ```bash
+   cp .env.example .env.local
+   ```
+   根据 `.env.example` 中的注释，配置你的 `DATABASE_URL`、`BETTER_AUTH_SECRET`、`MINIMAX_API_KEY` 及存储密钥。
+
+4. **同步数据库 Schema**
+   ```bash
+   pnpm db:push
+   ```
+
+5. **启动开发服务器**
+   ```bash
+   pnpm dev
+   ```
+
+   访问 [http://localhost:3000](http://localhost:3000) 即可在本地体验 AI2ART 平台。
+
+---
+
+## 📝 环境变量配置参考
+
+在 `.env.local` 中配置核心环境变量：
+
+```env
+# -----------------------------------------------------------------------------
+# 数据库 (PostgreSQL)
+# -----------------------------------------------------------------------------
+DATABASE_URL='postgresql://user:password@host:port/database?sslmode=require'
+
+# -----------------------------------------------------------------------------
+# 应用与认证 (Better Auth)
+# -----------------------------------------------------------------------------
+NEXT_PUBLIC_APP_URL='https://ai2art.net'
+BETTER_AUTH_URL='https://ai2art.net'
+BETTER_AUTH_SECRET='your_generated_secret_32bytes'
+
+# Google OAuth
+GOOGLE_CLIENT_ID='your_google_client_id'
+GOOGLE_CLIENT_SECRET='your_google_client_secret'
+
+# -----------------------------------------------------------------------------
+# AI 服务 (MiniMax / Evolink)
+# -----------------------------------------------------------------------------
+MINIMAX_API_KEY='your_minimax_api_key'
+MINIMAX_API_URL='https://api.minimaxi.com/v1'
+
+# -----------------------------------------------------------------------------
+# R2 / S3 存储
+# -----------------------------------------------------------------------------
+STORAGE_ENDPOINT='https://xxx.r2.cloudflarestorage.com'
+STORAGE_ACCESS_KEY='your_r2_access_key'
+STORAGE_SECRET_KEY='your_r2_secret_key'
+STORAGE_BUCKET='your_bucket_name'
+STORAGE_DOMAIN='https://pub-xxx.r2.dev'
+
+# -----------------------------------------------------------------------------
+# 支付渠道 (Creem / Stripe)
+# -----------------------------------------------------------------------------
+NEXT_PUBLIC_BILLING_PROVIDER='creem'
+CREEM_API_KEY='creem_sk_xxx'
+CREEM_WEBHOOK_SECRET='whsec_xxx'
+```
+
+---
+
+## 🛠 开发与运维常用脚本
+
+项目内置了丰富的手工治理与自动化运维脚本（位于 `scripts/`）：
 
 ```bash
-# 数据库
-DATABASE_URL='postgresql://user:pass@host:5432/db'
+# 给予用户特定积分 (支持添加备注)
+pnpm script:add-credits user@example.com 100 "管理员赠送积分"
 
-# 认证
-BETTER_AUTH_SECRET='your-secret'
-NEXT_PUBLIC_APP_URL='http://localhost:3000'
-GOOGLE_CLIENT_ID='your-google-client-id'
-GOOGLE_CLIENT_SECRET='your-google-client-secret'
+# 查询指定用户的积分资产与冻结状态
+pnpm script:check-credits user@example.com
 
-# 存储 (R2/S3)
-STORAGE_ENDPOINT='https://your-r2-endpoint'
-STORAGE_ACCESS_KEY='your-access-key'
-STORAGE_SECRET_KEY='your-secret-key'
-STORAGE_BUCKET='your-bucket'
-STORAGE_DOMAIN='https://your-domain.com'
+# 重置用户积分
+pnpm script:reset-credits user@example.com --confirm
 
-# AI 提供商
-EVOLINK_API_KEY='your-evolink-key'
-KIE_API_KEY='your-kie-key'
-AI_CALLBACK_URL='https://your-domain.com/api/v1/video/callback'
-AI_CALLBACK_SECRET='your-callback-secret'
-
-# 支付 - Creem (主要)
-CREEM_API_KEY='your-creem-key'
-CREEM_WEBHOOK_SECRET='your-creem-webhook-secret'
-
-# 支付 - Stripe (备用)
-STRIPE_API_KEY='your-stripe-key'
-STRIPE_WEBHOOK_SECRET='your-stripe-webhook-secret'
-
-# 邮件
-RESEND_FROM='noreply@yourdomain.com'
+# 初始化画廊/预设艺术模版数据
+pnpm script:seed-classic-images
 ```
 
-## 🔄 同步模板更新
-
-如果你基于本模板创建了自己的项目，可以按照以下方式同步模板的最新更新：
-
-### 方式一：添加上游仓库（推荐）
-
-```bash
-# 添加上游仓库
-git remote add upstream https://github.com/zifeixu85/videofly-template.git
-
-# 获取上游更新
-git fetch upstream
-
-# 合并上游 main 分支
-git merge upstream/main --allow-unrelated-histories
-
-# 解决冲突后，推送到你自己的仓库
-git push origin main
-```
-
-### 方式二：手动比较更新
-
-```bash
-# 添加上游仓库
-git remote add upstream https://github.com/zifeixu85/videofly-template.git
-
-# 查看上游变更
-git diff upstream/main...main
-
-# 选择性合并（查看变更后手动复制）
-git checkout upstream/main -- src/components/landing
-```
-
-### 同步注意事项
-
-1. **备份数据** - 同步前备份你的 `.env.local` 和数据库
-2. **处理冲突** - 如果有冲突，需要手动解决
-3. **环境变量** - 模板更新可能新增环境变量，检查 `.env.example`
-4. **数据库迁移** - 如有 schema 变更，执行 `pnpm db:migrate`
-
-## 🧩 近期更新（2026-01-26）
-
-- **模型与参数映射统一**：所有 provider 参数转换集中在 `src/ai/model-mapping.ts`，Veo 3.1 高/低质量自动选择对应模型 ID  
-- **生成参数对齐**：首页与工具页统一支持 `mode / imageUrl(s) / outputNumber / generateAudio`，图片上传走 `/api/v1/upload`  
-- **模型能力修正**：Veo 3.1 固定 8s；Wan 2.6 / Seedance 分辨率与质量映射统一  
-- **状态与通知**：SSE + 15s 轮询，生成完成支持浏览器通知与 toast  
-- **My Creations 体验优化**：4:3 卡片、hover 自动播放、错误信息展示在预览区  
-
-### 2026-02-02
-- **定价组件升级**：默认展示 Monthly，Yearly 20% OFF 标签，高亮 Popular 方案 UI  
-- **权限与修复**：CreditHistory 崩溃修复，针对免费用户的购买限制逻辑（仅 Subscribers 可买特定包）
-
-## 🗺 路线图
-
-- [x] 多 AI 模型支持
-- [x] 积分系统
-- [x] 支付集成 (Creem + Stripe)
-- [x] 用户认证
-- [x] 视频历史记录
-- [x] 多语言国际化
-- [ ] 团队协作功能
-- [ ] API 访问
-- [ ] Webhooks 导出
+---
 
 ## 📄 许可证
 
-本项目基于 MIT 许可证开源。
+本项目基于 [MIT 许可证](LICENSE) 开源。您可以自由学习、分发及用于商业用途。
+
+---
 
 ## 🙏 致谢
 
-本项目基于以下优秀开源项目：
+感谢以下优秀开源技术栈与服务提供方对本项目的支持：
 
-- [shadcn/ui](https://github.com/shadcn-ui/ui) - 精美的 UI 组件库
-- [Magic UI](https://magicui.design/) - 现代化动画组件
-- [Drizzle ORM](https://orm.drizzle.team/) - 轻量级数据库 ORM
-- [Better Auth](https://github.com/next-auth/next-auth) - 现代化认证方案
+- [Next.js](https://nextjs.org/) & [React](https://react.dev/) - 现代化 Web 应用架构
+- [Drizzle ORM](https://orm.drizzle.team/) - 类型安全且极速的数据库 ORM
+- [Better Auth](https://www.better-auth.com/) - 简便安全的全栈认证解决方案
+- [shadcn/ui](https://ui.shadcn.com/) & [Tailwind CSS](https://tailwindcss.com/) - 优雅可扩展的 UI 组件与样式库
+- [MiniMax](https://platform.minimaxi.com/) - 强劲的 AI 图像生成与多模态模型能力
