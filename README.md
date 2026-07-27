@@ -1,10 +1,9 @@
+[English](./README_EN.md) | [简体中文](./README.md)
+
 # AI2ART 🎨✨
 
-**AI2ART** 是一款基于 **Next.js 15 (App Router)** 和 **React 19** 构建的高性能 AI 照片重绘与艺术创作 SaaS 平台。支持文本生成图像 (Text-to-Image)、照片风格重绘 (Photo Remix)、艺术模板拼接、精细化积分管理 (FIFO) 以及双支付渠道集成，帮助你快速构建并运营生产级的 AI 图像与艺术创作服务。
+**AI2ART** 是一款基于 **Next.js 15 (App Router)** 和 **React 19** 构建的高性能 AI 照片重绘与艺术创作 SaaS 平台。支持文本生成图像 (Text-to-Image)、照片风格重绘 (Photo Remix)、艺术模板选择、精细化积分管理 (FIFO) 以及双支付渠道集成，帮助你快速搭建并运营生产级的 AI 图像与艺术创作服务。
 
-🌐 **在线演示 / Live Demo**: [https://ai2art.net](https://ai2art.net)
-
-[![Live Demo](https://img.shields.io/badge/Live_Demo-ai2art.net-7c3aed?style=for-the-badge&logo=vercel)](https://ai2art.net)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -16,9 +15,7 @@
 
 ## 📸 界面预览 / Preview
 
-![AI2ART Website Preview](public/preview.png)
-
-> ✨ 访问 [ai2art.net](https://ai2art.net) 体验完整在线功能（包含艺术照片重绘、文字生图、模版选择与积分充值流程）。
+![AI2ART UI Preview](public/preview.png)
 
 ---
 
@@ -86,13 +83,7 @@ ai2art/
 
 ---
 
-## 🚀 快速开始与部署
-
-### 在线体验与一键部署
-
-本仓库可直接连接部署至 Vercel：
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/ai2art)
+## 🚀 快速开始
 
 ### 本地环境要求
 
@@ -146,8 +137,8 @@ DATABASE_URL='postgresql://user:password@host:port/database?sslmode=require'
 # -----------------------------------------------------------------------------
 # 应用与认证 (Better Auth)
 # -----------------------------------------------------------------------------
-NEXT_PUBLIC_APP_URL='https://ai2art.net'
-BETTER_AUTH_URL='https://ai2art.net'
+NEXT_PUBLIC_APP_URL='http://localhost:3000'
+BETTER_AUTH_URL='http://localhost:3000'
 BETTER_AUTH_SECRET='your_generated_secret_32bytes'
 
 # Google OAuth
